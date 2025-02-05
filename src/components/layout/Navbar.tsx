@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { shortenAddress } from '@/utils/blockchainUtils'
+
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
@@ -81,7 +81,7 @@ const CustomConnectButton = () => {
                   </button>
 
                   <button onClick={openAccountModal} className="btn btn-primary text-[10px] sm:text-xs px-2 py-1">
-                    {shortenAddress(account.address)}
+                    {(account.address)}
                     {account.displayBalance
                       ? <span className="hidden sm:inline ml-1">({account.displayBalance})</span>
                       : ''}
@@ -125,32 +125,10 @@ const Navbar: React.FC = () => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-8">
               <Link href="/" className="flex items-center text-2xl font-bold">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-white mr-2"
-                  style={{ transform: 'rotate(-60deg)' }}
-                >
-                  <circle cx="19" cy="5" r="2"/>
-                  <circle cx="5" cy="19" r="2"/>
-                  <path d="M5 17A12 12 0 0 1 17 5"/>
-                </svg>
-                <span className="text-[var(--primary)]">DotFun.</span>
+                <span className="text-[var(--primary)]">XO-Market</span>
               </Link>
               <div className="hidden md:flex items-center space-x-4">
-                <button 
-                  onClick={handleProfileClick}
-                  className="text-gray-300 hover:text-white px-3 py-2 text-sm"
-                >
-                  My Profile
-                </button>
+                
                 <button 
                   onClick={() => setShowHowItWorks(true)}
                   className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-sm"
@@ -161,16 +139,6 @@ const Navbar: React.FC = () => {
             </div>
             
             <div className="hidden md:flex items-center space-x-4">
-             
-              <Link href="https://x.com/itsNikku876" target="_blank" className="text-gray-300 hover:text-white">
-                Twitter
-              </Link>
-              <button 
-                onClick={() => router.push('/create')}
-                className="bg-[var(--primary)] text-black px-4 py-2 rounded-lg font-medium hover:bg-[var(--primary-hover)]"
-              >
-                Launch Token
-              </button>
               <CustomConnectButton />
             </div>
 
@@ -194,12 +162,7 @@ const Navbar: React.FC = () => {
         {isOpen && (
           <div className="md:hidden bg-[var(--card2)] border-t border-[var(--card-boarder)]">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <button
-                onClick={handleProfileClick}
-                className="text-gray-300 hover:text-white block px-2 py-1.5 text-sm"
-              >
-                My Profile
-              </button>
+              
               <button
                 onClick={() => setShowHowItWorks(true)}
                 className="bg-white text-black px-2 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-sm inline-block"
@@ -207,16 +170,14 @@ const Navbar: React.FC = () => {
                 How it works
               </button>
              
-              <Link href="https://x.com/itsNikku876" target="_blank" className="text-gray-300 hover:text-white hover:bg-[var(--card-hover)] block px-2 py-1.5 text-sm rounded-lg transition-colors">
-                Twitter
-              </Link>
+             
               <div className="pt-4 pb-3 border-t border-[var(--card-boarder)]">
                 <div className="flex items-center px-5">
                   <button 
                     onClick={() => router.push('/create')}
                     className="bg-[var(--primary)] text-black px-4 py-2 rounded-lg font-medium hover:bg-[var(--primary-hover)] w-full"
                   >
-                    Launch Token
+                    Create Poll
                   </button>
                 </div>
               </div>
