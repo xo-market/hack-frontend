@@ -8,7 +8,9 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import HowItWorksPopup from '@/components/notifications/HowItWorksPopup'
 
+
 const CustomConnectButton = () => {
+  
   return (
     <ConnectButton.Custom>
       {({
@@ -97,6 +99,8 @@ const CustomConnectButton = () => {
 }
 
 const Navbar: React.FC = () => {
+
+
   const [isOpen, setIsOpen] = useState(false)
   const [showHowItWorks, setShowHowItWorks] = useState(false)
   const { address } = useAccount()
