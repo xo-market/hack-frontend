@@ -7,8 +7,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #111111;
-  --foreground: #ffffff;
+  --background:#ffffff ;
+  --foreground: #111111;
   --primary: #60A5FA;
   --primary-hover: #4B82EC;
   --card: #222222;
