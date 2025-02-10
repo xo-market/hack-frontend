@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { PrivyClient } from "@privy-io/server-auth";
 import PredictionCard from "@/components/ui/PredictionCard";
 import dummy_data from "@/utils/dummy_data.json";
+import Link from "next/link";
 const CATEGORIES = [
   "All",
   "Technologies",
@@ -201,8 +202,8 @@ const Home: React.FC = () => {
               >
                 Connect Wallet
               </button>
-              <button className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
-                Create Market
+              <button  className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
+                <Link href="/create">Create Market</Link>
               </button>
             </div>
           </div>
@@ -226,7 +227,7 @@ const Home: React.FC = () => {
               <a
                 key={index}
                 href="#"
-                className="whitespace-nowrap bg-gray-200 inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"
+                className="whitespace-nowrap bg-[#F58EA9] border-[#E84871] inline-flex rounded-md focus:bg-[#E84871] py-2 px-3 text-sm text-white transition-all duration-200 ease-in-out hover:bg-[#E84871] "
               >
                 {category}
               </a>
