@@ -159,9 +159,12 @@ const Home: React.FC = () => {
                 Paste a social media post link and then customize your market
                 parameters.
               </p>
-              <button className="border border-red-300 px-4 py-2 rounded-lg mt-4 text-red-500 hover:bg-red-100">
+              <div className="mt-4 "> 
+
+              <button className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
                 Create Market
               </button>
+              </div>
             </div>
           </div>
 
