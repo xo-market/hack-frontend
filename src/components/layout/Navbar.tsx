@@ -133,19 +133,31 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className="bg-[#111111] shadow-lg">
+      <nav className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-12 mt-4">
             <div className="flex items-center space-x-8 w-[80%]">
-              <Link href="/" className="flex items-center text-md font-bold">
-                <span className="text-[var(--primary)]">XO-Market</span>
+              <Link href="/" className="flex items-center text-2xl font-bold">
+                <span className="text-[var(--primary)]">XO.Market</span>
               </Link>
               <div className="hidden md:flex items-center space-x-4">
                 <button
                   onClick={() => setShowHowItWorks(true)}
-                  className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-xs"
+                  className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-md"
                 >
                   How it works
+                </button>
+                <button
+                  onClick={() => setShowHowItWorks(true)}
+                  className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-md"
+                >
+                  Dashboard
+                </button>
+                <button className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-md">
+                  Leaderboard
+                </button>
+                <button className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-md">
+                  My Bets
                 </button>
               </div>
             </div>

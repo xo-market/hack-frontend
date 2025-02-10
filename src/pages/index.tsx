@@ -43,30 +43,30 @@ const TYPEWRITER_TEXTS = [
   },
 ];
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const cookieAuthToken = req.cookies["privy-token"];
-  if (!cookieAuthToken) return { props: {} };
-  const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
-  const PRIVY_APP_SECRET = process.env.PRIVY_APP_SECRET;
-  const client = new PrivyClient(PRIVY_APP_ID!, PRIVY_APP_SECRET!);
+// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+//   const cookieAuthToken = req.cookies["privy-token"];
+//   if (!cookieAuthToken) return { props: {} };
+//   const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+//   const PRIVY_APP_SECRET = process.env.PRIVY_APP_SECRET;
+//   const client = new PrivyClient(PRIVY_APP_ID!, PRIVY_APP_SECRET!);
 
-  try {
-    const claims = await client.verifyAuthToken(cookieAuthToken);
-    console.log({ claims });
-    return {
-      props: {},
-      redirect: { destination: "/dashboard", permanent: false },
-    };
-  } catch (error) {
-    return { props: {} };
-  }
-};
+//   try {
+//     const claims = await client.verifyAuthToken(cookieAuthToken);
+//     console.log({ claims });
+//     return {
+//       props: {},
+//       redirect: { destination: "/dashboard", permanent: false },
+//     };
+//   } catch (error) {
+//     return { props: {} };
+//   }
+// };
 
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { login } = useLogin({
-    onComplete: () => router.push("/dashboard"),
+    onComplete: () => router.push("/"),
   });
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -157,13 +157,16 @@ const Home: React.FC = () => {
         isVisible={showHowItWorks}
         onClose={() => setShowHowItWorks(false)}
       />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col bg-white">
         <div className="text-center mb-4 ">
           <div className="h-[80px]">
             {" "}
-            {/* Reduced height from 120px to 80px */}
-            <h1 className="text-3xl font-bold mb-1">{displayText.heading}</h1>
-            <h2 className="text-2xl mb-3">{displayText.subheading}</h2>
+            <h1 className="text-3xl text-black font-bold mb-1">
+              {displayText.heading}
+            </h1>
+            <h2 className="text-2xl text-black mb-3">
+              {displayText.subheading}
+            </h2>
           </div>
 
           {/* {isLoading ? (
@@ -174,42 +177,46 @@ const Home: React.FC = () => {
             <></>
           )} */}
         </div>
-        <div className="flex gap-4 rounded-lg">
+        <div className="flex gap-4 rounded-lg h-[180px]">
           {/* Left Input Section */}
-          <div className="flex flex-1 items-center gap-4 border border-red-300 rounded-lg p-4">
-            <div className="w-10 h-10 bg-red-400 rounded-full"></div>
-            <div className="flex-1">
-              <p className="text-lg font-semibold">
-                What social media post you wanna bet on, Anon?
-              </p>
-              <p className="text-sm text-gray-500">
-                Paste a social media post link and then customize your market
-                parameters.
-              </p>
-              <div className="mt-4 flex gap-4">
-                <button className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
-                  Create Market
-                </button>
-
-                <button
-                  className="bg-black py-1.5 px-6 text-white rounded-lg"
-                  onClick={login}
-                >
-                  Connect Wallet
-                </button>
+          <div className="flex flex-col border border-red-300 h-[100%] rounded-lg w-[68%]">
+            <div className="w-full gap-x-10 items-center  border-red-300 border-b h-2/3 px-12 py-2 flex">
+              <div className="w-12 h-12 bg-red-400 rounded-full"></div>
+              <div className="flex flex-col">
+                <div className="bg-gray-300 px-2 py-2 flex items-center justify-center rounded-lg">
+                  <p className="font-bold text-black">
+                    What social media post you wanna bet on, Anon?{" "}
+                  </p>
+                </div>
+                <p className="text-xs text-gray-400 mt-1">
+                  Paste a social media post link and then customize your market
+                  parameters.{" "}
+                </p>
               </div>
+            </div>
+            <div className="w-full h-1/3 py-2 flex justify-between px-2">
+              <button
+                className="bg-black py-1.5 px-6 text-white rounded-lg"
+                onClick={login}
+              >
+                Connect Wallet
+              </button>
+              <button className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
+                Create Market
+              </button>
             </div>
           </div>
 
           {/* Right Section */}
-          <div className="border border-red-300 text-sm rounded-lg p-4 flex flex-col">
-            <p className="text-red-500 font-semibold underline">
-              US Politics Dashboard
-            </p>
-            <p className="text-red-500 mt-2">
-              <span className="font-semibold">52 Market.</span>{" "}
-              <span className="underline">Add your own.</span>
-            </p>
+          <div className="border border-red-300 rounded-lg flex flex-col w-[32%] text-[#E84871]">
+            <div className="w-full gap-x-10 items-center  border-red-300 border-b h-2/3 px-12 py-2 flex">
+              <p className="text-lg  font-bold">US Politics Dashboard</p>
+            </div>
+            <div className="w-full h-1/3 py-2 items-center flex gap-x-4 px-4"> 
+              <p>52 Market</p>
+              <p className="text-xs">Add your Own</p>
+           
+            </div>
           </div>
         </div>
 
@@ -243,3 +250,23 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+{
+  /* 
+            <div className="flex-1">
+              <p className="text-lg font-semibold">
+                What social media post you wanna bet on, Anon?
+              </p>
+              <p className="text-sm text-gray-500">
+                Paste a social media post link and then customize your market
+                parameters.
+              </p>
+              <div className="mt-4 flex gap-4">
+                <button className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
+                  Create Market
+                </button>
+
+                
+              </div>
+            </div> */
+}

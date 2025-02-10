@@ -1,16 +1,14 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@300..700&display=swap'); */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background:#ffffff ;
+  --background: #ffffff;
   --foreground: #111111;
-  --primary: #60A5FA;
-  --primary-hover: #4B82EC;
+  --primary: #60a5fa;
+  --primary-hover: #4b82ec;
   --card: #222222;
   --card2: #1a1a1a;
   --card-hover: #2a2a2a;
@@ -18,13 +16,19 @@
 }
 
 body {
-  background-color: var(--background);
+  background: #ffffff;
+  background-color: var(--background) !important;
   color: var(--foreground);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 @layer base {
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-bold mb-4;
   }
 
@@ -65,16 +69,15 @@ body {
   }
 
   .neon-text {
-    text-shadow: 0 0 5px rgb(var(--accent-color)), 0 0 10px rgb(var(--accent-color)), 0 0 15px rgb(var(--accent-color));
+    text-shadow: 0 0 5px rgb(var(--accent-color)),
+      0 0 10px rgb(var(--accent-color)), 0 0 15px rgb(var(--accent-color));
   }
 
   .neon-border {
-    box-shadow: 0 0 5px var(--primary),
-                0 0 10px var(--primary),
-                0 0 15px var(--primary);
+    box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary),
+      0 0 15px var(--primary);
   }
 }
-
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;

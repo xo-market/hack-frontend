@@ -42,11 +42,11 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
               className="w-8 h-8 rounded-full"
             />
             <div>
-              <p className="text-xs font-semibold">{data?.profile?.name}</p>
-              <p className="text-xs text-gray-500">{data?.profile?.title}</p>
+              <p className="text-xs text-black font-semibold">{data?.profile?.name}</p>
+              <p className="text-xs text-gray-700">{data?.profile?.title}</p>
             </div>
           </div>
-          <p className="text-xs p-2 text-gray-200">{data?.post?.content}</p>
+          <p className="text-xs p-2 text-gray-800">{data?.post?.content}</p>
           <div className="h-20 bg-gray-300 flex items-center justify-center text-gray-500">
             <svg
               className="w-6 h-6"
@@ -65,7 +65,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
           </div>
         </div>
 
-        <p className="font-bold text-lg text-center mt-3">{data?.prediction}</p>
+        <p className="font-bold text-black text-lg text-center mt-3">{data?.prediction}</p>
 
         <div className="flex items-center gap-2 mt-3">
           <span className="text-green-500 text-xs">{data?.progress?.yes}%</span>
