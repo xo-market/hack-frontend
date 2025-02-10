@@ -4,6 +4,7 @@ import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
 import SEO from "@/components/seo/SEO";
 import Spinner from "@/components/ui/Spinner";
 import PredictionCard from "@/components/ui/PredictionCard";
+import dummy_data from "@/utils/dummy_data.json";
 const CATEGORIES = [
   "All",
   "Technologies",
@@ -190,15 +191,15 @@ const Home: React.FC = () => {
           </nav>
         </div>
         <div className="grid grid-cols-3 gap-6 mt-10">
-          <PredictionCard/>
-          <PredictionCard/>
-          <PredictionCard/>
-          <PredictionCard/>
-          <PredictionCard/>
-          <PredictionCard/>
-          <PredictionCard/>
-          <PredictionCard/>
-          <PredictionCard/>
+          {dummy_data.map((data:any, index:any) => {
+            return (
+              <PredictionCard
+                key={index}
+                data={data}
+                onClick={() => console.log("Clicked")}
+              />
+            );
+          })}
         </div>
       </div>
     </Layout>
