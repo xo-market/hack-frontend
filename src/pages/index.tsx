@@ -3,6 +3,10 @@ import Layout from "@/components/layout/Layout";
 import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
 import SEO from "@/components/seo/SEO";
 import Spinner from "@/components/ui/Spinner";
+import { useLogin } from "@privy-io/react-auth";
+import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
+import { PrivyClient } from "@privy-io/server-auth";
 import PredictionCard from "@/components/ui/PredictionCard";
 import dummy_data from "@/utils/dummy_data.json";
 const CATEGORIES = [
@@ -39,8 +43,31 @@ const TYPEWRITER_TEXTS = [
   },
 ];
 
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const cookieAuthToken = req.cookies["privy-token"];
+  if (!cookieAuthToken) return { props: {} };
+  const PRIVY_APP_ID = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
+  const PRIVY_APP_SECRET = process.env.PRIVY_APP_SECRET;
+  const client = new PrivyClient(PRIVY_APP_ID!, PRIVY_APP_SECRET!);
+
+  try {
+    const claims = await client.verifyAuthToken(cookieAuthToken);
+    console.log({ claims });
+    return {
+      props: {},
+      redirect: { destination: "/dashboard", permanent: false },
+    };
+  } catch (error) {
+    return { props: {} };
+  }
+};
+
 const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const { login } = useLogin({
+    onComplete: () => router.push("/dashboard"),
+  });
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [displayText, setDisplayText] = useState({
@@ -159,11 +186,17 @@ const Home: React.FC = () => {
                 Paste a social media post link and then customize your market
                 parameters.
               </p>
-              <div className="mt-4 "> 
+              <div className="mt-4 flex gap-4">
+                <button className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
+                  Create Market
+                </button>
 
-              <button className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
-                Create Market
-              </button>
+                <button
+                  className="bg-black py-1.5 px-6 text-white rounded-lg"
+                  onClick={login}
+                >
+                  Connect Wallet
+                </button>
               </div>
             </div>
           </div>
@@ -194,7 +227,7 @@ const Home: React.FC = () => {
           </nav>
         </div>
         <div className="grid grid-cols-3 gap-6 mt-10">
-          {dummy_data.map((data:any, index:any) => {
+          {dummy_data.map((data: any, index: any) => {
             return (
               <PredictionCard
                 key={index}
