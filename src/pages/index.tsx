@@ -252,22 +252,3 @@ const Home: React.FC = () => {
 
 export default Home;
 
-{
-  /* 
-            <div className="flex-1">
-              <p className="text-lg font-semibold">
-                What social media post you wanna bet on, Anon?
-              </p>
-              <p className="text-sm text-gray-500">
-                Paste a social media post link and then customize your market
-                parameters.
-              </p>
-              <div className="mt-4 flex gap-4">
-                <button className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
-                  Create Market
-                </button>
-
-                
-              </div>
-            </div> */
-}

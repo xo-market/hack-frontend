@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 interface PredictionCardProps {
@@ -8,7 +9,7 @@ interface PredictionCardProps {
 const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
   return (
     <>
-      <div className="border border-red-300 rounded-xl p-4 w-100 shadow-lg">
+      <Link href={`/prediction/${data.id}`}><div className="border border-red-300 rounded-xl p-4 w-100 shadow-lg">
         <div className="flex gap-2 mb-2 border-b border-red-300 py-2">
           {data.tags.map((tag: string, index: number) => (
             <span
@@ -134,7 +135,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
             {data?.creator}
           </span>
         </div>
-      </div>
+      </div></Link>
     </>
   );
 };
