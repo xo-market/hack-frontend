@@ -12,7 +12,9 @@ const page = () => {
           <div className="max-w-5xl mx-auto p-6">
             {/* Header Section */}
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold">Market details</h1>
+              <h1 className="text-sm text-blue-500">
+                <Link href="/">Markets</Link>
+              </h1>
               <button className="flex items-center space-x-2 text-gray-500 hover:text-black">
                 <span>Share</span>
                 <svg
@@ -30,36 +32,37 @@ const page = () => {
             </div>
 
             {/* Market Title */}
-            <div className="mt-4 p-4 border rounded-lg">
+            <div className="mt-4 p-4 border rounded-lg flex gap-x-8">
               <div className="flex items-center space-x-4">
                 <img
                   src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   alt="Post Image"
-                  className="rounded-md"
+                  className="rounded-md w-20 h-20"
                 />
+              </div>
+              <div className="mt-2 flex flex-col">
                 <h2 className="text-lg font-semibold">
                   1K Likes or above by end of Feb.
                 </h2>
-              </div>
-
-              <div className="mt-2 flex items-center space-x-4 text-gray-600 text-sm">
-                <span>2000 Vol.</span>
-                <span>•</span>
-                <span>Feb 28, 23:59</span>
-                <span>•</span>
-                <span className="text-blue-500">@0Xwalid.eth</span>
-                <span className="px-2 py-0.5 text-xs bg-red-200 text-red-700 rounded">
-                  USDC
-                </span>
-                <span className="px-2 py-0.5 text-xs bg-blue-200 text-blue-700 rounded">
-                  NEW
-                </span>
-                <span className="px-2 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">
-                  Tech
-                </span>
-                <span className="px-2 py-0.5 text-xs bg-pink-200 text-pink-700 rounded">
-                  Multi tags
-                </span>
+                <div className="flex items-center space-x-2 text-gray-600 text-xs">
+                  <span>2000 Vol.</span>
+                  <span>•</span>
+                  <span>Feb 28, 23:59</span>
+                  <span>•</span>
+                  <span className="text-blue-500">@0Xwalid.eth</span>
+                  <span className="px-2 py-0.5 text-xs bg-red-200 text-red-700 rounded">
+                    USDC
+                  </span>
+                  <span className="px-2 py-0.5 text-xs bg-blue-200 text-blue-700 rounded">
+                    NEW
+                  </span>
+                  <span className="px-2 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">
+                    Tech
+                  </span>
+                  <span className="px-2 py-0.5 text-xs bg-pink-200 text-pink-700 rounded">
+                    Multi tags
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -105,57 +108,56 @@ const page = () => {
 
               <div className="w-1/3 flex flex-col">
                 {/* Transaction Confirmation Box */}
-             
-                  <div className="p-4 border rounded-lg mt-4">
-                    <h3 className="text-lg font-semibold">
-                      Confirming Transaction
-                    </h3>
-                    <div className="mt-4 flex items-center justify-center">
-                      <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                    </div>
-                    <p className="text-center mt-2 text-sm text-gray-600">
-                      Transaction is in progress
-                    </p>
-                    <div className="mt-4 text-sm text-gray-600">
-                      <p>
-                        You Pay: <strong>1000 USDC</strong>
-                      </p>
-                      <p>
-                        You Receive: <strong>500 Shares of Yes 1K</strong>
-                      </p>
-                      <p>
-                        Avg Price Per Share: <strong>2 USDC</strong>
-                      </p>
-                    </div>
-                    <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md">
-                      Confirming ...
-                    </button>
-                  </div>
 
-                  {/* Market Status */}
-                  <div className="w-full mt-4 p-4 border rounded-lg">
-                    <h3 className="text-lg font-semibold">Market Status</h3>
-                    <ul className="mt-4 space-y-2 text-sm text-gray-600">
-                      <li className="flex items-center space-x-2">
-                        <span className="w-4 h-4 bg-red-500 rounded-full"></span>
-                        <span>Market Start - Feb 05, 2025 | 12:43 EST</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
-                        <span>Predictions Close</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
-                        <span>Resolution Start</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
-                        <span>Resolution Close</span>
-                      </li>
-                    </ul>
+                <div className="p-4 border rounded-lg mt-4">
+                  <h3 className="text-lg font-semibold">
+                    Confirming Transaction
+                  </h3>
+                  <div className="mt-4 flex items-center justify-center">
+                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                   </div>
+                  <p className="text-center mt-2 text-sm text-gray-600">
+                    Transaction is in progress
+                  </p>
+                  <div className="mt-4 text-sm text-gray-600">
+                    <p>
+                      You Pay: <strong>1000 USDC</strong>
+                    </p>
+                    <p>
+                      You Receive: <strong>500 Shares of Yes 1K</strong>
+                    </p>
+                    <p>
+                      Avg Price Per Share: <strong>2 USDC</strong>
+                    </p>
+                  </div>
+                  <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md">
+                    Confirming ...
+                  </button>
                 </div>
-          
+
+                {/* Market Status */}
+                <div className="w-full mt-4 p-4 border rounded-lg">
+                  <h3 className="text-lg font-semibold">Market Status</h3>
+                  <ul className="mt-4 space-y-2 text-sm text-gray-600">
+                    <li className="flex items-center space-x-2">
+                      <span className="w-4 h-4 bg-red-500 rounded-full"></span>
+                      <span>Market Start - Feb 05, 2025 | 12:43 EST</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
+                      <span>Predictions Close</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
+                      <span>Resolution Start</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
+                      <span>Resolution Close</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
