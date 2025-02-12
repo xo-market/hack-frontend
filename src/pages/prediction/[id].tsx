@@ -12,8 +12,8 @@ const page = () => {
           <div className="max-w-5xl mx-auto p-6">
             {/* Header Section */}
             <div className="flex items-center justify-between">
-              <h1 className="text-sm text-blue-500">
-                <Link href="/">Markets</Link>
+              <h1 className="text-sm text-blue-500 mt-4">
+                <Link href="/">← Markets</Link>
               </h1>
               <button className="flex items-center space-x-2 text-gray-500 hover:text-black">
                 <span>Share</span>
@@ -30,7 +30,7 @@ const page = () => {
                 </svg>
               </button>
             </div>
-
+            <h1>Market Details</h1>
             {/* Market Title */}
             <div className="mt-4 p-4 border rounded-lg flex gap-x-8">
               <div className="flex items-center space-x-4">

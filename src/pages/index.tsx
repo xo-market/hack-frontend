@@ -213,9 +213,9 @@ const Home: React.FC = () => {
             <div className="w-full gap-x-10 items-center  border-red-300 border-b h-2/3 px-12 py-2 flex">
               <p className="text-lg  font-bold">US Politics Dashboard</p>
             </div>
-            <div className="w-full h-1/3 py-2 items-center flex gap-x-4 px-4"> 
+            <div className="w-full h-1/3 py-2 items-center flex gap-x-4 px-4 justify-between"> 
               <p>52 Market</p>
-              <p className="text-xs">Add your Own</p>
+              <p className="text-xs underline"><Link href="/">Add your Own</Link></p>
            
             </div>
           </div>
