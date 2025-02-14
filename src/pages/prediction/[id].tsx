@@ -1,10 +1,60 @@
 import Layout from "@/components/layout/Layout";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Chart from "chart.js";
 const page = () => {
   const router = useRouter();
   const { id } = router.query;
+
+  useEffect(() => {
+    var config = {
+      type: "line",
+      data: {
+        labels: [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+        ],
+        datasets: [
+          {
+            label: new Date().getFullYear(),
+            backgroundColor: "#FE69B3",
+            borderColor: "#FE69B3",
+            data: [65, 78, 66, 44, 56, 67, 75],
+            fill: false,
+            
+          },
+          {
+            label: new Date().getFullYear() - 1,
+            fill: false,
+            backgroundColor: "#3FDEC9",
+            borderColor: "#3FDEC9",
+            data: [40, 68, 86, 74, 56, 60, 87],
+          },
+        ],
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        tooltips: {
+          mode: "index",
+          intersect: false,
+        },
+        hover: {
+          mode: "nearest",
+          intersect: true,
+        },
+       
+      },
+    };
+    var ctx = document.getElementById("line-chart").getContext("2d");
+    window.myLine = new Chart(ctx, config);
+  }, []);
   return (
     <>
       <Layout>
@@ -69,8 +119,10 @@ const page = () => {
             <div className="w-full flex gap-4">
               <div className="w-2/3">
                 {/* Graph Placeholder */}
-                <div className="mt-6 h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-500">[Graph Component Here]</span>
+                <div className="mt-6 h-80 rounded-lg flex items-center justify-center">
+                  <div className="relative w-full h-full">
+                    <canvas id="line-chart"></canvas>
+                  </div>
                 </div>
 
                 {/* Market Rules Section */}
