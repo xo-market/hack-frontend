@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 interface ReviewTabProps {
 }
 export const ReviewTab: React.FC<ReviewTabProps> = ({
@@ -15,7 +16,7 @@ export const ReviewTab: React.FC<ReviewTabProps> = ({
       <div className="grid grid-cols-2 gap-4 mt-6">
         {/* Post Preview */}
         <div className="border rounded-lg p-2">
-          <img
+          <Image
             src="https://via.placeholder.com/150"
             alt="Post Preview"
             className="w-full h-auto rounded"

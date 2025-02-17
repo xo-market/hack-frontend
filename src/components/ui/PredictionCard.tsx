@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-
+import Image from "next/image";
 interface PredictionCardProps {
   data: any;
   onClick: () => void;
@@ -37,7 +37,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
 
         <div className="border border-red-300 rounded-lg overflow-hidden mt-4">
           <div className="p-2 flex items-center gap-2">
-            <img
+            <Image
               src="https://avatars.githubusercontent.com/u/82640789?v=4"
               alt="Profile"
               className="w-8 h-8 rounded-full"

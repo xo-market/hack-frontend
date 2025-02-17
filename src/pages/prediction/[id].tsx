@@ -1,14 +1,15 @@
+"use client";
 import Layout from "@/components/layout/Layout";
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Chart from "chart.js";
-const page = () => {
+import {Chart,ChartConfiguration} from "chart.js";
+import Image from "next/image";
+const Page = () => {
   const router = useRouter();
   const { id } = router.query;
-
   useEffect(() => {
-    var config = {
+    var config: ChartConfiguration = {
       type: "line",
       data: {
         labels: [
@@ -22,7 +23,7 @@ const page = () => {
         ],
         datasets: [
           {
-            label: new Date().getFullYear(),
+            label: `${new Date().getFullYear()}`,
             backgroundColor: "#FE69B3",
             borderColor: "#FE69B3",
             data: [65, 78, 66, 44, 56, 67, 75],
@@ -30,7 +31,7 @@ const page = () => {
             
           },
           {
-            label: new Date().getFullYear() - 1,
+            label: `${new Date().getFullYear() - 1}`,
             fill: false,
             backgroundColor: "#3FDEC9",
             borderColor: "#3FDEC9",
@@ -51,9 +52,15 @@ const page = () => {
         },
        
       },
+      plugins:[]
     };
-    var ctx = document.getElementById("line-chart").getContext("2d");
-    window.myLine = new Chart(ctx, config);
+    var canvas = document.getElementById("line-chart") as HTMLCanvasElement;
+    if (canvas) {
+      var ctx = canvas.getContext("2d");
+      if (ctx) {
+        new Chart(ctx, config);
+      }
+    }
   }, []);
   return (
     <>
@@ -84,7 +91,7 @@ const page = () => {
             {/* Market Title */}
             <div className="mt-4 p-4 border rounded-lg flex gap-x-8">
               <div className="flex items-center space-x-4">
-                <img
+                <Image
                   src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   alt="Post Image"
                   className="rounded-md w-20 h-20"
@@ -132,9 +139,9 @@ const page = () => {
                   <div className="mt-4 border p-4 rounded-md">
                     <h4 className="font-semibold">Market Summary</h4>
                     <p className="text-sm text-gray-600">
-                      This market will resolve to "Yes" if the total amount of
+                      This market will resolve to  Yes  if the total amount of
                       likes on the linked post are 1K or above, by Feb 28, 2025,
-                      11:59 PM EST. Otherwise, this market will resolve to "No".
+                      11:59 PM EST. Otherwise, this market will resolve to No.
                     </p>
                   </div>
 
@@ -218,4 +225,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

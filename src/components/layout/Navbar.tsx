@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-
+import Image from "next/image";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -75,7 +75,7 @@ const CustomConnectButton = () => {
                         }}
                       >
                         {chain.iconUrl && (
-                          <img
+                          <Image
                             alt={chain.name ?? "Chain icon"}
                             src={chain.iconUrl}
                             style={{ width: 12, height: 12 }}
