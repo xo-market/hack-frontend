@@ -39,14 +39,14 @@ importers:
         specifier: ^1.7.2
         version: 1.7.9
       chart.js:
-        specifier: ^2.9.3
-        version: 2.9.3
+        specifier: ^3.2.0
+        version: 3.9.1
       chartjs-adapter-date-fns:
         specifier: ^3.0.0
-        version: 3.0.0(chart.js@2.9.3)(date-fns@3.6.0)
+        version: 3.0.0(chart.js@3.9.1)(date-fns@3.6.0)
       chartjs-plugin-zoom:
-        specifier: ^2.0.1
-        version: 2.2.0(chart.js@2.9.3)
+        specifier: ^2.2.0
+        version: 2.2.0(chart.js@3.9.1)
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -79,7 +79,7 @@ importers:
         version: 18.3.1
       react-chartjs-2:
         specifier: ^5.2.0
-        version: 5.3.0(chart.js@2.9.3)(react@18.3.1)
+        version: 5.3.0(chart.js@3.9.1)(react@18.3.1)
       react-dom:
         specifier: ^18
         version: 18.3.1(react@18.3.1)
@@ -1667,20 +1667,14 @@ packages:
   charenc@0.0.2:
     resolution: {integrity: sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==}
 
-  chart.js@2.9.3:
-    resolution: {integrity: sha512-+2jlOobSk52c1VU6fzkh3UwqHMdSlgH1xFv9FKMqHiNCpXsGPQa/+81AFa+i3jZ253Mq9aAycPwDjnn1XbRNNw==}
+  chart.js@3.9.1:
+    resolution: {integrity: sha512-Ro2JbLmvg83gXF5F4sniaQ+lTbSv18E+TIf2cOeiH1Iqd2PGFOtem+DUufMZsCJwFE7ywPOpfXFBwRTGq7dh6w==}
 
   chartjs-adapter-date-fns@3.0.0:
     resolution: {integrity: sha512-Rs3iEB3Q5pJ973J93OBTpnP7qoGwvq3nUnoMdtxO+9aoJof7UFcRbWcIDteXuYd1fgAvct/32T9qaLyLuZVwCg==}
     peerDependencies:
       chart.js: '>=2.8.0'
       date-fns: '>=2.0.0'
-
-  chartjs-color-string@0.6.0:
-    resolution: {integrity: sha512-TIB5OKn1hPJvO7JcteW4WY/63v6KwEdt6udfnDE9iCAZgy+V4SrbSxoIbTw/xkUIapjEI4ExGtD0+6D3KyFd7A==}
-
-  chartjs-color@2.4.1:
-    resolution: {integrity: sha512-haqOg1+Yebys/Ts/9bLo/BqUcONQOdr/hoEr2LLTRl6C5LXctUdHxsCYfvQVg5JIxITrfCNUDr4ntqmQk9+/0w==}
 
   chartjs-plugin-zoom@2.2.0:
     resolution: {integrity: sha512-in6kcdiTlP6npIVLMd4zXZ08PDUXC52gZ4FAy5oyjk1zX3gKarXMAof7B9eFiisf9WOC3bh2saHg+J5WtLXZeA==}
@@ -6688,29 +6682,17 @@ snapshots:
 
   charenc@0.0.2: {}
 
-  chart.js@2.9.3:
-    dependencies:
-      chartjs-color: 2.4.1
-      moment: 2.30.1
+  chart.js@3.9.1: {}
 
-  chartjs-adapter-date-fns@3.0.0(chart.js@2.9.3)(date-fns@3.6.0):
+  chartjs-adapter-date-fns@3.0.0(chart.js@3.9.1)(date-fns@3.6.0):
     dependencies:
-      chart.js: 2.9.3
+      chart.js: 3.9.1
       date-fns: 3.6.0
 
-  chartjs-color-string@0.6.0:
-    dependencies:
-      color-name: 1.1.4
-
-  chartjs-color@2.4.1:
-    dependencies:
-      chartjs-color-string: 0.6.0
-      color-convert: 1.9.3
-
-  chartjs-plugin-zoom@2.2.0(chart.js@2.9.3):
+  chartjs-plugin-zoom@2.2.0(chart.js@3.9.1):
     dependencies:
       '@types/hammerjs': 2.0.46
-      chart.js: 2.9.3
+      chart.js: 3.9.1
       hammerjs: 2.0.8
 
   chokidar@3.6.0:
@@ -8614,9 +8596,9 @@ snapshots:
     dependencies:
       performance-now: 2.1.0
 
-  react-chartjs-2@5.3.0(chart.js@2.9.3)(react@18.3.1):
+  react-chartjs-2@5.3.0(chart.js@3.9.1)(react@18.3.1):
     dependencies:
-      chart.js: 2.9.3
+      chart.js: 3.9.1
       react: 18.3.1
 
   react-clientside-effect@1.2.7(react@18.3.1):
