@@ -95,6 +95,8 @@ const Page = () => {
                   src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   alt="Post Image"
                   className="rounded-md w-20 h-20"
+                  width={80}
+                  height={80}
                 />
               </div>
               <div className="mt-2 flex flex-col">

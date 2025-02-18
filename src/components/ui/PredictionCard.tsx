@@ -41,6 +41,8 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
               src="https://avatars.githubusercontent.com/u/82640789?v=4"
               alt="Profile"
               className="w-8 h-8 rounded-full"
+              width={32}
+              height={32}
             />
             <div>
               <p className="text-xs text-black font-semibold">{data?.profile?.name}</p>

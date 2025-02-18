@@ -20,6 +20,8 @@ export const ReviewTab: React.FC<ReviewTabProps> = ({
             src="https://via.placeholder.com/150"
             alt="Post Preview"
             className="w-full h-auto rounded"
+            width={150}
+            height={150}
           />
           <p className="text-md text-gray-700 mt-2">
             Over the years, I’ve had countless conversations with friends,
