@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      NEXT_PUBLIC_PRIVY_APP_ID: ${{ vars.PRIVY_APP_ID }}
+      NEXT_PUBLIC_PRIVY_APP_ID: ${{ vars.NEXT_PUBLIC_PRIVY_APP_ID }}
 
     steps:
       - uses: actions/checkout@v4
