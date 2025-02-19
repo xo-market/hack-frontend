@@ -78,7 +78,8 @@ const CustomConnectButton = () => {
                           <Image
                             alt={chain.name ?? "Chain icon"}
                             src={chain.iconUrl}
-                            style={{ width: 12, height: 12 }}
+                            width={12}
+                            height={12}
                           />
                         )}
                       </div>
@@ -134,9 +135,9 @@ const Navbar: React.FC = () => {
   return (
     <>
       <nav className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-12 mt-4">
-            <div className="flex items-center space-x-8 w-[80%]">
+            <div className="flex items-center space-x-8 w-[100%]">
               <Link href="/" className="flex items-center text-2xl font-bold">
                 <span className="text-[var(--primary)]">XO.Market</span>
               </Link>
@@ -153,8 +154,8 @@ const Navbar: React.FC = () => {
                 >
                   Dashboard
                 </button>
-                <button className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-md">
-                  Leaderboard
+                <button  className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-md">
+                  <Link href="/leaderboard">Leaderboard</Link>
                 </button>
                 <button className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-md">
                   My Bets
