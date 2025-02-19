@@ -39,14 +39,14 @@ importers:
         specifier: ^1.7.2
         version: 1.7.9
       chart.js:
-        specifier: ^3.2.0
-        version: 3.9.1
+        specifier: ^4.1.1
+        version: 4.4.7
       chartjs-adapter-date-fns:
         specifier: ^3.0.0
-        version: 3.0.0(chart.js@3.9.1)(date-fns@3.6.0)
+        version: 3.0.0(chart.js@4.4.7)(date-fns@3.6.0)
       chartjs-plugin-zoom:
         specifier: ^2.2.0
-        version: 2.2.0(chart.js@3.9.1)
+        version: 2.2.0(chart.js@4.4.7)
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -79,7 +79,7 @@ importers:
         version: 18.3.1
       react-chartjs-2:
         specifier: ^5.2.0
-        version: 5.3.0(chart.js@3.9.1)(react@18.3.1)
+        version: 5.3.0(chart.js@4.4.7)(react@18.3.1)
       react-dom:
         specifier: ^18
         version: 18.3.1(react@18.3.1)
@@ -514,6 +514,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@kurkle/color@0.3.4':
+    resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
 
   '@lit-labs/ssr-dom-shim@1.3.0':
     resolution: {integrity: sha512-nQIWonJ6eFAvUUrSlwyHDm/aE8PBDu5kRpL0vHMg6K8fK3Diq1xdPjTnsJSwxABhaZ+5eBi1btQB5ShUTKo4nQ==}
@@ -1667,8 +1670,9 @@ packages:
   charenc@0.0.2:
     resolution: {integrity: sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==}
 
-  chart.js@3.9.1:
-    resolution: {integrity: sha512-Ro2JbLmvg83gXF5F4sniaQ+lTbSv18E+TIf2cOeiH1Iqd2PGFOtem+DUufMZsCJwFE7ywPOpfXFBwRTGq7dh6w==}
+  chart.js@4.4.7:
+    resolution: {integrity: sha512-pwkcKfdzTMAU/+jNosKhNL2bHtJc/sSmYgVbuGTEDhzkrhmyihmP7vUc/5ZK9WopidMDHNe3Wm7jOd/WhuHWuw==}
+    engines: {pnpm: '>=8'}
 
   chartjs-adapter-date-fns@3.0.0:
     resolution: {integrity: sha512-Rs3iEB3Q5pJ973J93OBTpnP7qoGwvq3nUnoMdtxO+9aoJof7UFcRbWcIDteXuYd1fgAvct/32T9qaLyLuZVwCg==}
@@ -4966,6 +4970,8 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
+  '@kurkle/color@0.3.4': {}
+
   '@lit-labs/ssr-dom-shim@1.3.0': {}
 
   '@lit/reactive-element@1.6.3':
@@ -6682,17 +6688,19 @@ snapshots:
 
   charenc@0.0.2: {}
 
-  chart.js@3.9.1: {}
-
-  chartjs-adapter-date-fns@3.0.0(chart.js@3.9.1)(date-fns@3.6.0):
+  chart.js@4.4.7:
     dependencies:
-      chart.js: 3.9.1
+      '@kurkle/color': 0.3.4
+
+  chartjs-adapter-date-fns@3.0.0(chart.js@4.4.7)(date-fns@3.6.0):
+    dependencies:
+      chart.js: 4.4.7
       date-fns: 3.6.0
 
-  chartjs-plugin-zoom@2.2.0(chart.js@3.9.1):
+  chartjs-plugin-zoom@2.2.0(chart.js@4.4.7):
     dependencies:
       '@types/hammerjs': 2.0.46
-      chart.js: 3.9.1
+      chart.js: 4.4.7
       hammerjs: 2.0.8
 
   chokidar@3.6.0:
@@ -8596,9 +8604,9 @@ snapshots:
     dependencies:
       performance-now: 2.1.0
 
-  react-chartjs-2@5.3.0(chart.js@3.9.1)(react@18.3.1):
+  react-chartjs-2@5.3.0(chart.js@4.4.7)(react@18.3.1):
     dependencies:
-      chart.js: 3.9.1
+      chart.js: 4.4.7
       react: 18.3.1
 
   react-clientside-effect@1.2.7(react@18.3.1):
