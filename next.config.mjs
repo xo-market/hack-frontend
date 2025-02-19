@@ -1,26 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  output: "export", // Enable static export
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'ipfs-chainsafe.dev',
-      },
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/robots.txt',
-        destination: '/api/robots',
-      },
-    ];
-  },
+    unoptimized: true, // Required for static image support
+  }
 };
 
 export default nextConfig;
