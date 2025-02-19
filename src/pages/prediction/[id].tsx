@@ -42,10 +42,6 @@ const Page = () => {
       options: {
         maintainAspectRatio: false,
         responsive: true,
-        tooltips: {
-          mode: "index",
-          intersect: false,
-        },
         hover: {
           mode: "nearest",
           intersect: true,
