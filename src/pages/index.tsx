@@ -11,7 +11,6 @@ import PredictionCard from "@/components/ui/PredictionCard";
 import dummy_data from "@/utils/dummy_data.json";
 import Link from "next/link";
 const CATEGORIES = [
-  "All",
   "Technologies",
   "Memes",
   "Socials",
@@ -137,7 +136,7 @@ const Home: React.FC = () => {
         isVisible={showHowItWorks}
         onClose={() => setShowHowItWorks(false)}
       />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col bg-white">
+      <div className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-6 flex flex-col bg-white">
         <div className="text-center mb-4 ">
           <div className="h-[80px]">
             {" "}
@@ -182,18 +181,29 @@ const Home: React.FC = () => {
           </div>
         </div> */}
 
-        <div className="rounded-lg bg-transparent mt-8 flex">
-          <nav className="flex flex-wrap gap-4">
-            {CATEGORIES.map((category, index) => (
-              <a
-                key={index}
-                href="#"
-                className="whitespace-nowrap bg-[#F58EA9] border-[#E84871] inline-flex rounded-md focus:bg-[#E84871] py-2 px-3 text-sm text-white transition-all duration-200 ease-in-out hover:bg-[#E84871] "
-              >
-                {category}
-              </a>
-            ))}
-          </nav>
+        <div className="flex items-center gap-3 overflow-x-auto p-4">
+          {/* Category Buttons */}
+          <button className="px-4 py-2 rounded-md bg-red-500 text-white font-medium">
+            All
+          </button>
+          {CATEGORIES.map((category) => (
+            <button
+              key={category}
+              className="px-4 py-2 text-xs border border-red-500 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
+            >
+              {category}
+            </button>
+          ))}
+
+          {/* Dropdowns */}
+          <div className="ml-auto flex gap-2">
+            <select className="px-4 py-2 border text-black text-xs border-black rounded-md focus:outline-none">
+              <option>Tokens</option>
+            </select>
+            <select className="px-4 py-2 text-black text-xs border border-black rounded-md focus:outline-none">
+              <option>Trending</option>
+            </select>
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-6 mt-10">
           {dummy_data.map((data: any, index: any) => {
@@ -212,4 +222,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-

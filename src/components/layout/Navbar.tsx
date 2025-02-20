@@ -79,6 +79,9 @@ const Navbar: React.FC = () => {
         <Link href="/dashboard" className="text-gray-600 hover:text-gray-900">
           My Bets
         </Link>
+        <Link href="/create" className="text-gray-600 hover:text-gray-900">
+          Create New
+        </Link>
       </div>
 
       {/* Balance & Actions */}
