@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { CubeTransparentIcon, ChartBarIcon, CurrencyDollarIcon, ArrowPathIcon, BeakerIcon } from '@heroicons/react/24/outline';

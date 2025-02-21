@@ -24,7 +24,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-plugin-zoom": "^2.2.0",
     "date-fns": "^3.6.0",
-    "ethers": "5",
+    "ethers": "^5.7.2",
     "formidable": "^3.5.1",
     "framer-motion": "^11.3.21",
     "lightweight-charts": "^4.1.7",
@@ -42,8 +42,8 @@
     "styled-components": "^6.1.13",
     "typewriter-effect": "^2.21.0",
     "use-debounce": "^10.0.1",
-    "viem": "^2.17.2",
-    "wagmi": "^2.10.9"
+    "viem": "^2.7.15",
+    "wagmi": "^2.5.7"
   },
   "devDependencies": {
     "@typechain/ethers-v5": "^11.1.2",

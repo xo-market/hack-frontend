@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import {Chart,ChartConfiguration} from "chart.js";
 import Image from "next/image";
-const Page = () => {
+const page = () => {
   const router = useRouter();
   const { id } = router.query;
   useEffect(() => {
@@ -223,4 +223,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default page;

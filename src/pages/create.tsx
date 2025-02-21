@@ -1,3 +1,4 @@
+"use client";
 import Layout from "@/components/layout/Layout";
 import React, { useState, useEffect, useMemo } from "react";
 import StartTab from "@/components/ui/create-tabs/StartTab";
