@@ -3,7 +3,7 @@ import React, { useState, useEffect, ReactNode } from "react";
 import { useAccount,useChainId } from "wagmi";
 import { useEthersSigner } from "@/utils/signer";
 import { ethers, BigNumber, Contract } from "ethers";
-import { Addresses, tokenAbi } from "@/constant";
+import { Addresses, CollateralTokenABI } from "@/constant";
 // Context types
 interface DataContextProps {
   getTokenBalance: () => Promise<BigNumber>;
@@ -57,7 +57,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       if(!activeChain) return BigNumber.from(0);
       const tokenContract = await getContractInstance(
         Addresses[activeChain]?.tokenAddress,
-        tokenAbi
+        CollateralTokenABI
       );
       if (tokenContract) {
         let balance = await tokenContract.balanceOf(address);
