@@ -183,13 +183,13 @@ const Home: React.FC = () => {
 
         <div className="flex items-center gap-3 overflow-x-auto p-4">
           {/* Category Buttons */}
-          <button className="px-4 py-2 rounded-md bg-red-500 text-white font-medium">
+          <button className="px-4 py-2 rounded-md bg-pink-500 text-white font-medium">
             All
           </button>
           {CATEGORIES.map((category) => (
             <button
               key={category}
-              className="px-4 py-2 text-xs border border-red-500 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
+              className="px-4 py-2 text-xs border border-pink-500 text-pink-500 rounded-md hover:bg-pink-500 hover:text-white transition"
             >
               {category}
             </button>

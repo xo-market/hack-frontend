@@ -28,7 +28,6 @@ import { PrivyClient } from "@privy-io/server-auth";
 // };
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const { address } = useAccount();
   const router = useRouter();
@@ -59,7 +58,7 @@ const Navbar: React.FC = () => {
       {/* Logo & Search */}
       <div className="flex items-center space-x-6">
         <h1 className="text-xl font-bold text-black mt-4">
-          <span className="text-pink-500">XO.</span>Market
+          <Link href="/"><span className="text-pink-500">XO.</span>Market</Link>
         </h1>
         <input
           type="text"
@@ -91,7 +90,7 @@ const Navbar: React.FC = () => {
           <p className="text-sm font-medium text-pink-500">0 Token</p>
         </div>
         <button onClick={login} className="bg-pink-500 text-white px-4 py-2 rounded-md text-sm">
-          Connect Button
+          Login
         </button>
         <div className="w-10 h-10 bg-pink-400 rounded-full"></div>
       </div>

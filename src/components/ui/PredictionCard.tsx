@@ -9,18 +9,18 @@ interface PredictionCardProps {
 const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
   return (
     <>
-      <Link href={`/prediction/${data.id}`}><div className="border border-red-300 rounded-xl p-4 w-100 shadow-lg">
+      <Link href={`/prediction/${data.id}`}><div className="border border-pink-300 rounded-xl p-4 w-100 shadow-lg">
         <div className="flex gap-2 mb-2 border-b border-red-300 py-2">
           {data.tags.map((tag: string, index: number) => (
             <span
               key={index}
-              className="bg-red-200 text-red-600 text-xs px-3 py-1 rounded-full font-semibold"
+              className="bg-pink-200 text-pink-600 text-xs px-3 py-1 rounded-full font-semibold"
             >
               {tag}
             </span>
           ))}
           <svg
-            className="ml-auto text-red-500 cursor-pointer w-4 h-4"
+            className="ml-auto text-pink-500 cursor-pointer w-4 h-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -35,7 +35,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
           </svg>
         </div>
 
-        <div className="border border-red-300 rounded-lg overflow-hidden mt-4">
+        <div className="border border-pink-300 rounded-lg overflow-hidden mt-4">
           <div className="p-2 flex items-center gap-2">
             <Image
               src="https://avatars.githubusercontent.com/u/82640789?v=4"
@@ -82,7 +82,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
               style={{ width: `${data?.progress?.no}%` }}
             ></div>
           </div>
-          <span className="text-red-500 text-xs">{data?.progress?.no}%</span>
+          <span className="text-pink-500 text-xs">{data?.progress?.no}%</span>
         </div>
 
         <div className="flex justify-center mt-3 gap-4">
@@ -92,7 +92,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
             Yes
           </button>
           <button
-            className={`bg-red-100 text-red-600 px-2 py-2 rounded-lg font-semibold w-1/3`}
+            className={`bg-pink-100 text-pink-600 px-2 py-2 rounded-lg font-semibold w-1/3`}
           >
             No
           </button>
@@ -133,7 +133,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
             </svg>
             {data?.deadline}
           </span>
-          <span className="ml-auto text-red-500 font-semibold">
+          <span className="ml-auto text-pink-500 font-semibold">
             {data?.creator}
           </span>
         </div>
