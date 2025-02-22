@@ -1,9 +1,14 @@
 "use client";
 import React, { useState, useEffect, ReactNode } from "react";
-import { useAccount,useChainId } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import { useEthersSigner } from "@/utils/signer";
 import { ethers, BigNumber, Contract } from "ethers";
-import { Addresses, CollateralTokenABI } from "@/constant";
+import {
+  Addresses,
+  CollateralTokenABI,
+  NFTABI,
+  MultiOutcomeMarketABI,
+} from "@/constant";
 // Context types
 interface DataContextProps {
   getTokenBalance: () => Promise<BigNumber>;
@@ -26,14 +31,14 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   const [tokenBalance, setTokenBalance] = useState<BigNumber | number>(0);
   const { address, chain } = useAccount();
   const [activeChain, setActiveChainId] = useState<number | undefined>(
-      chain?.id
-    );
+    chain?.id
+  );
   useEffect(() => {
     setActiveChainId(chain?.id);
   }, [chain?.id]);
 
   const signer = useEthersSigner({ chainId: activeChain });
-
+  console.log("Signer", activeChain);
   const getContractInstance = async (
     contractAddress: string,
     contractAbi: any
@@ -52,12 +57,11 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   };
 
   const getTokenBalance = async () => {
-    
     try {
-      if(!activeChain) return BigNumber.from(0);
+      if (!activeChain) return BigNumber.from(0);
       const tokenContract = await getContractInstance(
-        Addresses[activeChain]?.tokenAddress,
-        CollateralTokenABI
+        Addresses[activeChain]?.XOCollateralTokenAddress,
+        CollateralTokenABI,
       );
       if (tokenContract) {
         let balance = await tokenContract.balanceOf(address);
@@ -66,15 +70,17 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         return balance;
       }
     } catch (error) {
-      console.log("Error in getting token balance",error);
+      console.log("Error in getting token balance", error);
       return BigNumber.from(0);
     }
   };
 
+  
+
   useEffect(() => {
     if (!signer) return;
     getTokenBalance();
-  }, [signer,address,activeChain]);
+  }, [signer, address, activeChain]);
 
   function formatTimestamp(timestamp: number) {
     const date = new Date(timestamp * 1000); // Convert to milliseconds

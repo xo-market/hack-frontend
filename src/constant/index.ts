@@ -1,6 +1,5 @@
 interface Address {
   name: string;
-  tokenAddress: string;
   XOMultiOutcomeMarketAddress: string;
   XONFTMarketAddress: string;
   XONFTOutcomeMarketAddress: string;
@@ -10,7 +9,13 @@ interface Address {
 export const Addresses: { [key: string]: Address } = {
   "10143": {
     name: "Monad Testnet",
-    tokenAddress: "0xE0590015A873bF326bd645c3E1266d4db41C4E6B",
+    XOMultiOutcomeMarketAddress: "",
+    XONFTMarketAddress: "",
+    XONFTOutcomeMarketAddress: "",
+    XOCollateralTokenAddress: "",
+  },
+  "123420001402": {
+    name: "XO Testnet",
     XOMultiOutcomeMarketAddress: "0xdeBCD0975753BFE290CE7ca42ffB5CE7917463F2",
     XONFTMarketAddress: "0x80eCafB02824b4A386539D16AB857CeD5B00799b",
     XONFTOutcomeMarketAddress: "0x108423040f77BdF39B0F86C07f36306A9C99E5B2",

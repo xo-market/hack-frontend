@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 
 import PredictionCard from "@/components/ui/PredictionCard";
 import dummy_data from "@/utils/dummy_data.json";
-import Link from "next/link";
 const CATEGORIES = [
   "Technologies",
   "Memes",

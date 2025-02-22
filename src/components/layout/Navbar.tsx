@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useLogin, usePrivy, useLogout } from "@privy-io/react-auth";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
@@ -13,6 +13,8 @@ const Navbar: React.FC = () => {
   const { ready, authenticated, user: privyUser } = usePrivy();
   const router = useRouter();
   const disableLogin = !ready || (ready && authenticated);
+  const [showProfile, setShowProfile] = useState(false);
+  const toggleShowProfile = () => setShowProfile(!showProfile);
   const { login } = useLogin({
     onComplete: () => {
       router.push("/");
@@ -26,6 +28,9 @@ const Navbar: React.FC = () => {
     onSuccess: () => {
       router.push("/");
     },
+  });
+  const { data, isError, isLoading } = useBalance({
+    address,
   });
 
   const handleProfileClick = (e: React.MouseEvent) => {
@@ -72,9 +77,7 @@ const Navbar: React.FC = () => {
           >
             Leaderboard
           </Link>
-          <Link href="/dashboard" className="text-gray-600 hover:text-gray-900">
-            My Bets
-          </Link>
+
           <Link href="/create" className="text-gray-600 hover:text-gray-900">
             Create New
           </Link>
@@ -94,15 +97,44 @@ const Navbar: React.FC = () => {
             className="bg-pink-500 cursor-pointer text-white px-4 py-2 rounded-md text-sm"
           >
             {privyUser?.wallet
-              ? privyUser?.wallet?.address.slice(0, 10) +
+              ? privyUser?.wallet?.address.slice(0, 4) +
                 "..." +
-                privyUser?.wallet?.address.slice(-4)
+                privyUser?.wallet?.address.slice(-4) +
+                " | " +
+                data?.formatted +
+                " " +
+                data?.symbol
               : "Login"}
-
-              
           </button>
           {authenticated && (
-            <div className="w-10 h-10 bg-pink-400 rounded-full"></div>
+            <>
+              <button
+                onClick={toggleShowProfile}
+                className="relative inline-flex items-center rounded-lg"
+              >
+                <span className="h-10 w-10 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
+                  <img
+                    src="https://randomuser.me/api/portraits/men/68.jpg"
+                    alt="user profile photo"
+                    className="h-full w-full object-cover"
+                  />
+                </span>
+              </button>
+              <div
+                className="absolute top-20 right-4 text-xs bg-white border border-pink-400 rounded-md p-2 w-56"
+                style={{ display: showProfile ? "block" : "none" }}
+              >
+                <div className="p-2 text-black hover:bg-blue-200 cursor-pointer">
+                  <Link href="/dashboard"> My Bets</Link>
+                </div>
+                <div
+                  onClick={logout}
+                  className="p-2 text-black hover:bg-blue-200 cursor-pointer"
+                >
+                  Logout
+                </div>
+              </div>
+            </>
           )}
         </div>
       </nav>
