@@ -8,11 +8,11 @@ import MultiOutcomeMarketABI from '../contracts/MultiOutcomeMarket.json';
 import XOMarketABI from '../contracts/XOMarket.json';
 import XOutcomeABI from '../contracts/XOutcome.json';
 
-const contractAddress = '0x52Fa1D7AC079297Abb4dc7B056d50cEc4F255876';
+const contractAddress = '0x9C5c116B90dA4ae820f9078586ef232f8FabC510';
 const XO_RPC = 'https://rpc.xo-testnet.t.raas.gelato.cloud'; // Add your RPC URL here
-const COLLATERAL_TOKEN = '0x6926B1646069D64175c88335303D155bc9B670b6';
-const XO_MARKETS_ADDRESS = '0x4C804E9A772B6bB935b1b5ab76EbddaE21eA7b8F';
-const XO_OUTCOMES_ADDRESS = '0xc355140ff4dD31eCA1f37E9F382CC99A0f37CC6e';
+const COLLATERAL_TOKEN = '0xC44eaB33F1B67b17Bc1c51F2b2e3BDC81270A53d';
+const XO_MARKETS_ADDRESS = '0xfb06e7B5983724E3623911B12C929CEf07c53278';
+const XO_OUTCOMES_ADDRESS = '0x7dC2D5FF8b8BcEAB36B0bdA96694c06a14cBF6A6';
 
 function ConnectWallet({ onConnect }: { onConnect: (provider: BrowserProvider) => void }) {
   const connectWallet = async () => {
@@ -184,14 +184,24 @@ const MarketUI: React.FC = () => {
     }
   };
 
-  const handleCreateMarket = async (expiry: string, collateralToken: string, initialCollateral: string, creatorFeeBps: string, outcomeCount: string, metaDataURI: string) => {
+  const handleCreateMarket = async (
+    startsAt: string,
+    expiresAt: string,
+    collateralToken: string,
+    initialCollateral: string,
+    creatorFeeBps: string,
+    outcomeCount: string,
+    resolver: string,
+    metaDataURI: string
+  ) => {
     const contracts = getContracts(signer);
     if (!contracts) return;
 
     try {
       setLoading(true);
       const collateralAmount = parseUnits(initialCollateral, 18);
-      const expiryTimestamp = Math.floor(new Date(expiry).getTime() / 1000);
+      const startsAtTimestamp = Math.floor(new Date(startsAt).getTime() / 1000);
+      const expiresAtTimestamp = Math.floor(new Date(expiresAt).getTime() / 1000);
 
       const collateralTokenContract = new Contract(
         collateralToken,
@@ -203,11 +213,13 @@ const MarketUI: React.FC = () => {
       await approvalTx.wait();
 
       const tx = await contracts.multiOutcomeMarket.createMarket(
-        expiryTimestamp,
+        startsAtTimestamp,
+        expiresAtTimestamp,
         collateralToken,
         collateralAmount,
         Number(creatorFeeBps),
         Number(outcomeCount),
+        resolver,
         metaDataURI
       );
       await tx.wait();
@@ -354,7 +366,6 @@ const MarketUI: React.FC = () => {
             >
               <h3 className="text-xl font-semibold mb-2">Market ID: {market.id}</h3>
               <p>Expiry: {formatDate(market.expiry)}</p>
-              <p>Creator: {market.creator.slice(0, 6)}...{market.creator.slice(-4)}</p>
               <p>Collateral: {market.collateralToken.slice(0, 6)}...{market.collateralToken.slice(-4)}</p>
               <p>Outcomes: {market.outcomeCount}</p>
               {market.resolved && <p>Winning Outcome: {market.winningOutcome}</p>}
@@ -436,20 +447,40 @@ const MarketUI: React.FC = () => {
 };
 
 interface CreateMarketFormProps {
-  onCreateMarket: (expiry: string, collateralToken: string, initialCollateral: string, creatorFeeBps: string, outcomeCount: string, metaDataURI: string) => void;
+  onCreateMarket: (
+    startsAt: string,
+    expiresAt: string,
+    collateralToken: string,
+    initialCollateral: string,
+    creatorFeeBps: string,
+    outcomeCount: string,
+    resolver: string,
+    metaDataURI: string
+  ) => void;
 }
 
 const CreateMarketForm: React.FC<CreateMarketFormProps> = ({ onCreateMarket }) => {
-  const [expiry, setExpiry] = useState('');
+  const [startsAt, setStartsAt] = useState('');
+  const [expiresAt, setExpiresAt] = useState('');
   const [collateralToken, setCollateralToken] = useState(COLLATERAL_TOKEN);
   const [initialCollateral, setInitialCollateral] = useState('');
   const [creatorFeeBps, setCreatorFeeBps] = useState('');
   const [outcomeCount, setOutcomeCount] = useState('');
+  const [resolver, setResolver] = useState('');
   const [metaDataURI, setMetaDataURI] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onCreateMarket(expiry, collateralToken, initialCollateral, creatorFeeBps, outcomeCount, metaDataURI);
+    onCreateMarket(
+      startsAt,
+      expiresAt,
+      collateralToken,
+      initialCollateral,
+      creatorFeeBps,
+      outcomeCount,
+      resolver,
+      metaDataURI
+    );
   };
 
   return (
@@ -457,15 +488,26 @@ const CreateMarketForm: React.FC<CreateMarketFormProps> = ({ onCreateMarket }) =
       <div className="grid grid-cols-2 gap-4">
         {/* First row */}
         <div>
-          <label className="block text-gray-700 text-sm font-bold mb-2">Expiry Date</label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Start Date</label>
           <input 
             type="datetime-local" 
-            value={expiry} 
-            onChange={(e) => setExpiry(e.target.value)} 
+            value={startsAt} 
+            onChange={(e) => setStartsAt(e.target.value)} 
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
             required 
           />
         </div>
+        <div>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Expiry Date</label>
+          <input 
+            type="datetime-local" 
+            value={expiresAt} 
+            onChange={(e) => setExpiresAt(e.target.value)} 
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+            required 
+          />
+        </div>
+        {/* Second row */}
         <div>
           <label className="block text-gray-700 text-sm font-bold mb-2">Collateral Token</label>
           <input 
@@ -476,7 +518,6 @@ const CreateMarketForm: React.FC<CreateMarketFormProps> = ({ onCreateMarket }) =
             required 
           />
         </div>
-        {/* Second row */}
         <div>
           <label className="block text-gray-700 text-sm font-bold mb-2">Initial Collateral</label>
           <input 
@@ -487,6 +528,7 @@ const CreateMarketForm: React.FC<CreateMarketFormProps> = ({ onCreateMarket }) =
             required 
           />
         </div>
+        {/* Third row */}
         <div>
           <label className="block text-gray-700 text-sm font-bold mb-2">Creator Fee (BPS)</label>
           <input 
@@ -497,13 +539,23 @@ const CreateMarketForm: React.FC<CreateMarketFormProps> = ({ onCreateMarket }) =
             required 
           />
         </div>
-        {/* Third row */}
         <div>
           <label className="block text-gray-700 text-sm font-bold mb-2">Outcome Count</label>
           <input 
             type="number" 
             value={outcomeCount} 
             onChange={(e) => setOutcomeCount(e.target.value)} 
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+            required 
+          />
+        </div>
+        {/* Fourth row */}
+        <div>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Resolver Address</label>
+          <input 
+            type="text" 
+            value={resolver} 
+            onChange={(e) => setResolver(e.target.value)} 
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
             required 
           />
