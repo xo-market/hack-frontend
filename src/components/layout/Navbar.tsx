@@ -1,200 +1,150 @@
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-
-import { useAccount } from 'wagmi'
-import { useRouter } from 'next/router'
-import { toast } from 'react-toastify'
-import HowItWorksPopup from '@/components/notifications/HowItWorksPopup'
-
-const CustomConnectButton = () => {
-  return (
-    <ConnectButton.Custom>
-      {({
-        account,
-        chain,
-        openAccountModal,
-        openChainModal,
-        openConnectModal,
-        mounted,
-      }) => {
-        const ready = mounted
-        const connected = ready && account && chain
-
-        return (
-          <div
-            {...(!ready && {
-              'aria-hidden': true,
-              style: {
-                opacity: 0,
-                pointerEvents: 'none',
-                userSelect: 'none',
-              },
-            })}
-          >
-            {(() => {
-              if (!connected) {
-                return (
-                  <button onClick={openConnectModal} className="btn btn-primary text-xs px-2 py-1">
-                    Connect
-                  </button>
-                )
-              }
-
-              if (chain.unsupported) {
-                return (
-                  <button onClick={openChainModal} className="btn btn-secondary text-[10px] sm:text-xs px-2 py-1">
-                    Wrong network
-                  </button>
-                )
-              }
-
-              return (
-                <div className="flex items-center space-x-1 sm:space-x-2">
-                  <button
-                    onClick={openChainModal}
-                    className="btn btn-secondary text-xs px-2 py-1"
-                    style={{ display: 'flex', alignItems: 'center' }}
-                  >
-                    {chain.hasIcon && (
-                      <div
-                        style={{
-                          background: chain.iconBackground,
-                          width: 12,
-                          height: 12,
-                          borderRadius: 999,
-                          overflow: 'hidden',
-                          marginRight: 4,
-                        }}
-                      >
-                        {chain.iconUrl && (
-                          <img
-                            alt={chain.name ?? 'Chain icon'}
-                            src={chain.iconUrl}
-                            style={{ width: 12, height: 12 }}
-                          />
-                        )}
-                      </div>
-                    )}
-                    <span className="text-[10px] sm:text-xs">{chain.name}</span>
-                  </button>
-
-                  <button onClick={openAccountModal} className="btn btn-primary text-[10px] sm:text-xs px-2 py-1">
-                    {(account.address)}
-                    {account.displayBalance
-                      ? <span className="hidden sm:inline ml-1">({account.displayBalance})</span>
-                      : ''}
-                  </button>
-                </div>
-              )
-            })()}
-          </div>
-        )
-      }}
-    </ConnectButton.Custom>
-  )
-}
-
+import React, { useState } from "react";
+import Link from "next/link";
+import { useLogin, usePrivy, useLogout } from "@privy-io/react-auth";
+import { useAccount, useBalance } from "wagmi";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
+import { useDataContext } from "@/context/DataContext";
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [showHowItWorks, setShowHowItWorks] = useState(false)
-  const { address } = useAccount()
-  const router = useRouter()
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const { address } = useAccount();
+  const { tokenBalance } = useDataContext();
+  const { ready, authenticated, user: privyUser } = usePrivy();
+  const router = useRouter();
+  const disableLogin = !ready || (ready && authenticated);
+  const [showProfile, setShowProfile] = useState(false);
+  const toggleShowProfile = () => setShowProfile(!showProfile);
+  const { login } = useLogin({
+    onComplete: () => {
+      router.push("/");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const { logout } = useLogout({
+    onSuccess: () => {
+      router.push("/");
+    },
+  });
+  const { data, isError, isLoading } = useBalance({
+    address,
+  });
 
   const handleProfileClick = (e: React.MouseEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!address) {
-      toast.error('Please connect your wallet first', {
+      toast.error("Please connect your wallet first", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-      })
-      return
+      });
+      return;
     }
-    router.push(`/profile/${address}`)
-  }
+    router.push(`/profile/${address}`);
+  };
 
   return (
     <>
-      <nav className="bg-[#111111] shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-8">
-              <Link href="/" className="flex items-center text-2xl font-bold">
-                <span className="text-[var(--primary)]">XO-Market</span>
-              </Link>
-              <div className="hidden md:flex items-center space-x-4">
-                
-                <button 
-                  onClick={() => setShowHowItWorks(true)}
-                  className="bg-white text-black px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-sm"
-                >
-                  How it works
-                </button>
-              </div>
-            </div>
-            
-            <div className="hidden md:flex items-center space-x-4">
-              <CustomConnectButton />
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden flex items-center">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="text-gray-400 hover:text-white focus:outline-none"
-              >
-                {isOpen ? (
-                  <XMarkIcon className="h-6 w-6" />
-                ) : (
-                  <Bars3Icon className="h-6 w-6" />
-                )}
-              </button>
-            </div>
-          </div>
+      <nav className="flex items-center justify-between px-6 py-3 bg-white">
+        {/* Logo & Search */}
+        <div className="flex items-center space-x-6">
+          <h1 className="text-xl font-bold text-black mt-4">
+            <Link href="/">
+              <span className="text-pink-500">XO.</span>Market
+            </Link>
+          </h1>
+          <input
+            type="text"
+            placeholder="Search xo.market"
+            className="px-4 py-2 w-64 bg-gray-100 rounded-md text-gray-600 text-sm focus:outline-none"
+          />
         </div>
 
-        {/* Mobile menu */}
-        {isOpen && (
-          <div className="md:hidden bg-[var(--card2)] border-t border-[var(--card-boarder)]">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              
+        {/* Navigation Links */}
+        <div className="flex items-center space-x-6">
+          <Link href="/" className="text-pink-500 font-semibold">
+            Market
+          </Link>
+          <Link
+            href="/leaderboard"
+            className="text-gray-600 hover:text-gray-900"
+          >
+            Leaderboard
+          </Link>
+
+          <Link href="/create" className="text-gray-600 hover:text-gray-900">
+            Create New
+          </Link>
+        </div>
+
+        {/* Balance & Actions */}
+        <div className="flex items-center space-x-8">
+          <div className="text-right">
+            <p className="text-xs text-gray-500">My balance</p>
+            <p className="text-sm font-medium text-pink-500">
+              {tokenBalance?.toString()} Token
+            </p>
+          </div>
+          <button
+            disabled={disableLogin}
+            onClick={login}
+            className="bg-pink-500 cursor-pointer text-white px-4 py-2 rounded-md text-sm"
+          >
+            {privyUser?.wallet
+              ? privyUser?.wallet?.address.slice(0, 4) +
+                "..." +
+                privyUser?.wallet?.address.slice(-4) +
+                " | " +
+                data?.formatted +
+                " " +
+                data?.symbol
+              : "Login"}
+          </button>
+          {authenticated && (
+            <>
               <button
-                onClick={() => setShowHowItWorks(true)}
-                className="bg-white text-black px-2 py-1.5 rounded-full hover:bg-gray-100 transition-colors text-sm inline-block"
+                onClick={toggleShowProfile}
+                className="relative inline-flex items-center rounded-lg"
               >
-                How it works
+                <span className="h-10 w-10 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
+                  <img
+                    src="https://randomuser.me/api/portraits/men/68.jpg"
+                    alt="user profile photo"
+                    className="h-full w-full object-cover"
+                  />
+                </span>
               </button>
-             
-             
-              <div className="pt-4 pb-3 border-t border-[var(--card-boarder)]">
-                <div className="flex items-center px-5">
-                  <button 
-                    onClick={() => router.push('/create')}
-                    className="bg-[var(--primary)] text-black px-4 py-2 rounded-lg font-medium hover:bg-[var(--primary-hover)] w-full"
-                  >
-                    Create Poll
-                  </button>
+              <div
+                className="absolute top-20 right-4 text-xs bg-white border border-pink-400 rounded-md p-2 w-56"
+                style={{ display: showProfile ? "block" : "none" }}
+              >
+                <div className="p-2 text-black hover:bg-blue-200 cursor-pointer">
+                  <Link href="/dashboard"> My Bets</Link>
+                </div>
+                <div
+                  onClick={logout}
+                  className="p-2 text-black hover:bg-blue-200 cursor-pointer"
+                >
+                  Logout
                 </div>
               </div>
-              <div className="pt-4 px-3">
-                <CustomConnectButton />
-              </div>
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </div>
       </nav>
-      
-      <HowItWorksPopup 
-        isVisible={showHowItWorks} 
-        onClose={() => setShowHowItWorks(false)} 
+
+      <HowItWorksPopup
+        isVisible={showHowItWorks}
+        onClose={() => setShowHowItWorks(false)}
       />
     </>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
