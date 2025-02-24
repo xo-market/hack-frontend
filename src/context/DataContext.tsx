@@ -61,6 +61,11 @@ interface DataContextProps {
   getMarket: (_marketId: number) => void;
   getExtendedMarket: (_marketId: number) => void;
   fetchAllMarketsData: () => void;
+  getMarketMetadata: (hash: string) => void;
+  uploadMarketData : (metadata: any) => void;
+  scheduleFarcasterMarket: (marketData: any) => void;
+  validateFarcasterMarket: (validationData: any) => void;
+  createFarcasterMarket: (marketMetadata: any) => void;
 }
 
 interface DataContextProviderProps {
@@ -121,11 +126,11 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       return BigNumber.from(0);
     }
   };
-  // User -> url -> (Likes,parametres) -> (Choice Params) -> 
+  // User -> url -> (Likes,parametres) -> (Choice Params) ->
 
   const createMarket = async (
-    _startsAt: number, // pre define 
-    _expiresAt: number, // 
+    _startsAt: number, // pre define
+    _expiresAt: number, //
     _collateralToken: string,
     _initialCollateral: number,
     _creatorFeeBps: number,
@@ -258,13 +263,13 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const getMarket = async (_marketId: number) => {
     if (!activeChain) return;
-  
+
     try {
       const marketContract = await getContractInstance(
         Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
         MultiOutcomeMarketABI
       );
-  
+
       if (marketContract) {
         const marketDetails = await marketContract.getMarket(_marketId);
         return marketDetails;
@@ -278,15 +283,17 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const getExtendedMarket = async (_marketId: number) => {
     if (!activeChain) return;
-  
+
     try {
       const marketContract = await getContractInstance(
         Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
         MultiOutcomeMarketABI
       );
-  
+
       if (marketContract) {
-        const extendedMarketDetails = await marketContract.getExtendedMarket(_marketId);
+        const extendedMarketDetails = await marketContract.getExtendedMarket(
+          _marketId
+        );
         return extendedMarketDetails;
       }
     } catch (error) {
@@ -295,7 +302,6 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       throw error;
     }
   };
-  
 
   const resolveMarket = async (_marketId: number, _winningOutcome: number) => {
     if (!activeChain) return;
@@ -630,14 +636,14 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     getTokenBalance();
   }, [signer, address, activeChain]);
 
-  const fetchAllMarketsData = async ()=>{
+  const fetchAllMarketsData = async () => {
     try {
       let marketData = await api.get("/market/all");
       return marketData?.data?.markets || [];
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   function formatTimestamp(timestamp: number) {
     const date = new Date(timestamp * 1000); // Convert to milliseconds
@@ -648,6 +654,55 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     });
   }
 
+  function getMarketMetadata(hash: string) {
+    try {
+      let metadata = api.get(`/ipfs/get_ipfs/${hash}`);
+      return metadata;
+    } catch (error) {
+      console.log("Not getting any data");
+    }
+  }
+
+  function uploadMarketData(metadata: any) {
+    try {
+      let response = api.post("/ipfs/upload_image", metadata);
+      return response;
+    } catch (error) {
+      console.log("Error in uploading data");
+    }
+  }
+
+  const scheduleFarcasterMarket = async (marketData:any) => {
+    try {
+      const response = await api.post("/farcaster/schedule", marketData);
+      return response.data;
+    } catch (error) {
+      console.error("Error scheduling Farcaster market:", error);
+      throw error;
+    }
+  };
+  
+  // Validate a Farcaster market
+  const validateFarcasterMarket = async (validationData:any) => {
+    try {
+      const response = await api.post("/farcaster/validate", validationData);
+      return response.data;
+    } catch (error) {
+      console.error("Error validating Farcaster market:", error);
+      throw error;
+    }
+  };
+  
+  // Create a new Farcaster market
+  const createFarcasterMarket = async (marketMetadata:any) => {
+    try {
+      const response = await api.post("/farcaster/create", marketMetadata);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating Farcaster market:", error);
+      throw error;
+    }
+  };
   return (
     <DataContext.Provider
       value={{
@@ -675,7 +730,12 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         getInsuranceAddress,
         getMarket,
         getExtendedMarket,
-        fetchAllMarketsData
+        fetchAllMarketsData,
+        getMarketMetadata,
+        uploadMarketData,
+        scheduleFarcasterMarket,
+        validateFarcasterMarket,
+        createFarcasterMarket
       }}
     >
       {children}

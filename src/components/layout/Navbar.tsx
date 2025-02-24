@@ -78,8 +78,8 @@ const Navbar: React.FC = () => {
           >
             Leaderboard
           </Link>
-
-          <Link href="/create" className="text-gray-600 hover:text-gray-900">
+          
+          <Link href="/create" className="text-pink-600 font-bold hover:text-gray-900">
             Create New
           </Link>
         </div>

@@ -1,5 +1,4 @@
 "use client";
-import Layout from "@/components/layout/Layout";
 import React, { useState, useEffect, useMemo } from "react";
 import StartTab from "@/components/ui/create-tabs/StartTab";
 import { DefineTab } from "@/components/ui/create-tabs/DefineTab";
@@ -7,26 +6,29 @@ import { ProvideTab } from "@/components/ui/create-tabs/ProvideTab";
 import { ReviewTab } from "@/components/ui/create-tabs/ReviewTab";
 const Create: React.FC = () => {
   const [tab, setTab] = useState("start");
+  const [image, setImage] = useState(null);
   const [createData, setCreateData] = useState({
     url: "",
     param: "",
     value: "",
     endDate: "",
-    categroy: "",
+    category: "",
     seed: "",
     reward: "",
   });
 
   const handleOnChange = async (e: any) => {
+    e.preventDefault();
     try {
-        let name = e.target.name;
-        let value = e.target.value;
+      let name = e.target.name;
+      let value = e.target.value;
       setCreateData({ ...createData, [name]: value });
+      console.log(createData);
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   const changeTab = (tab: string) => {
     setTab(tab);
   };
@@ -82,20 +84,32 @@ const Create: React.FC = () => {
             </button>
           </div>
 
-          {tab === "start" && <StartTab changeNextTab={changeNextTab} />}
+          {tab === "start" && (
+            <StartTab
+              handleOnChange={handleOnChange}
+              changeNextTab={changeNextTab}
+              createData={createData}
+            />
+          )}
           {tab === "define" && (
             <DefineTab
               changeNextTab={changeNextTab}
               changePreviousTab={changePreviousTab}
+              handleOnChange={handleOnChange}
+              setImage={setImage}
+              image={image}
+              createData={createData}
             />
           )}
           {tab === "provide" && (
             <ProvideTab
               changeNextTab={changeNextTab}
               changePreviousTab={changePreviousTab}
+              handleOnChange={handleOnChange}
+              createData={createData}
             />
           )}
-          {tab === "review" && <ReviewTab />}
+          {tab === "review" && <ReviewTab handleOnChange={handleOnChange}      createData={createData} />}
         </div>
       </div>
     </>

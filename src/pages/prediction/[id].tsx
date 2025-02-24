@@ -3,12 +3,28 @@ import Layout from "@/components/layout/Layout";
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import {Chart,ChartConfiguration} from "chart.js";
+import {
+  Chart,
+  ChartConfiguration,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+} from "chart.js";
 import Image from "next/image";
-const page = () => {
+const SingleMarket: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
   useEffect(() => {
+    // Register necessary components
+    Chart.register(
+      LineController,
+      LineElement,
+      PointElement,
+      LinearScale,
+      CategoryScale
+    );
+
     var config: ChartConfiguration = {
       type: "line",
       data: {
@@ -28,7 +44,6 @@ const page = () => {
             borderColor: "#FE69B3",
             data: [65, 78, 66, 44, 56, 67, 75],
             fill: false,
-            
           },
           {
             label: `${new Date().getFullYear() - 1}`,
@@ -46,10 +61,9 @@ const page = () => {
           mode: "nearest",
           intersect: true,
         },
-       
       },
-      plugins:[]
     };
+
     var canvas = document.getElementById("line-chart") as HTMLCanvasElement;
     if (canvas) {
       var ctx = canvas.getContext("2d");
@@ -137,7 +151,7 @@ const page = () => {
                   <div className="mt-4 border p-4 rounded-md">
                     <h4 className="font-semibold">Market Summary</h4>
                     <p className="text-sm text-gray-600">
-                      This market will resolve to  Yes  if the total amount of
+                      This market will resolve to Yes if the total amount of
                       likes on the linked post are 1K or above, by Feb 28, 2025,
                       11:59 PM EST. Otherwise, this market will resolve to No.
                     </p>
@@ -223,4 +237,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SingleMarket;

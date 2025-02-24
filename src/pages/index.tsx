@@ -3,11 +3,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Layout from "@/components/layout/Layout";
 import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
 import SEO from "@/components/seo/SEO";
-
-import { useRouter } from "next/router";
-
 import PredictionCard from "@/components/ui/PredictionCard";
-import dummy_data from "@/utils/dummy_data.json";
 import { useDataContext } from "@/context/DataContext";
 import Spinner from "@/components/ui/Spinner";
 const CATEGORIES = [

@@ -2,12 +2,16 @@ import { useState } from "react";
 interface ProvideTabProps {
   changeNextTab: () => void;
   changePreviousTab: () => void;
+  handleOnChange: (e: any) => void;
+  createData: any;
 }
 export const ProvideTab: React.FC<ProvideTabProps> = ({
   changeNextTab,
   changePreviousTab,
+  handleOnChange,
+  createData
 }) => {
-  const [reward, setReward] = useState(""); // Default reward
+
 
   return (
     <>
@@ -15,7 +19,10 @@ export const ProvideTab: React.FC<ProvideTabProps> = ({
         <label className="text-gray-700 text-sm">Seed your market</label>
         <input
           type="text"
-          defaultValue="2000 XO USDC"
+          name="seed"
+          onChange={(e) => handleOnChange(e)}
+          value={createData?.seed}
+          placeholder="2000 XO USDC"
           className="w-full border border-gray-300 rounded-md p-2 mt-1"
         />
       </div>
@@ -29,11 +36,12 @@ export const ProvideTab: React.FC<ProvideTabProps> = ({
             min="0"
             max="2"
             step="0.1"
-            value={reward}
-            onChange={(e) => setReward(e.target.value)}
+            name="reward"
+            value={createData.reward}
+            onChange={(e) => handleOnChange(e.target.value)}
             className="w-full"
           />
-          <span className="text-gray-600 text-sm">{reward}%</span>
+          <span className="text-gray-600 text-sm">{createData?.reward}%</span>
         </div>
         <p className="text-gray-400 text-sm">Market creator share of market</p>
       </div>
