@@ -1,15 +1,7 @@
+import { useCreateContext } from "@/context/CreateContext";
 import React from "react";
-
-interface StartTabProps {
-  changeNextTab: () => void;
-  handleOnChange: (e: any) => void;
-  createData: any;
-}
-const StartTab: React.FC<StartTabProps> = ({
-  changeNextTab,
-  handleOnChange,
-  createData,
-}) => {
+const StartTab: React.FC = () => {
+  const { createData, handleOnChange, changeNextTab } = useCreateContext();
   return (
     <>
       <div className="mt-4  rounded-md flex items-center justify-between">

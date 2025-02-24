@@ -1,18 +1,7 @@
-import { useState } from "react";
-interface ProvideTabProps {
-  changeNextTab: () => void;
-  changePreviousTab: () => void;
-  handleOnChange: (e: any) => void;
-  createData: any;
-}
-export const ProvideTab: React.FC<ProvideTabProps> = ({
-  changeNextTab,
-  changePreviousTab,
-  handleOnChange,
-  createData
-}) => {
-
-
+import { useCreateContext } from "@/context/CreateContext";
+export const ProvideTab: React.FC = () => {
+  const { createData, handleOnChange, changeNextTab, changePreviousTab } =
+    useCreateContext();
   return (
     <>
       <div className="mt-4 w-1/2">
@@ -33,12 +22,11 @@ export const ProvideTab: React.FC<ProvideTabProps> = ({
         <div className="flex items-center space-x-2">
           <input
             type="range"
-            min="0"
-            max="2"
+            min={0}
+            max={2}
             step="0.1"
             name="reward"
-            value={createData.reward}
-            onChange={(e) => handleOnChange(e.target.value)}
+            onChange={(e) => handleOnChange(e)}
             className="w-full"
           />
           <span className="text-gray-600 text-sm">{createData?.reward}%</span>

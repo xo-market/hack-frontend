@@ -1,22 +1,10 @@
 import Image from "next/image";
 import { useState } from "react";
+import { useCreateContext } from "@/context/CreateContext";
 
-interface DefineTabProps {
-  changeNextTab: () => void;
-  changePreviousTab: () => void;
-  handleOnChange: (e: any) => void;
-  setImage: (image: any) => void;
-  image: any;
-  createData: any;
-}
-export const DefineTab: React.FC<DefineTabProps> = ({
-  changeNextTab,
-  changePreviousTab,
-  handleOnChange,
-  setImage,
-  image,
-  createData
-}) => {
+export const DefineTab: React.FC = () => {
+  const { createData, handleOnChange, setImage, image, changeNextTab, changePreviousTab } =
+  useCreateContext();
   const [fileName, setFileName] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const handleImageChange = (event: any) => {
@@ -124,7 +112,6 @@ export const DefineTab: React.FC<DefineTabProps> = ({
             <input
               type="file"
               name="image"
-              value={image}
               accept="image/*"
               onChange={handleImageChange}
               className="hidden"
