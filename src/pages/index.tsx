@@ -4,11 +4,12 @@ import Layout from "@/components/layout/Layout";
 import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
 import SEO from "@/components/seo/SEO";
 
-
 import { useRouter } from "next/router";
 
 import PredictionCard from "@/components/ui/PredictionCard";
 import dummy_data from "@/utils/dummy_data.json";
+import { useDataContext } from "@/context/DataContext";
+import Spinner from "@/components/ui/Spinner";
 const CATEGORIES = [
   "Technologies",
   "Memes",
@@ -43,11 +44,11 @@ const TYPEWRITER_TEXTS = [
 ];
 
 const Home: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-
+  const { fetchAllMarketsData } = useDataContext();
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [marketsData, setMarketsData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [displayText, setDisplayText] = useState({
     heading: "",
     subheading: "",
@@ -124,6 +125,27 @@ const Home: React.FC = () => {
     };
   }, [currentTextIndex, isTyping]);
 
+  useEffect(() => {
+    const fetchMarkets = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchAllMarketsData();
+        console.log("Fetched Market Data:", data);
+        if (Array.isArray(data)) {
+          const uniqueData = Array.from(new Map(data.map(item => [item.id, item])).values());
+          setMarketsData(uniqueData);
+        } else {
+          throw new Error("Invalid data format received");
+        }
+      } catch (err) {
+        console.error("Error fetching market data:", err);
+        
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMarkets();
+  }, []);
   return (
     <Layout>
       <SEO
@@ -147,38 +169,14 @@ const Home: React.FC = () => {
             </h2>
           </div>
 
-          {/* {isLoading ? (
+          {loading ? (
             <div className="flex justify-center items-center mt-10">
               <Spinner size="medium" />
             </div>
           ) : (
             <></>
-          )} */}
+          )}
         </div>
-        {/* <div className="flex gap-4 rounded-lg h-[180px]">
-
-          <div className="flex flex-col border border-red-300 h-[100%] rounded-lg w-[68%]">
-        
-            <div className="w-full h-1/3 py-2 flex justify-between px-2">
-            
-              <button  className="border border-red-300 px-4 py-2 rounded-lg  text-red-500 hover:bg-red-100">
-                <Link href="/create">Create Market</Link>
-              </button>
-            </div>
-          </div>
-
-
-          <div className="border border-red-300 rounded-lg flex flex-col w-[32%] text-[#E84871]">
-            <div className="w-full gap-x-10 items-center  border-red-300 border-b h-2/3 px-12 py-2 flex">
-              <p className="text-lg  font-bold">US Politics Dashboard</p>
-            </div>
-            <div className="w-full h-1/3 py-2 items-center flex gap-x-4 px-4 justify-between"> 
-              <p>52 Market</p>
-              <p className="text-xs underline"><Link href="/">Add your Own</Link></p>
-           
-            </div>
-          </div>
-        </div> */}
 
         <div className="flex items-center gap-3 overflow-x-auto p-4">
           {/* Category Buttons */}
@@ -205,15 +203,16 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-6 mt-10">
-          {dummy_data.map((data: any, index: any) => {
-            return (
-              <PredictionCard
-                key={index}
-                data={data}
-                onClick={() => console.log("Clicked")}
-              />
-            );
-          })}
+          {marketsData &&
+            marketsData?.map((data: any, index: any) => {
+              return (
+                <PredictionCard
+                  key={index}
+                  data={data}
+                  onClick={() => console.log("Clicked")}
+                />
+              );
+            })}
         </div>
       </div>
     </Layout>

@@ -4,6 +4,7 @@ import { useLogin, usePrivy, useLogout } from "@privy-io/react-auth";
 import { useAccount, useBalance } from "wagmi";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import numeral from "numeral"
 import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
 import { useDataContext } from "@/context/DataContext";
 const Navbar: React.FC = () => {
@@ -101,7 +102,7 @@ const Navbar: React.FC = () => {
                 "..." +
                 privyUser?.wallet?.address.slice(-4) +
                 " | " +
-                data?.formatted +
+                numeral(data?.formatted).format('0.0a') +
                 " " +
                 data?.symbol
               : "Login"}

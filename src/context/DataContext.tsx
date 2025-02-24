@@ -4,6 +4,7 @@ import { useAccount, useChainId } from "wagmi";
 import { useEthersSigner } from "@/utils/signer";
 import { ethers, BigNumber, Contract } from "ethers";
 import { toast } from "react-hot-toast";
+import api from "@/config";
 import {
   Addresses,
   CollateralTokenABI,
@@ -59,6 +60,7 @@ interface DataContextProps {
   getInsuranceAddress: () => void;
   getMarket: (_marketId: number) => void;
   getExtendedMarket: (_marketId: number) => void;
+  fetchAllMarketsData: () => void;
 }
 
 interface DataContextProviderProps {
@@ -119,10 +121,11 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       return BigNumber.from(0);
     }
   };
+  // User -> url -> (Likes,parametres) -> (Choice Params) -> 
 
   const createMarket = async (
-    _startsAt: number,
-    _expiresAt: number,
+    _startsAt: number, // pre define 
+    _expiresAt: number, // 
     _collateralToken: string,
     _initialCollateral: number,
     _creatorFeeBps: number,
@@ -131,6 +134,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     _metaDataURI: string
   ) => {
     if (!activeChain) return;
+
     let id = toast.loading("Creating market...");
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
@@ -626,6 +630,15 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     getTokenBalance();
   }, [signer, address, activeChain]);
 
+  const fetchAllMarketsData = async ()=>{
+    try {
+      let marketData = await api.get("/market/all");
+      return marketData?.data?.markets || [];
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   function formatTimestamp(timestamp: number) {
     const date = new Date(timestamp * 1000); // Convert to milliseconds
     return date.toLocaleDateString("en-US", {
@@ -662,6 +675,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         getInsuranceAddress,
         getMarket,
         getExtendedMarket,
+        fetchAllMarketsData
       }}
     >
       {children}

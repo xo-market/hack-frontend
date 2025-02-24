@@ -2,11 +2,31 @@
 import Layout from "@/components/layout/Layout";
 import React, { useState, useEffect, useMemo } from "react";
 import StartTab from "@/components/ui/create-tabs/StartTab";
-import {DefineTab} from "@/components/ui/create-tabs/DefineTab";
+import { DefineTab } from "@/components/ui/create-tabs/DefineTab";
 import { ProvideTab } from "@/components/ui/create-tabs/ProvideTab";
 import { ReviewTab } from "@/components/ui/create-tabs/ReviewTab";
 const Create: React.FC = () => {
   const [tab, setTab] = useState("start");
+  const [createData, setCreateData] = useState({
+    url: "",
+    param: "",
+    value: "",
+    endDate: "",
+    categroy: "",
+    seed: "",
+    reward: "",
+  });
+
+  const handleOnChange = async (e: any) => {
+    try {
+        let name = e.target.name;
+        let value = e.target.value;
+      setCreateData({ ...createData, [name]: value });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   const changeTab = (tab: string) => {
     setTab(tab);
   };
@@ -75,11 +95,7 @@ const Create: React.FC = () => {
               changePreviousTab={changePreviousTab}
             />
           )}
-          {tab === "review" && (
-            <ReviewTab
-        
-            />
-          )}
+          {tab === "review" && <ReviewTab />}
         </div>
       </div>
     </>
