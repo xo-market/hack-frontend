@@ -3,15 +3,26 @@ import { useState } from "react";
 import { useCreateContext } from "@/context/CreateContext";
 
 export const DefineTab: React.FC = () => {
-  const { createData, handleOnChange, setImage, image, changeNextTab, changePreviousTab } =
-  useCreateContext();
+  const {
+    createData,
+    handleOnChange,
+    setImage,
+    image,
+    changeNextTab,
+    changePreviousTab,
+    setFormData,
+  } = useCreateContext();
   const [fileName, setFileName] = useState("");
+
   const [uploadProgress, setUploadProgress] = useState(0);
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
       setFileName(file.name);
       const reader = new FileReader();
+      const fd = new FormData();
+      fd.append("file", file);
+      setFormData(fd);
       reader.onload = () => {
         setImage(reader.result);
       };

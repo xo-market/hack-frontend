@@ -7,6 +7,7 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
 const {createFarcasterMarket} = useDataContext();
   const [tab, setTab] = useState("start");
   const [image, setImage] = useState(null);
+  const [formData, setFormData] = useState(null);
   const [createData, setCreateData] = useState({
     url: "",
     param: "",
@@ -30,7 +31,7 @@ const {createFarcasterMarket} = useDataContext();
         return;
     }
 
-    await createFarcasterMarket(createData,image);
+    await createFarcasterMarket(createData,image,formData);
     
    
   };
@@ -59,6 +60,7 @@ const {createFarcasterMarket} = useDataContext();
         changeTab,
         changeNextTab,
         changePreviousTab,
+        setFormData
       }}
     >
       {children}

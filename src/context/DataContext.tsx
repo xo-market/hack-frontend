@@ -4,13 +4,14 @@ import { useAccount, useChainId } from "wagmi";
 import { useEthersSigner } from "@/utils/signer";
 import { ethers, BigNumber, Contract } from "ethers";
 import { toast } from "react-hot-toast";
-import api from "@/config";
+import { api, apiMultipart } from "@/config";
 import {
   Addresses,
   CollateralTokenABI,
   NFTABI,
   MultiOutcomeMarketABI,
 } from "@/constant";
+
 // Context types
 interface DataContextProps {
   getTokenBalance: () => Promise<BigNumber>;
@@ -65,7 +66,11 @@ interface DataContextProps {
   uploadMarketData: (metadata: any) => void;
   scheduleFarcasterMarket: (marketData: any) => void;
   validateFarcasterMarket: (validationData: any) => void;
-  createFarcasterMarket: (marketMetadata: any, image: any) => void;
+  createFarcasterMarket: (
+    marketMetadata: any,
+    image: any,
+    formData: any
+  ) => void;
 }
 
 interface DataContextProviderProps {
@@ -696,23 +701,39 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   };
 
   // Create a new Farcaster market
-  const createFarcasterMarket = async (marketMetadata: any, image: any) => {
+  const createFarcasterMarket = async (
+    marketMetadata: any,
+    image: any,
+    formData: any
+  ) => {
     let id = toast.loading("Creating Farcaster market...");
     try {
       if (!activeChain) {
         return;
       }
 
-      // const response = await api.post("/farcaster/create", {
-      //   name: "Market Name",
-      //   description: "Market Description",
-      //   image: image,
-      //   attributes: [marketMetadata?.param, marketMetadata?.category],
-      //   external_url: "https://farcaster.market",
-      //   animation_url: "https://farcaster.market",
-      //   background_color: "#FFFFFF",
-      // });
+      const ipfsHashResponse = await apiMultipart.post(
+        "/ipfs/upload_image",
+        formData
+      );
+      
+      const formattedData = {
+        name: "Market Name",
+        description:"Market Description",
+        image: ipfsHashResponse?.data?.image_link,
+        attributes: [
+          { trait_type: "Category", value: marketMetadata?.category },
+          { trait_type: "Type", value: marketMetadata?.param },
+          { trait_type: "Tags", value: marketMetadata?.seed?.split(",") || [] },
+          { trait_type: "Rules", value: marketMetadata?.reward },
+        ],
+        external_url: `https://your-platform.com/market/1`,
+        animation_url: "https://ipfs.io/ipfs/bafkreiglmgetqhmrksqwyz7z73ogft4dcwtbzkgiiyij6ofa4ptnl2q2cy",
+        background_color: "#FFFFFF",
+      };
 
+      const response = await api.post("/market/farcaster/create", formattedData);
+      
       let tx = await createMarket(
         Date.now() + 1000,
         Date.now() + 1000 * 60 * 30,
@@ -721,10 +742,10 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         0,
         2,
         "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
-        "https://ipfs.io/ipfs/bafkreiglmgetqhmrksqwyz7z73ogft4dcwtbzkgiiyij6ofa4ptnl2q2cy"
+        `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`
       );
 
-      console.log("Farcaster market created successfully:", tx);
+      console.log("Farcaster market created successfully:", response);
       toast.success("Farcaster market created successfully", { id });
       // return response.data;
     } catch (error) {
