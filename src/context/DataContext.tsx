@@ -62,10 +62,10 @@ interface DataContextProps {
   getExtendedMarket: (_marketId: number) => void;
   fetchAllMarketsData: () => void;
   getMarketMetadata: (hash: string) => void;
-  uploadMarketData : (metadata: any) => void;
+  uploadMarketData: (metadata: any) => void;
   scheduleFarcasterMarket: (marketData: any) => void;
   validateFarcasterMarket: (validationData: any) => void;
-  createFarcasterMarket: (marketMetadata: any) => void;
+  createFarcasterMarket: (marketMetadata: any, image: any) => void;
 }
 
 interface DataContextProviderProps {
@@ -158,6 +158,8 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
           _metaDataURI
         );
         await tx.wait();
+
+        return tx;
         toast.success("Market created successfully", { id });
       }
     } catch (error) {
@@ -672,7 +674,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   }
 
-  const scheduleFarcasterMarket = async (marketData:any) => {
+  const scheduleFarcasterMarket = async (marketData: any) => {
     try {
       const response = await api.post("/farcaster/schedule", marketData);
       return response.data;
@@ -681,9 +683,9 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       throw error;
     }
   };
-  
+
   // Validate a Farcaster market
-  const validateFarcasterMarket = async (validationData:any) => {
+  const validateFarcasterMarket = async (validationData: any) => {
     try {
       const response = await api.post("/farcaster/validate", validationData);
       return response.data;
@@ -692,14 +694,42 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       throw error;
     }
   };
-  
+
   // Create a new Farcaster market
-  const createFarcasterMarket = async (marketMetadata:any) => {
+  const createFarcasterMarket = async (marketMetadata: any, image: any) => {
+    let id = toast.loading("Creating Farcaster market...");
     try {
-      const response = await api.post("/farcaster/create", marketMetadata);
-      return response.data;
+      if (!activeChain) {
+        return;
+      }
+
+      // const response = await api.post("/farcaster/create", {
+      //   name: "Market Name",
+      //   description: "Market Description",
+      //   image: image,
+      //   attributes: [marketMetadata?.param, marketMetadata?.category],
+      //   external_url: "https://farcaster.market",
+      //   animation_url: "https://farcaster.market",
+      //   background_color: "#FFFFFF",
+      // });
+
+      let tx = await createMarket(
+        Date.now() + 1000,
+        Date.now() + 1000 * 60 * 30,
+        Addresses[activeChain]?.XOCollateralTokenAddress,
+        0,
+        0,
+        2,
+        "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
+        "https://ipfs.io/ipfs/bafkreiglmgetqhmrksqwyz7z73ogft4dcwtbzkgiiyij6ofa4ptnl2q2cy"
+      );
+
+      console.log("Farcaster market created successfully:", tx);
+      toast.success("Farcaster market created successfully", { id });
+      // return response.data;
     } catch (error) {
       console.error("Error creating Farcaster market:", error);
+      toast.error("Error creating Farcaster market", { id });
       throw error;
     }
   };
@@ -735,7 +765,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         uploadMarketData,
         scheduleFarcasterMarket,
         validateFarcasterMarket,
-        createFarcasterMarket
+        createFarcasterMarket,
       }}
     >
       {children}

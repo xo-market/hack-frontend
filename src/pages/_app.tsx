@@ -4,8 +4,7 @@ import { WagmiConfig } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {  RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "react-hot-toast";
 import { PrivyProvider } from "@privy-io/react-auth";
 import DataContextProvider from "@/context/DataContext";
 import {wagmiConfig} from "@/utils/wallet-utils"
@@ -37,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </PrivyProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
-      <ToastContainer />
+      <Toaster />
     </WagmiConfig>
   );
 }

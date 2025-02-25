@@ -1,7 +1,10 @@
 import React, { createContext, useState, useContext } from "react";
+import { toast } from "react-toastify";
+import { useDataContext } from "./DataContext";
 const CreateContext = createContext<any>(null);
 
 export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
+const {createFarcasterMarket} = useDataContext();
   const [tab, setTab] = useState("start");
   const [image, setImage] = useState(null);
   const [createData, setCreateData] = useState({
@@ -21,9 +24,15 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
     setCreateData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const createMarket = () => {
-    console.log(createData);
-    console.log(image);
+  const createMarket = async () => {
+    if(!createData.url || !createData.param || !createData.value || !createData.endDate || !createData.category || !createData.seed || !createData.reward || !image) {
+        toast.error("Please fill all the fields");
+        return;
+    }
+
+    await createFarcasterMarket(createData,image);
+    
+   
   };
 
   const changeTab = (newTab: string) => setTab(newTab);
