@@ -11,8 +11,7 @@ import {
   NFTABI,
   MultiOutcomeMarketABI,
 } from "@/constant";
-
-// Context types
+import { useRouter } from "next/navigation";
 interface DataContextProps {
   getTokenBalance: () => Promise<BigNumber>;
   formatTimestamp: (timestamp: number) => string;
@@ -90,6 +89,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   const [activeChain, setActiveChainId] = useState<number | undefined>(
     chain?.id
   );
+  const router = useRouter();
   useEffect(() => {
     setActiveChainId(chain?.id);
   }, [chain?.id]);
@@ -144,8 +144,6 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     _metaDataURI: string
   ) => {
     if (!activeChain) return;
-
-    let id = toast.loading("Creating market...");
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
       MultiOutcomeMarketABI
@@ -165,11 +163,10 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         await tx.wait();
 
         return tx;
-        toast.success("Market created successfully", { id });
+  
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Error in creating market", { id });
+      console.log(error)
     }
   };
 
@@ -748,8 +745,8 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         return;
       }
       let tx = await createMarket(
-        Date.now() + 1000,
-        Date.now() + 1000 * 60 * 30,
+        Math.floor(Date.now() / 1000) + 1,
+        Math.floor(Date.now() / 1000) + 60 * 30,
         Addresses[activeChain]?.XOCollateralTokenAddress,
         0,
         0,
@@ -759,6 +756,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       );
       console.log("Farcaster market created successfully:", response);
       toast.success("Farcaster market created successfully", { id });
+      router.push("/");
       // return response.data;
     } catch (error) {
       console.error("Error creating Farcaster market:", error);
