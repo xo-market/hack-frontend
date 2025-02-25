@@ -716,10 +716,15 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         "/ipfs/upload_image",
         formData
       );
-      
+
+      if (!ipfsHashResponse?.data?.success) {
+        toast.error("Error uploading image to IPFS", { id });
+        return;
+      }
+
       const formattedData = {
         name: "Market Name",
-        description:"Market Description",
+        description: "Market Description",
         image: ipfsHashResponse?.data?.image_link,
         attributes: [
           { trait_type: "Category", value: marketMetadata?.category },
@@ -728,12 +733,20 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
           { trait_type: "Rules", value: marketMetadata?.reward },
         ],
         external_url: `https://your-platform.com/market/1`,
-        animation_url: "https://ipfs.io/ipfs/bafkreiglmgetqhmrksqwyz7z73ogft4dcwtbzkgiiyij6ofa4ptnl2q2cy",
+        animation_url:
+          "https://ipfs.io/ipfs/bafkreiglmgetqhmrksqwyz7z73ogft4dcwtbzkgiiyij6ofa4ptnl2q2cy",
         background_color: "#FFFFFF",
       };
 
-      const response = await api.post("/market/farcaster/create", formattedData);
-      
+      const response = await api.post(
+        "/market/farcaster/create",
+        formattedData
+      );
+
+      if (!response?.data?.success) {
+        toast.error("Error creating Farcaster market", { id });
+        return;
+      }
       let tx = await createMarket(
         Date.now() + 1000,
         Date.now() + 1000 * 60 * 30,
@@ -744,7 +757,6 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
         `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`
       );
-
       console.log("Farcaster market created successfully:", response);
       toast.success("Farcaster market created successfully", { id });
       // return response.data;
