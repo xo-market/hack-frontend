@@ -377,7 +377,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
           _marketId,
           _outcome,
           ethers.utils.parseUnits(_amount.toString(), 18),
-          _maxCost
+          ethers.utils.parseUnits(_amount.toString(), 18)
         );
         await tx.wait();
         toast.success("Purchase successful", { id });

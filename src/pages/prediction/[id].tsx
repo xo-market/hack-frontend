@@ -85,7 +85,7 @@ const SingleMarket: React.FC = () => {
       10,
       1,
       +amount.toString(),
-      2
+      +amount.toString()
     );
   }
 
