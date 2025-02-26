@@ -113,6 +113,10 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
 
+  function generateBinaryPredictionQuestion(metric: string, threshold: number) {
+    return `Will this post cross ${threshold} ${metric}?`;
+  }
+
   const getTokenBalance = async () => {
     try {
       if (!activeChain) return BigNumber.from(0);
@@ -339,6 +343,8 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   ) => {
     if (!activeChain) return;
 
+    console.log("Buy Outcome", _marketId, _outcome, _amount, _maxCost);
+
     let id = toast.loading("Processing purchase...");
 
     const marketContract = await getContractInstance(
@@ -347,11 +353,30 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     );
 
     try {
+      let collateralToken = await getContractInstance(
+        Addresses[activeChain]?.XOCollateralTokenAddress,
+        CollateralTokenABI
+      );
+      if (!collateralToken) {
+        toast.error("Error getting collateral token instance", { id });
+        return;
+      }
+      let allowanceAmount = await collateralToken.allowance(
+        address,
+        Addresses[activeChain]?.XOMultiOutcomeMarketAddress
+      );
+      if (allowanceAmount.lt(_maxCost)) {
+        const tx = await collateralToken.approve(
+          Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
+          ethers.utils.parseUnits(_amount.toString(), 18)
+        );
+        await tx.wait();
+      }
       if (marketContract) {
         const tx = await marketContract.buy(
           _marketId,
           _outcome,
-          _amount,
+          ethers.utils.parseUnits(_amount.toString(), 18),
           _maxCost
         );
         await tx.wait();
@@ -719,13 +744,16 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       }
 
       const formattedData = {
-        name: "Market Name",
-        description: "Market Description",
+        name: `${marketMetadata?.param} Prediction Market`,
+        description: generateBinaryPredictionQuestion(
+          marketMetadata?.param,
+          marketMetadata?.value
+        ),
         image: ipfsHashResponse?.data?.image_link,
         attributes: [
           { trait_type: "Category", value: marketMetadata?.category },
           { trait_type: "Type", value: marketMetadata?.param },
-          { trait_type: "Tags", value: marketMetadata?.seed?.split(",") || [] },
+          { trait_type: "Tags", value: marketMetadata?.param || [] },
           { trait_type: "Rules", value: marketMetadata?.reward },
         ],
         external_url: `https://your-platform.com/market/1`,
@@ -782,16 +810,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         );
         await tx.wait();
       }
-      console.log(
-        startsAtTimestamp,
-        expiresAtTimestamp,
-        Addresses[activeChain]?.XOCollateralTokenAddress,
-        collateralAmount,
-        ethers.BigNumber.from(0),
-        ethers.BigNumber.from(2),
-        "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
-        `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`
-      );
+
       let tx = await createMarket(
         startsAtTimestamp,
         expiresAtTimestamp,

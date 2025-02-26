@@ -13,8 +13,11 @@ import {
   CategoryScale,
 } from "chart.js";
 import Image from "next/image";
+import { useDataContext } from "@/context/DataContext";
 const SingleMarket: React.FC = () => {
   const router = useRouter();
+  const id = router.query.id;
+  console.log(id);
   useEffect(() => {
     // Register necessary components
     Chart.register(
@@ -71,7 +74,21 @@ const SingleMarket: React.FC = () => {
         new Chart(ctx, config);
       }
     }
-  }, []);
+  }, [
+     
+  ]);
+
+  const {buyOutcome} = useDataContext();
+  const [amount, setAmount] = React.useState("0");
+  const handleConfirmTransaction = async () => {
+    await buyOutcome(
+      10,
+      1,
+      +amount.toString(),
+      2
+    );
+  }
+
   return (
     <>
       <Layout>
@@ -179,30 +196,73 @@ const SingleMarket: React.FC = () => {
 
               <div className="w-1/3 flex flex-col">
                 {/* Transaction Confirmation Box */}
+                <div className="w-80 border border-red-300 rounded-lg p-4 mt-4">
+                  {/* Tab Selector */}
+                  <div className="flex border-b border-red-300">
+                    <button className="w-1/2 text-center py-2 font-semibold text-black border-b-2 border-red-400">
+                      Buy
+                    </button>
+                    <button className="w-1/2 text-center py-2 text-gray-400">
+                      Sell
+                    </button>
+                  </div>
 
-                <div className="p-4 border rounded-lg mt-4">
-                  <h3 className="text-lg font-semibold">
-                    Confirming Transaction
-                  </h3>
-                  <div className="mt-4 flex items-center justify-center">
-                    <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                  {/* Prediction Bar */}
+                  <div className="flex items-center justify-between py-3">
+                    <span className="text-green-600 font-semibold">64%</span>
+                    <div className="flex-1 h-2 mx-2 bg-[#198788] rounded-full relative">
+                      <div
+                        style={{ width: "64%" }}
+                      ></div>
+                      <div
+                        className="absolute right-0 top-0 h-2 bg-red-500 rounded-r-full"
+                        style={{ width: "35%" }}
+                      ></div>
+                    </div>
+                    <span className="text-red-500 font-semibold">35%</span>
                   </div>
-                  <p className="text-center mt-2 text-sm text-gray-600">
-                    Transaction is in progress
-                  </p>
-                  <div className="mt-4 text-sm text-gray-600">
+
+                  {/* Yes / No Buttons */}
+                  <div className="flex gap-3">
+                    <button className="flex-1 bg-[#198788] text-white py-2 rounded-lg flex items-center justify-center">
+                      Yes
+                    </button>
+                    <button className="flex-1 bg-red-100 text-red-500 py-2 rounded-lg flex items-center justify-center">
+                      No
+                    </button>
+                  </div>
+
+                  {/* Input Field */}
+                  <div className="mt-4">
+                    <span className="text-gray-500 text-sm">
+                      Balance:{" "}
+                      <span className="font-semibold">5230 xoUSDC</span>
+                    </span>
+                    <input
+                      type="number"
+                      name="amount"
+                      onChange={(e) => setAmount(e.target.value)}
+                      value={amount}
+                      placeholder="Amount"
+                      className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-red-300"
+                    />
+                  </div>
+
+                  {/* Share Price & Potential Return */}
+                  <div className="mt-2 text-sm text-gray-500">
                     <p>
-                      You Pay: <strong>1000 USDC</strong>
+                      Share Price:{" "}
+                      <span className="font-semibold">0.5 xoUSDC</span>
                     </p>
                     <p>
-                      You Receive: <strong>500 Shares of Yes 1K</strong>
-                    </p>
-                    <p>
-                      Avg Price Per Share: <strong>2 USDC</strong>
+                      Potential Return:{" "}
+                      <span className="font-semibold">400 xoUSDC</span>
                     </p>
                   </div>
-                  <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md">
-                    Confirming ...
+
+                  {/* Confirm Button */}
+                  <button onClick={handleConfirmTransaction} className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg">
+                    Confirm Transaction
                   </button>
                 </div>
 
