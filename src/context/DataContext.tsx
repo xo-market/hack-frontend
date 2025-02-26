@@ -744,11 +744,14 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         toast.error("Error creating Farcaster market", { id });
         return;
       }
+      const startsAt = Math.floor(Date.now() / 1000) + 60; // 1 minute from now
+      const expiresAtSeconds = Math.floor(new Date(marketMetadata?.endDate).getTime() / 1000); 
+      console.log("Starts At", startsAt,expiresAtSeconds);
       let tx = await createMarket(
-        Math.floor(Date.now() / 1000) + 1,
-        Math.floor(Date.now() / 1000) + 60 * 30,
+        startsAt,
+        expiresAtSeconds,
         Addresses[activeChain]?.XOCollateralTokenAddress,
-        0,
+        +ethers.utils.parseUnits("1", 18).toString(),
         0,
         2,
         "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",

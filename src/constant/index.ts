@@ -16,10 +16,10 @@ export const Addresses: { [key: string]: Address } = {
   },
   "123420001402": {
     name: "XO Testnet",
-    XOMultiOutcomeMarketAddress: "0xdeBCD0975753BFE290CE7ca42ffB5CE7917463F2",
-    XONFTMarketAddress: "0x80eCafB02824b4A386539D16AB857CeD5B00799b",
-    XONFTOutcomeMarketAddress: "0x108423040f77BdF39B0F86C07f36306A9C99E5B2",
-    XOCollateralTokenAddress: "0xbC943e09772845D463395F8473D0bF9771BD5a75",
+    XOMultiOutcomeMarketAddress: "0x9C5c116B90dA4ae820f9078586ef232f8FabC510",
+    XONFTMarketAddress: "0xfb06e7B5983724E3623911B12C929CEf07c53278",
+    XONFTOutcomeMarketAddress: "0x7dC2D5FF8b8BcEAB36B0bdA96694c06a14cBF6A6",
+    XOCollateralTokenAddress: "0xC44eaB33F1B67b17Bc1c51F2b2e3BDC81270A53d",
   },
 };
 
