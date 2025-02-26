@@ -13,6 +13,7 @@ const {createFarcasterMarket} = useDataContext();
     param: "",
     value: "",
     endDate: "",
+    startDate:"",
     category: "",
     seed: "",
     reward: "",

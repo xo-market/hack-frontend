@@ -20,9 +20,9 @@ interface DataContextProps {
     _startsAt: number,
     _expiresAt: number,
     _collateralToken: string,
-    _initialCollateral: number,
-    _creatorFeeBps: number,
-    _outcomeCount: number,
+    _initialCollateral: any,
+    _creatorFeeBps: any,
+    _outcomeCount: any,
     _resolver: string,
     _metaDataURI: string
   ) => void;
@@ -137,9 +137,9 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     _startsAt: number, // pre define
     _expiresAt: number, //
     _collateralToken: string,
-    _initialCollateral: number,
-    _creatorFeeBps: number,
-    _outcomeCount: number,
+    _initialCollateral: any,
+    _creatorFeeBps: any,
+    _outcomeCount: any,
     _resolver: string,
     _metaDataURI: string
   ) => {
@@ -163,10 +163,9 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         await tx.wait();
 
         return tx;
-  
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -745,15 +744,61 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         return;
       }
       const startsAt = Math.floor(Date.now() / 1000) + 60; // 1 minute from now
-      const expiresAtSeconds = Math.floor(new Date(marketMetadata?.endDate).getTime() / 1000); 
-      console.log("Starts At", startsAt,expiresAtSeconds);
-      let tx = await createMarket(
-        startsAt,
-        expiresAtSeconds,
+      const expiresAtSeconds = Math.floor(
+        new Date(marketMetadata?.endDate).getTime() / 1000
+      );
+      console.log("Starts At", startsAt, expiresAtSeconds);
+
+      const collateralAmount = ethers.utils.parseUnits(
+        marketMetadata?.seed,
+        18
+      );
+      const startsAtTimestamp = Math.floor(
+        new Date(marketMetadata?.startDate).getTime() / 1000
+      );
+      const expiresAtTimestamp = Math.floor(
+        new Date(marketMetadata?.endDate).getTime() / 1000
+      );
+
+      let collateralTokenInstance = await getContractInstance(
         Addresses[activeChain]?.XOCollateralTokenAddress,
-        +ethers.utils.parseUnits("1", 18).toString(),
-        0,
-        2,
+        CollateralTokenABI
+      );
+
+      if (!collateralTokenInstance) {
+        toast.error("Error getting collateral token instance", { id });
+        return;
+      }
+
+      let allowanceAmount = await collateralTokenInstance.allowance(
+        address,
+        Addresses[activeChain]?.XOMultiOutcomeMarketAddress
+      );
+
+      if (allowanceAmount.lt(collateralAmount)) {
+        const tx = await collateralTokenInstance.approve(
+          Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
+          collateralAmount
+        );
+        await tx.wait();
+      }
+      console.log(
+        startsAtTimestamp,
+        expiresAtTimestamp,
+        Addresses[activeChain]?.XOCollateralTokenAddress,
+        collateralAmount,
+        ethers.BigNumber.from(0),
+        ethers.BigNumber.from(2),
+        "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
+        `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`
+      );
+      let tx = await createMarket(
+        startsAtTimestamp,
+        expiresAtTimestamp,
+        Addresses[activeChain]?.XOCollateralTokenAddress,
+        collateralAmount,
+        ethers.BigNumber.from(0),
+        ethers.BigNumber.from(2),
         "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
         `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`
       );

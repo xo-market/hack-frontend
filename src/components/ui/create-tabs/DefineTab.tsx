@@ -76,7 +76,18 @@ export const DefineTab: React.FC = () => {
           />
         </div>
         <div>
-          <label className="text-gray-700 text-md">Bet End Date</label>
+          <label className="text-gray-700 text-md">Start Date</label>
+          <input
+            type="date"
+            name="startDate"
+            value={createData?.startDate}
+            onChange={(e) => handleOnChange(e)}
+            className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
+            placeholder="End Data"
+          />
+        </div>
+        <div>
+          <label className="text-gray-700 text-md">End Date</label>
           <input
             type="date"
             name="endDate"
@@ -86,6 +97,7 @@ export const DefineTab: React.FC = () => {
             placeholder="End Data"
           />
         </div>
+       
         <div>
           <label className="text-gray-700 text-md">Market categories</label>
           <select
@@ -103,17 +115,7 @@ export const DefineTab: React.FC = () => {
             <option value="social">Social</option>
           </select>
         </div>
-        <div className="col-span-2">
-          <label className="text-gray-700 text-md">Market Tags</label>
-          <div className="flex space-x-2 mt-1">
-            <div className="bg-green-100 text-green-600 text-xs px-3 py-1 rounded-md">
-              XO
-            </div>
-            <div className="bg-purple-100 text-purple-600 text-xs px-3 py-1 rounded-md">
-              Farcaster
-            </div>
-          </div>
-        </div>
+      
       </div>
       <div className="w-full mt-4">
         {" "}
