@@ -1,8 +1,17 @@
 "use client";
 import Layout from "@/components/layout/Layout";
-import React from "react";
-
+import { useDataContext } from "@/context/DataContext";
+import React, { useEffect, useState } from "react";
+import numeral from "numeral"
 const Leaderboard: React.FC = () => {
+  const {getLeaderBoardData} = useDataContext();
+  const [leaderBoardData,setLeaderBoardData] = useState();
+  useEffect(()=>{
+    (async()=>{
+      let res = await getLeaderBoardData();
+      setLeaderBoardData(res?.data);
+    })()
+  },[])
   const data = [
     {
       rank: 1,
@@ -68,29 +77,29 @@ const Leaderboard: React.FC = () => {
             <thead>
               <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
                 <th className="p-3 text-left">Rank</th>
-                <th className="p-3 text-left">xoPoints</th>
+          
                 <th className="p-3 text-left">User</th>
                 <th className="p-3 text-left">Wins</th>
                 <th className="p-3 text-left">Losses</th>
-                <th className="p-3 text-left">Sold</th>
                 <th className="p-3 text-left">Markets</th>
-                <th className="p-3 text-left">PNL</th>
+                <th className="p-3 text-left">Volume</th>
+                <th className="p-3 text-left">Pts</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((player, index) => (
+              {leaderBoardData && leaderBoardData?.map((player:any, index:any) => (
                 <tr
                   key={index}
                   className="border-t text-gray-900 text-sm hover:bg-gray-50"
                 >
-                  <td className="p-3">{player.rank}</td>
-                  <td className="p-3">{player.xoPoints}</td>
-                  <td className="p-3 text-blue-600">{player.user}</td>
-                  <td className="p-3 font-semibold">{player.wins}</td>
-                  <td className="p-3">{player.losses}</td>
-                  <td className="p-3">{player.sold}</td>
-                  <td className="p-3">{player.markets}</td>
-                  <td className="p-3 text-red-600 font-bold">{player.pnl}</td>
+                  <td className="p-3">{index + 1}</td>
+        
+                  <td className="p-3 text-blue-600">{player?.user_address}</td>
+                  <td className="p-3 font-semibold">{numeral(player?.wins).format('0.0a')}</td>
+                  <td className="p-3">{numeral(player?.losses).format('0.0a')}</td>
+                  <td className="p-3">{numeral(player?.markets).format('0.0a')}</td>
+                  <td className="p-3">{numeral(player?.total_volume).format('0.0a')}</td>
+                  <td className="p-3 text-red-600 font-bold">{numeral(player?.points).format('0.0a')}</td>
                 </tr>
               ))}
             </tbody>

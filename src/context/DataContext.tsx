@@ -68,6 +68,7 @@ interface DataContextProps {
   createFarcasterMarket: (marketMetadata: any, farcasterData: any) => void;
   fetchMarketChartPrices: (marketID: number) => void;
   getFaucet : () => void;
+  getLeaderBoardData : () => void;
 }
 
 interface DataContextProviderProps {
@@ -859,6 +860,15 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       console.log(error);
     }
   };
+
+  const getLeaderBoardData=async ()=>{
+    try {
+      let res = await api.get("/user/leaderboard");
+      return res?.data;
+    } catch (error) {
+      throw error;
+    }
+  }
   return (
     <DataContext.Provider
       value={{
@@ -893,7 +903,8 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         validateFarcasterMarket,
         createFarcasterMarket,
         fetchMarketChartPrices,
-        getFaucet
+        getFaucet,
+        getLeaderBoardData
       }}
     >
       {children}
