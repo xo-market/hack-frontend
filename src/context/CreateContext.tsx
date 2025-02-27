@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useDataContext } from "./DataContext";
 import { api } from "@/config";
@@ -43,6 +43,12 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
     }
     await createFarcasterMarket(createData,farcasterData);
   };
+
+  useEffect(() => {
+    if (createData.url) {
+      fetchFarcasterData(createData.url);
+    }
+  }, [createData.url]);
 
   const fetchFarcasterData = async (cast_url: any) => {
     let id = toast.loading("Fetching Farcaster Data ...");

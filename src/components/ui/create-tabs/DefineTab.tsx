@@ -11,6 +11,7 @@ export const DefineTab: React.FC = () => {
     changeNextTab,
     changePreviousTab,
     setFormData,
+    farcasterData,
   } = useCreateContext();
   const [fileName, setFileName] = useState("");
 
@@ -56,13 +57,10 @@ export const DefineTab: React.FC = () => {
             onChange={(e) => handleOnChange(e)}
             className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
           >
-            <option value="null" disabled>
-              Select
-            </option>
+            <option value="null">Select Cast Parameter</option>
             <option value="likes">Likes</option>
             <option value="recasts">Recasts</option>
             <option value="replies">Replies</option>
-    
           </select>
         </div>
         <div>
@@ -70,16 +68,33 @@ export const DefineTab: React.FC = () => {
           <input
             type="number"
             name="value"
+            min={
+              createData?.param === "likes"
+                ? farcasterData?.reactions?.likes_count
+                : createData?.param === "recasts"
+                ? farcasterData?.reactions?.recasts_count
+                : createData?.param === "replies"
+                ? farcasterData?.replies?.count
+                : 0
+            }
             value={createData?.value}
             onChange={(e) => handleOnChange(e)}
             className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
-            placeholder="1000"
+            placeholder={`${
+              createData?.param === "likes"
+                ? farcasterData?.reactions?.likes_count
+                : createData?.param === "recasts"
+                ? farcasterData?.reactions?.recasts_count
+                : createData?.param === "replies"
+                ? farcasterData?.replies?.count
+                : 0
+            } minimum value`}
           />
         </div>
         <div>
           <label className="text-gray-700 text-md">Start Date</label>
           <input
-            type="date"
+            type="datetime-local"
             name="startDate"
             value={createData?.startDate}
             onChange={(e) => handleOnChange(e)}
@@ -90,7 +105,7 @@ export const DefineTab: React.FC = () => {
         <div>
           <label className="text-gray-700 text-md">End Date</label>
           <input
-            type="date"
+            type="datetime-local"
             name="endDate"
             value={createData?.endDate}
             onChange={(e) => handleOnChange(e)}
@@ -98,7 +113,7 @@ export const DefineTab: React.FC = () => {
             placeholder="End Data"
           />
         </div>
-       
+
         <div>
           <label className="text-gray-700 text-md">Market categories</label>
           <select
@@ -107,16 +122,13 @@ export const DefineTab: React.FC = () => {
             onChange={(e) => handleOnChange(e)}
             className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
           >
-            <option value="null" disabled>
-              Select
-            </option>
+            <option value="null">Select Category</option>
             <option value="politics">Politics</option>
             <option value="entertainment">Entertainment</option>
             <option value="sports">Sports</option>
             <option value="social">Social</option>
           </select>
         </div>
-      
       </div>
       {/* <div className="w-full mt-4">
         {" "}

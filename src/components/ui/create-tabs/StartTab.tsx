@@ -5,26 +5,20 @@ const StartTab: React.FC = () => {
 
   return (
     <>
-      <div className="mt-4  rounded-md flex items-center justify-between">
-        <input
-          type="text"
-          name="url"
-          onChange={async (e) => {
-            handleOnChange(e)
-          }}
-          onPaste={async (e) => {
-            setCreateData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-            console.log(e.target.value);
-            if(e.target.value){
-              await fetchFarcasterData(e.target.value);
-            }
-          }}
-          value={createData?.url}
-          placeholder="https://twitter.com/xodotmarket/status/1839006163440119910"
-          className="w-full px-4 py-2 bg-gray-100 rounded-md"
-        />
-      </div>
-
+     <div className="mt-4 rounded-md flex items-center justify-between">
+      <input
+        type="text"
+        name="url"
+        onChange={handleOnChange}
+        onPaste={(e) => {
+          const pastedText = e.clipboardData.getData("text");
+          setCreateData((prev) => ({ ...prev, url: pastedText }));
+        }}
+        value={createData.url}
+        placeholder="https://warpcast.com/vitalik.eth/0x0868f688"
+        className="w-full px-4 py-2 bg-gray-100 rounded-md"
+      />
+    </div>
       <div className="flex justify-end mt-4">
         <button
           onClick={changeNextTab}

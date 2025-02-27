@@ -87,7 +87,10 @@ const Home: React.FC = () => {
       setFilteredMarkets(marketsData);
     } else {
       setFilteredMarkets(
-        marketsData?.filter((market) => market?.category?.toLowerCase() === category?.toLowerCase())
+        marketsData?.filter(
+          (market) =>
+            market?.category?.toLowerCase() === category?.toLowerCase()
+        )
       );
     }
   };
@@ -198,7 +201,7 @@ const Home: React.FC = () => {
           {/* Category Buttons */}
           <button
             onClick={() => handleFilter("All")}
-            className={`px-4 py-2 rounded-md font-medium ${
+            className={`px-4 py-2 rounded-md font-medium text-xs ${
               selectedCategory === "All"
                 ? "bg-pink-500 text-white"
                 : "border border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white transition"
@@ -231,7 +234,7 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-6 mt-10">
-          {filteredMarkets &&
+          {filteredMarkets.length > 0 ? (
             filteredMarkets?.map((data: any, index: any) => {
               return (
                 <PredictionCard
@@ -240,7 +243,10 @@ const Home: React.FC = () => {
                   onClick={() => console.log("Clicked")}
                 />
               );
-            })}
+            })
+          ) : (
+            <p className="text-center text-black">No Data Available</p>
+          )}
         </div>
       </div>
     </Layout>

@@ -17,6 +17,7 @@ const SingleMarket: React.FC = () => {
     formatTimestamp,
     fetchMarketChartPrices,
     fetchSingleMarketData,
+    tokenBalance,
   } = useDataContext();
   const [prices, setPrices] = useState<
     { price: number[]; timestamp: string }[]
@@ -218,11 +219,14 @@ const SingleMarket: React.FC = () => {
                     <div className="mt-4">
                       <span className="text-gray-500 text-sm">
                         Balance:{" "}
-                        <span className="font-semibold">5230 xoUSDC</span>
+                        <span className="font-semibold">
+                          {tokenBalance} XO Token
+                        </span>
                       </span>
                       <input
                         type="number"
                         name="amount"
+                        max={tokenBalance.toString()}
                         onChange={(e) => setAmount(e.target.value)}
                         value={amount}
                         placeholder="Amount"
@@ -234,11 +238,21 @@ const SingleMarket: React.FC = () => {
                     <div className="mt-2 text-sm text-gray-500">
                       <p>
                         Share Price:{" "}
-                        <span className="font-semibold">0.5 xoUSDC</span>
+                        <span className="font-semibold">
+                          {marketData?.yesPercentage /
+                            (marketData?.yesPercentage +
+                              marketData?.noPercentage)}{" "}
+                          XO Token
+                        </span>
                       </p>
                       <p>
                         Potential Return:{" "}
-                        <span className="font-semibold">400 xoUSDC</span>
+                        <span className="font-semibold">
+                          {amount *
+                            (marketData?.yesPercentage /
+                              (marketData?.yesPercentage +
+                                marketData?.noPercentage))}
+                        </span>
                       </p>
                     </div>
 
