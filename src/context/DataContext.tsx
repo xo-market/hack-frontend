@@ -578,6 +578,18 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
 
+  const validateFarcasterMarket = async ()=>{
+    let id = toast.loading("Validate Farcaster Market...");
+
+    const res = await api.post("/market/farcaster/validate")
+    try {
+      
+    } catch (error) {
+      console.log("");
+      return false;
+
+    }
+  }
   const setProtocolFee = async (_feeBps: number) => {
     if (!activeChain) return;
 
