@@ -578,18 +578,6 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
 
-  const validateFarcasterMarket = async ()=>{
-    let id = toast.loading("Validate Farcaster Market...");
-
-    const res = await api.post("/market/farcaster/validate")
-    try {
-      
-    } catch (error) {
-      console.log("");
-      return false;
-
-    }
-  }
   const setProtocolFee = async (_feeBps: number) => {
     if (!activeChain) return;
 
@@ -725,13 +713,25 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   // Validate a Farcaster market
   const validateFarcasterMarket = async (validationData: any) => {
     try {
-      const response = await api.post("/farcaster/validate", validationData);
+      const response = await api.post("/market/farcaster/validate", validationData);
       return response.data;
     } catch (error) {
       console.error("Error validating Farcaster market:", error);
       throw error;
     }
   };
+
+    // // Validate a Farcaster market
+    // const fetchFarcasterData = async (url: any) => {
+    //   try {
+    //     const response = await api.post("/market/farcaster/validate", validationData);
+    //     return response.data;
+    //   } catch (error) {
+    //     console.error("Error validating Farcaster market:", error);
+    //     throw error;
+    //   }
+    // };
+  
 
   // Create a new Farcaster market
   const createFarcasterMarket = async (
