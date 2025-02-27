@@ -61,7 +61,8 @@ const {createFarcasterMarket} = useDataContext();
         changeTab,
         changeNextTab,
         changePreviousTab,
-        setFormData
+        setFormData,
+        setCreateData
       }}
     >
       {children}

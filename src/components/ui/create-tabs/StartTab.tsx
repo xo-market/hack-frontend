@@ -1,7 +1,7 @@
 import { useCreateContext } from "@/context/CreateContext";
 import React from "react";
 const StartTab: React.FC = () => {
-  const { createData, handleOnChange, changeNextTab } = useCreateContext();
+  const { createData, handleOnChange, changeNextTab,setCreateData } = useCreateContext();
   return (
     <>
       <div className="mt-4  rounded-md flex items-center justify-between">
@@ -9,7 +9,7 @@ const StartTab: React.FC = () => {
           type="text"
           name="url"
           onChange={(e) => handleOnChange(e)}
-          onPaste={(e) => handleOnChange(e)}
+          onPaste={(e) => setCreateData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
           value={createData?.url}
           placeholder="https://twitter.com/xodotmarket/status/1839006163440119910"
           className="w-full px-4 py-2 bg-gray-100 rounded-md"
