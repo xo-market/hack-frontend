@@ -4,13 +4,13 @@ import { useLogin, usePrivy, useLogout } from "@privy-io/react-auth";
 import { useAccount, useBalance } from "wagmi";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import numeral from "numeral"
+import numeral from "numeral";
 import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
 import { useDataContext } from "@/context/DataContext";
 const Navbar: React.FC = () => {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const { address } = useAccount();
-  const { tokenBalance } = useDataContext();
+  const { tokenBalance, getFaucet } = useDataContext();
   const { ready, authenticated, user: privyUser } = usePrivy();
   const router = useRouter();
   const disableLogin = !ready || (ready && authenticated);
@@ -33,22 +33,6 @@ const Navbar: React.FC = () => {
   const { data, isError, isLoading } = useBalance({
     address,
   });
-
-  const handleProfileClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!address) {
-      toast.error("Please connect your wallet first", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      return;
-    }
-    router.push(`/profile/${address}`);
-  };
 
   return (
     <>
@@ -78,8 +62,11 @@ const Navbar: React.FC = () => {
           >
             Leaderboard
           </Link>
-          
-          <Link href="/create" className="text-pink-600 font-bold hover:text-gray-900">
+
+          <Link
+            href="/create"
+            className="text-pink-600 font-bold hover:text-gray-900"
+          >
             Create New
           </Link>
         </div>
@@ -102,7 +89,7 @@ const Navbar: React.FC = () => {
                 "..." +
                 privyUser?.wallet?.address.slice(-4) +
                 " | " +
-                numeral(data?.formatted).format('0.0a') +
+                numeral(data?.formatted).format("0.0a") +
                 " " +
                 data?.symbol
               : "Login"}
@@ -122,15 +109,21 @@ const Navbar: React.FC = () => {
                 </span>
               </button>
               <div
-                className="absolute top-20 right-4 text-xs bg-white border border-pink-400 rounded-md p-2 w-56"
+                className="absolute top-20 right-4 text-xs bg-white border border-pink-400 rounded-md p-2 w-48"
                 style={{ display: showProfile ? "block" : "none" }}
               >
                 <div className="p-2 text-black hover:bg-blue-200 cursor-pointer">
                   <Link href="/dashboard"> My Bets</Link>
                 </div>
                 <div
+                  onClick={getFaucet}
+                  className="bg-blue-500 cursor-pointer text-white px-4 py-2 rounded-md text-sm mt-2"
+                >
+                  Get Drip Faucet
+                </div>
+                <div
                   onClick={logout}
-                  className="p-2 text-black hover:bg-blue-200 cursor-pointer"
+                  className="bg-pink-500 cursor-pointer text-white px-4 py-2 rounded-md text-sm mt-2"
                 >
                   Logout
                 </div>

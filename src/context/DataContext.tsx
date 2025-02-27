@@ -65,11 +65,9 @@ interface DataContextProps {
   uploadMarketData: (metadata: any) => void;
   scheduleFarcasterMarket: (marketData: any) => void;
   validateFarcasterMarket: (validationData: any) => void;
-  createFarcasterMarket: (
-    marketMetadata: any,
-    farcasterData:any
-  ) => void;
-  fetchMarketChartPrices : (marketID:number) => void ;
+  createFarcasterMarket: (marketMetadata: any, farcasterData: any) => void;
+  fetchMarketChartPrices: (marketID: number) => void;
+  getFaucet : () => void;
 }
 
 interface DataContextProviderProps {
@@ -136,8 +134,6 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
   // User -> url -> (Likes,parametres) -> (Choice Params) ->
-
-
 
   const createMarket = async (
     _startsAt: number, // pre define
@@ -715,7 +711,10 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   // Validate a Farcaster market
   const validateFarcasterMarket = async (validationData: any) => {
     try {
-      const response = await api.post("/market/farcaster/validate", validationData);
+      const response = await api.post(
+        "/market/farcaster/validate",
+        validationData
+      );
       return response.data;
     } catch (error) {
       console.error("Error validating Farcaster market:", error);
@@ -723,17 +722,14 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
 
-
-
-    const fetchMarketChartPrices = async (marketID:number)=>{
-      try {
-        const data = await api.get(`/market/price-chart/${marketID}`);
-        return data?.data;
-      } catch (error) {
-        console.log(error);
-      }
+  const fetchMarketChartPrices = async (marketID: number) => {
+    try {
+      const data = await api.get(`/market/price-chart/${marketID}`);
+      return data?.data;
+    } catch (error) {
+      console.log(error);
     }
-  
+  };
 
   // Create a new Farcaster market
   const createFarcasterMarket = async (
@@ -844,6 +840,25 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       throw error;
     }
   };
+
+  const getFaucet = async () => {
+    let id = toast.loading("Dripping Faucet..");
+    try {
+      if (!address) {
+        toast.error("No Address Detected !!!", { id });
+        return;
+      }
+      let res = await api.post("/faucet/token", {
+        recipient: address,
+      });
+
+      toast.success("Driping Completed", { id });
+      return;
+    } catch (error) {
+      toast.error("Driping Failed", { id });
+      console.log(error);
+    }
+  };
   return (
     <DataContext.Provider
       value={{
@@ -877,7 +892,8 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         scheduleFarcasterMarket,
         validateFarcasterMarket,
         createFarcasterMarket,
-        fetchMarketChartPrices
+        fetchMarketChartPrices,
+        getFaucet
       }}
     >
       {children}
