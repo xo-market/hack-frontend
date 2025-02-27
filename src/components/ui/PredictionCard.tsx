@@ -26,6 +26,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
                 {tag}
               </span>
             ))}
+            <span className="bg-pink-200 uppercase text-[#198778] text-xs px-3 py-1 rounded-full font-semibold">{data?.category}</span>
            <div className="flex border justify-content-end">{checkExpiration(data?.expires_at) ? <p>🟢</p> : <p>🔴</p>}</div>
           </div>
 
