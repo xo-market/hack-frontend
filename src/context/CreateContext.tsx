@@ -1,19 +1,21 @@
 import React, { createContext, useState, useContext } from "react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useDataContext } from "./DataContext";
+import { api } from "@/config";
 const CreateContext = createContext<any>(null);
 
 export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
-const {createFarcasterMarket} = useDataContext();
+  const { createFarcasterMarket } = useDataContext();
   const [tab, setTab] = useState("start");
   const [image, setImage] = useState(null);
   const [formData, setFormData] = useState(null);
+  const [farcasterData,setFarcasterData] = useState();
   const [createData, setCreateData] = useState({
     url: "",
     param: "",
     value: "",
     endDate: "",
-    startDate:"",
+    startDate: "",
     category: "",
     seed: "",
     reward: "",
@@ -27,15 +29,36 @@ const {createFarcasterMarket} = useDataContext();
   };
 
   const createMarket = async () => {
-    if(!createData.url || !createData.param || !createData.value || !createData.endDate || !createData.category || !createData.seed || !createData.reward || !image) {
-        toast.error("Please fill all the fields");
-        return;
+    if (
+      !createData.url ||
+      !createData.param ||
+      !createData.value ||
+      !createData.endDate ||
+      !createData.category ||
+      !createData.seed ||
+      !createData.reward
+    ) {
+      toast.error("Please fill all the fields");
+      return;
     }
-
-    await createFarcasterMarket(createData,image,formData);
-    
-   
+    await createFarcasterMarket(createData,farcasterData);
   };
+
+  const fetchFarcasterData = async (cast_url: any) => {
+    let id = toast.loading("Fetching Farcaster Data ...");
+    try {
+      const response = await api.get(`/farcaster/cast?cast_url=${cast_url}`);
+      setFarcasterData(response?.data?.cast);
+      console.log(response?.data?.cast);
+      toast.success("Farcaster Data Fetch Sucessfully",{id});
+      return response.data;
+    } catch (error) {
+      toast.error("Error Fetching Farcaster market",{id});
+      throw error;
+    }
+  };
+
+
 
   const changeTab = (newTab: string) => setTab(newTab);
   const changeNextTab = () => {
@@ -62,7 +85,9 @@ const {createFarcasterMarket} = useDataContext();
         changeNextTab,
         changePreviousTab,
         setFormData,
-        setCreateData
+        setCreateData,
+        fetchFarcasterData,
+        farcasterData
       }}
     >
       {children}

@@ -38,14 +38,17 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
             </svg>
           </div>
 
-          <div className="border border-pink-300 rounded-lg overflow-hidden mt-4">
+          <div className="border border-pink-300 object-cover rounded-lg justify-center items-center flex overflow-hidden mt-4">
             <Image
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdWbSawA3GEvIqk54-RJTyKllWJPfh4RjrDQ&s"
+              src={
+                data?.image
+                  ? data?.image
+                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdWbSawA3GEvIqk54-RJTyKllWJPfh4RjrDQ&s"
+              }
               alt="Market Image"
-              className="w-[100%]"
-              width={100}
-              height={100}
-              objectFit="contain"
+              className="w-[100%] h-[30vh]  "
+              width={200} // Fixed width
+              height={128} // Fixed height
             />
           </div>
 
@@ -85,10 +88,10 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
 
           <div className="flex items-center text-xs text-gray-600 mt-6">
             <span className="flex items-center">
-              Starts : <br/>  {formatTimestamp(data?.starts_at)}
+              Starts : <br /> {formatTimestamp(data?.starts_at)}
             </span>
             <span className="flex items-center ml-6">
-              End : <br/>  {formatTimestamp(data?.expires_at)}
+              End : <br /> {formatTimestamp(data?.expires_at)}
             </span>
             <span className="ml-auto text-pink-500 font-semibold">
               {data?.creator.slice(0, 5) + "..." + data?.creator.slice(-5)}

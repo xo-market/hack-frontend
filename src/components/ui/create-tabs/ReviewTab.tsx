@@ -1,19 +1,29 @@
 import Image from "next/image";
 import { useCreateContext } from "@/context/CreateContext";
 export const ReviewTab: React.FC = () => {
-  const { createData, image, createMarket } = useCreateContext();
+  const { createData, image, createMarket, farcasterData } = useCreateContext();
   return (
     <>
       <div className="grid grid-cols-2 gap-4 mt-6">
         {/* Post Preview */}
-        <div className="rounded-lg p-2 flex justify-center items-center border">
+        <div className="rounded-lg p-2 flex justify-center flex-col gap-y-4 items-center border">
           <Image
-            src={image ? image : "/images/placeholder.png"}
+            src={
+              farcasterData?.author?.pfp_url
+                ? farcasterData?.author?.pfp_url
+                : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+            }
             alt="Post Preview"
             className="w-full h-auto rounded"
             width={150}
             height={150}
           />
+          {farcasterData?.author?.username && (
+            <p className="text-sm">
+              By : {farcasterData?.author?.display_name} |{" "}
+              {farcasterData?.author?.username}{" "}
+            </p>
+          )}
         </div>
 
         {/* Market Info */}

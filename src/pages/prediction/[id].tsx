@@ -1,6 +1,6 @@
 "use client";
 import Layout from "@/components/layout/Layout";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import {
@@ -17,43 +17,56 @@ import { useDataContext } from "@/context/DataContext";
 const SingleMarket: React.FC = () => {
   const router = useRouter();
   const id = router.query.id;
-  console.log(id);
+  const chartRef = useRef<Chart | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [prices, setPrices] = useState<{ price: number[]; timestamp: string }[]>(
+    []
+  );
+
   useEffect(() => {
     // Register necessary components
-    Chart.register(
-      LineController,
-      LineElement,
-      PointElement,
-      LinearScale,
-      CategoryScale
-    );
+    Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale);
+  }, []);
 
-    var config: ChartConfiguration = {
+  useEffect(() => {
+    (async () => {
+      let data = await fetchMarketChartPrices(id);
+      setPrices(data?.prices || []);
+    })();
+  }, [id]);
+
+  useEffect(() => {
+    if (!prices.length) return;
+
+    // Transform backend data
+    const labels = prices.map((item) =>
+      new Date(Number(item.timestamp)).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })
+    );    
+    const dataset1 = prices.map((item) => Number(item.price[0]) / 1e14);
+    const dataset2 = prices.map((item) => Number(item.price[1]) / 1e14);    
+
+    const config: ChartConfiguration = {
       type: "line",
       data: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-        ],
+        labels,
         datasets: [
           {
             label: `${new Date().getFullYear()}`,
             backgroundColor: "#FE69B3",
             borderColor: "#FE69B3",
-            data: [65, 78, 66, 44, 56, 67, 75],
+            data: dataset1,
             fill: false,
           },
           {
             label: `${new Date().getFullYear() - 1}`,
-            fill: false,
             backgroundColor: "#3FDEC9",
             borderColor: "#3FDEC9",
-            data: [40, 68, 86, 74, 56, 60, 87],
+            data: dataset2,
+            fill: false,
           },
         ],
       },
@@ -67,18 +80,20 @@ const SingleMarket: React.FC = () => {
       },
     };
 
-    var canvas = document.getElementById("line-chart") as HTMLCanvasElement;
-    if (canvas) {
-      var ctx = canvas.getContext("2d");
+    // Destroy previous instance if exists
+    if (chartRef.current) {
+      chartRef.current.destroy();
+    }
+
+    // Initialize new chart instance
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext("2d");
       if (ctx) {
-        new Chart(ctx, config);
+        chartRef.current = new Chart(ctx, config);
       }
     }
-  }, [
-     
-  ]);
-
-  const {buyOutcome} = useDataContext();
+  }, [prices,id]);
+  const {buyOutcome,fetchMarketChartPrices} = useDataContext();
   const [amount, setAmount] = React.useState("0");
   const handleConfirmTransaction = async () => {
     await buyOutcome(
@@ -87,7 +102,8 @@ const SingleMarket: React.FC = () => {
       +amount.toString(),
       +amount.toString()
     );
-  }
+  } 
+
 
   return (
     <>

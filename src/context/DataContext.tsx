@@ -67,9 +67,9 @@ interface DataContextProps {
   validateFarcasterMarket: (validationData: any) => void;
   createFarcasterMarket: (
     marketMetadata: any,
-    image: any,
-    formData: any
+    farcasterData:any
   ) => void;
+  fetchMarketChartPrices : (marketID:number) => void ;
 }
 
 interface DataContextProviderProps {
@@ -136,6 +136,8 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
   // User -> url -> (Likes,parametres) -> (Choice Params) ->
+
+
 
   const createMarket = async (
     _startsAt: number, // pre define
@@ -721,23 +723,22 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
 
-    // // Validate a Farcaster market
-    // const fetchFarcasterData = async (url: any) => {
-    //   try {
-    //     const response = await api.post("/market/farcaster/validate", validationData);
-    //     return response.data;
-    //   } catch (error) {
-    //     console.error("Error validating Farcaster market:", error);
-    //     throw error;
-    //   }
-    // };
+
+
+    const fetchMarketChartPrices = async (marketID:number)=>{
+      try {
+        const data = await api.get(`/market/price-chart/${marketID}`);
+        return data?.data;
+      } catch (error) {
+        console.log(error);
+      }
+    }
   
 
   // Create a new Farcaster market
   const createFarcasterMarket = async (
     marketMetadata: any,
-    image: any,
-    formData: any
+    farcasterData: any
   ) => {
     let id = toast.loading("Creating Farcaster market...");
     try {
@@ -745,23 +746,23 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         return;
       }
 
-      const ipfsHashResponse = await apiMultipart.post(
-        "/ipfs/upload_image",
-        formData
-      );
+      // const ipfsHashResponse = await apiMultipart.post(
+      //   "/ipfs/upload_image",
+      //   formData
+      // );
 
-      if (!ipfsHashResponse?.data?.success) {
-        toast.error("Error uploading image to IPFS", { id });
-        return;
-      }
+      // if (!ipfsHashResponse?.data?.success) {
+      //   toast.error("Error uploading image to IPFS", { id });
+      //   return;
+      // }
 
       const formattedData = {
-        name: `${marketMetadata?.param} Prediction Market`,
+        name: `${farcasterData?.author?.username} Prediction Market`,
         description: generateBinaryPredictionQuestion(
           marketMetadata?.param,
           marketMetadata?.value
         ),
-        image: ipfsHashResponse?.data?.image_link,
+        image: farcasterData?.author?.pfp_url,
         attributes: [
           { trait_type: "Category", value: marketMetadata?.category },
           { trait_type: "Type", value: marketMetadata?.param },
@@ -876,6 +877,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         scheduleFarcasterMarket,
         validateFarcasterMarket,
         createFarcasterMarket,
+        fetchMarketChartPrices
       }}
     >
       {children}

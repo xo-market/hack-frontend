@@ -60,8 +60,8 @@ export const DefineTab: React.FC = () => {
               Select
             </option>
             <option value="likes">Likes</option>
-            <option value="shares">Shares</option>
-            <option value="comments">Comments</option>
+            <option value="shares">Recasts</option>
+    
           </select>
         </div>
         <div>
@@ -117,7 +117,7 @@ export const DefineTab: React.FC = () => {
         </div>
       
       </div>
-      <div className="w-full mt-4">
+      {/* <div className="w-full mt-4">
         {" "}
         <div className="flex flex-col items-center justify-center p-6 bg-white text-white border-4 border-dotted w-full">
           <label className="cursor-pointer bg-violet-300  text-violet-600 py-2 px-4 rounded-lg mb-3 transition duration-300">
@@ -154,7 +154,7 @@ export const DefineTab: React.FC = () => {
             </div>
           )}
         </div>
-      </div>
+      </div> */}
 
       <div className="flex justify-end gap-4 mt-6">
         <button

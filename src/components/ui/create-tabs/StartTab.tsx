@@ -1,15 +1,24 @@
 import { useCreateContext } from "@/context/CreateContext";
 import React from "react";
 const StartTab: React.FC = () => {
-  const { createData, handleOnChange, changeNextTab,setCreateData } = useCreateContext();
+  const { createData, handleOnChange, changeNextTab,setCreateData,fetchFarcasterData } = useCreateContext();
+
   return (
     <>
       <div className="mt-4  rounded-md flex items-center justify-between">
         <input
           type="text"
           name="url"
-          onChange={(e) => handleOnChange(e)}
-          onPaste={(e) => setCreateData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
+          onChange={async (e) => {
+            handleOnChange(e)
+          }}
+          onPaste={async (e) => {
+            setCreateData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+            console.log(e.target.value);
+            if(e.target.value){
+              await fetchFarcasterData(e.target.value);
+            }
+          }}
           value={createData?.url}
           placeholder="https://twitter.com/xodotmarket/status/1839006163440119910"
           className="w-full px-4 py-2 bg-gray-100 rounded-md"
