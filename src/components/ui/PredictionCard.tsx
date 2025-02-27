@@ -9,9 +9,9 @@ interface PredictionCardProps {
 
 const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
   const { formatTimestamp } = useDataContext();
-  const checkExpiration = (expirationTimestamp:number) => {
+  const checkExpiration = (expirationTimestamp: number) => {
     const currentTime = Math.floor(Date.now() / 1000); // Convert to seconds
-    return (currentTime >= expirationTimestamp);
+    return currentTime >= expirationTimestamp;
   };
   return (
     <>
@@ -26,8 +26,12 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
                 {tag}
               </span>
             ))}
-            <span className="bg-pink-200 uppercase text-[#198778] text-xs px-3 py-1 rounded-full font-semibold">{data?.category}</span>
-           <div className="flex border justify-content-end">{checkExpiration(data?.expires_at) ? <p>🟢</p> : <p>🔴</p>}</div>
+            <span className="bg-pink-200 uppercase text-[#198778] text-xs px-3 py-1 rounded-full font-semibold">
+              {data?.category}
+            </span>
+            <div className="flex justify-content-end">
+              {checkExpiration(data?.expires_at) ? <p>🟢</p> : <p>🔴</p>}
+            </div>
           </div>
 
           <div className="border border-pink-300 object-cover rounded-lg justify-center items-center flex overflow-hidden mt-4">
@@ -50,19 +54,21 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
 
           <div className="flex items-center gap-2 mt-3">
             <span className="text-green-500 text-xs">
-              {data?.progress?.yes}%
+              {Number(data?.yesPercentage).toFixed(2)}%
             </span>
             <div className="flex-1 h-2 bg-gray-200 rounded-full relative">
               <div
                 className="absolute top-0 left-0 h-full bg-green-500 rounded-full rounded-r-none"
-                style={{ width: `${data?.progress?.yes}%` }}
+                style={{ width: `${Number(data?.yesPercentage).toFixed(2)}%` }}
               ></div>
               <div
                 className="absolute top-0 right-0 h-full bg-red-500 rounded-full rounded-l-none"
-                style={{ width: `${data?.progress?.no}%` }}
+                style={{ width: `${Number(data?.noPercentage).toFixed(2)}%` }}
               ></div>
             </div>
-            <span className="text-pink-500 text-xs">{data?.progress?.no}%</span>
+            <span className="text-pink-500 text-xs">
+              {Number(data?.noPercentage).toFixed(2)}%
+            </span>
           </div>
 
           <div className="flex justify-center mt-3 gap-4">

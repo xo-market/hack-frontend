@@ -60,7 +60,8 @@ export const DefineTab: React.FC = () => {
               Select
             </option>
             <option value="likes">Likes</option>
-            <option value="shares">Recasts</option>
+            <option value="recasts">Recasts</option>
+            <option value="replies">Replies</option>
     
           </select>
         </div>

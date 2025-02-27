@@ -45,7 +45,7 @@ const SingleMarket: React.FC = () => {
     (async () => {
       let data = await fetchMarketChartPrices(id);
       let market = await fetchSingleMarketData(id);
-      setMarketData(market[0]);
+      setMarketData(market);
       setPrices(data?.prices || []);
     })();
   }, [id]);
@@ -61,8 +61,10 @@ const SingleMarket: React.FC = () => {
         day: "numeric",
       })
     );
-    const dataset1 = prices.map((item) => Number(item.price[0]) / 1e14);
-    const dataset2 = prices.map((item) => Number(item.price[1]) / 1e14);
+    const dataset1 = prices.map((item) => Number(item.price[0]) / 1e18);
+    const dataset2 = prices.map((item) => Number(item.price[1]) / 1e18);
+
+    console.log(labels, dataset1, dataset2);
 
     const config: ChartConfiguration = {
       type: "line",
@@ -174,11 +176,12 @@ const SingleMarket: React.FC = () => {
                   <span className="px-2 py-0.5 text-xs bg-blue-200 text-blue-700 rounded">
                     NEW
                   </span>
-                  {marketData?.tags && marketData?.tags?.map((item) => (
-                    <span className="px-2 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">
-                      {item}
-                    </span>
-                  ))}
+                  {marketData?.tags &&
+                    marketData?.tags?.map((item) => (
+                      <span className="px-2 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">
+                        {item}
+                      </span>
+                    ))}
                   <span className="px-2 py-0.5 text-xs bg-pink-200 text-pink-700 rounded">
                     {marketData?.category}
                   </span>
@@ -243,15 +246,29 @@ const SingleMarket: React.FC = () => {
 
                   {/* Prediction Bar */}
                   <div className="flex items-center justify-between py-3">
-                    <span className="text-green-600 font-semibold">64%</span>
+                    <span className="text-green-600 font-semibold">
+                      {Number(marketData?.yesPercentage).toFixed(2)}%
+                    </span>
                     <div className="flex-1 h-2 mx-2 bg-[#198788] rounded-full relative">
-                      <div style={{ width: "64%" }}></div>
+                      <div
+                        style={{
+                          width: `${Number(marketData?.yesPercentage).toFixed(
+                            2
+                          )}%`,
+                        }}
+                      ></div>
                       <div
                         className="absolute right-0 top-0 h-2 bg-red-500 rounded-r-full"
-                        style={{ width: "35%" }}
+                        style={{
+                          width: `${Number(marketData?.noPercentage).toFixed(
+                            2
+                          )}%`,
+                        }}
                       ></div>
                     </div>
-                    <span className="text-red-500 font-semibold">35%</span>
+                    <span className="text-red-500 font-semibold">
+                      {Number(marketData?.noPercentage).toFixed(2)}%
+                    </span>
                   </div>
 
                   {/* Yes / No Buttons */}

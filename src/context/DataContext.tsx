@@ -31,7 +31,7 @@ interface DataContextProps {
     _isApproved: boolean,
     _data: string
   ) => void;
-  setMarketResolver: (_resolver: string, _isPublicResolver: boolean) => void;
+  setMarketResolver: (_resolver: any, _isPublicResolver: boolean) => void;
   setMarketResolverFee: (_feeBps: number) => void;
   getMarketResolver: (_resolver: string) => void;
   resolveMarket: (_marketId: number, _winningOutcome: number) => void;
@@ -67,10 +67,10 @@ interface DataContextProps {
   validateFarcasterMarket: (validationData: any) => void;
   createFarcasterMarket: (marketMetadata: any, farcasterData: any) => void;
   fetchMarketChartPrices: (marketID: number) => void;
-  getFaucet : () => void;
-  getLeaderBoardData : () => void;
-  getUserData : () => void;
-  fetchSingleMarketData : () => void;
+  getFaucet: () => void;
+  getLeaderBoardData: () => void;
+  getUserData: () => void;
+  fetchSingleMarketData: (id: number) => void;
 }
 
 interface DataContextProviderProps {
@@ -165,9 +165,27 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
           _resolver,
           _metaDataURI
         );
-        await tx.wait();
-
-        return tx;
+        const receipt = await tx.wait();
+        let marketId;
+        for (const log of receipt.logs) {
+          try {
+            const parsedLog = marketContract.interface.parseLog(log);
+            if (parsedLog.name === "MarketCreated") {
+              console.log("✅ MarketCreated Event Caught!");
+              console.log("Market ID:", parsedLog.args.marketId.toString());
+              marketId = parsedLog.args.marketId.toString();
+              console.log("Creator:", parsedLog.args[1]); // msg.sender
+              console.log("Starts At:", parsedLog.args[2].toString());
+              console.log("Expires At:", parsedLog.args[3].toString());
+              console.log("Collateral Token:", parsedLog.args[4]);
+              console.log("Outcome Count:", parsedLog.args[5].toString());
+              console.log("Metadata URI:", parsedLog.args[6]);
+            }
+          } catch (err) {
+            // Ignore logs that don't match the event
+          }
+        }
+        return marketId;
       }
     } catch (error) {
       console.log(error);
@@ -204,7 +222,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   };
 
   const setMarketResolver = async (
-    _resolver: string,
+    _resolver: any,
     _isPublicResolver: boolean
   ) => {
     if (!activeChain) return;
@@ -668,24 +686,62 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   const fetchAllMarketsData = async () => {
     try {
       let marketData = await api.get("/market/all");
-      return marketData?.data?.markets || [];
+      let markets = marketData?.data?.markets || [];
+  
+      // Fetch yes/no percentages for all markets concurrently
+      let marketsWithPercentages = await Promise.all(
+        markets.map(async (market) => {
+          const { yesPercentage, noPercentage } = await _getPricePercentages(market.market_id);
+          return { ...market, yesPercentage, noPercentage };
+        })
+      );
+      return marketsWithPercentages;
     } catch (error) {
       console.log(error);
     }
   };
 
-  const fetchSingleMarketData = async (id:number) => {
+  const _getPricePercentages = async (marketId:number) => {
+    if (!activeChain) return;
+    let yesPercentage=50,noPercentage=50;
+    const marketContract = await getContractInstance(
+      Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
+      MultiOutcomeMarketABI
+    );
+    if (marketContract) {
+      let prices = await marketContract.getPrices(marketId);
+
+      let yes = +prices[0].toString() / 10 ** 18;
+      let no = +prices[1].toString() / 10 ** 18;
+
+      let total = yes + no;
+
+       yesPercentage = total > 0 ? (yes / total) * 100 : 0;
+       noPercentage = total > 0 ? (no / total) * 100 : 0;
+
+      console.log(`Yes: ${yesPercentage}%`);
+      console.log(`No: ${noPercentage}%`);
+    }
+    return {yesPercentage,noPercentage}
+  };
+
+  const fetchSingleMarketData = async (id: number) => {
     try {
       let marketData = await api.get("/market/all");
-      if(marketData?.data?.markets.length>0){
-        let market = marketData?.data?.markets?.filter((item)=>item.market_id==id);
-        return market;
+      if (marketData?.data?.markets.length > 0) {
+        let market = marketData?.data?.markets?.find((item) => item.market_id == id);
+        if (market) {
+          const { yesPercentage, noPercentage } = await _getPricePercentages(id);
+          return { ...market, yesPercentage, noPercentage };
+        }
       }
       return null;
     } catch (error) {
+      console.log(error);
       return null;
     }
   };
+  
 
   function formatTimestamp(timestamp: number) {
     const date = new Date(timestamp * 1000); // Convert to milliseconds
@@ -836,7 +892,9 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         await tx.wait();
       }
 
-      let tx = await createMarket(
+      await setMarketResolver(address, true);
+
+      let marketId = await createMarket(
         startsAtTimestamp,
         expiresAtTimestamp,
         Addresses[activeChain]?.XOCollateralTokenAddress,
@@ -846,6 +904,16 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
         `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`
       );
+
+      let scheduleRes = await api.post("/market/farcaster/schedule", {
+        market_id: marketId,
+        cast_url: marketMetadata?.url,
+        expiry: marketMetadata?.endDate,
+        settlement_factor: marketMetadata?.param,
+        count: marketMetadata?.value,
+        winning_outcome: 1,
+      });
+
       console.log("Farcaster market created successfully:", response);
       toast.success("Farcaster market created successfully", { id });
       router.push("/");
@@ -876,18 +944,18 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
 
-  const getLeaderBoardData=async ()=>{
+  const getLeaderBoardData = async () => {
     try {
       let res = await api.get("/user/leaderboard");
       return res?.data;
     } catch (error) {
       throw error;
     }
-  }
+  };
 
-  const getUserData = async ()=>{
+  const getUserData = async () => {
     try {
-      if(!address){
+      if (!address) {
         return;
       }
       let res = await api.get(`/user/activity/${address}`);
@@ -895,7 +963,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   return (
     <DataContext.Provider
       value={{
@@ -933,7 +1001,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         getFaucet,
         getLeaderBoardData,
         getUserData,
-        fetchSingleMarketData
+        fetchSingleMarketData,
       }}
     >
       {children}
