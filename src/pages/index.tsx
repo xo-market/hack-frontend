@@ -72,6 +72,7 @@ const Home: React.FC = () => {
         }
       } catch (err) {
         console.error("Error fetching market data:", err);
+        setLoading(true);
       } finally {
         setLoading(false);
       }

@@ -30,7 +30,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
               {data?.category}
             </span>
             <div className="flex justify-content-end">
-              {checkExpiration(data?.expires_at) ? <p>🟢</p> : <p>🔴</p>}
+              {!checkExpiration(data?.expires_at) ? <p>🟢</p> : <p>🔴</p>}
             </div>
           </div>
 

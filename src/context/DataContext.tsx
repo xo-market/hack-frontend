@@ -691,7 +691,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       // Fetch yes/no percentages for all markets concurrently
       let marketsWithPercentages = await Promise.all(
         markets.map(async (market) => {
-          const { yesPercentage, noPercentage } = await _getPricePercentages(market.market_id);
+          const { yesPercentage, noPercentage } = await _getPricePercentages(market?.market_id);
           return { ...market, yesPercentage, noPercentage };
         })
       );
