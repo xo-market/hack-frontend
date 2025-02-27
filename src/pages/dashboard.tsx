@@ -3,9 +3,11 @@ import Layout from "@/components/layout/Layout";
 import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { useDataContext } from "@/context/DataContext";
+import { useAccount } from "wagmi";
 const Dashboard: React.FC = () => {
     const {getUserData} = useDataContext();
     const [userData,setUserData] = useState();
+    const {address} = useAccount();
   useEffect(() => {
     (async () => {
       let res = await getUserData();
@@ -20,11 +22,11 @@ const Dashboard: React.FC = () => {
           <div className="flex items-center space-x-4">
             <div className="relative">
               <div className="w-24 h-24 bg-pink-400 rounded-full"></div>
-              <div className="absolute bottom-1 right-1 bg-black p-1 rounded-full">
+              <div className="absolute bottom-1 right-1 object-cover bg-black p-1 overflow-hidden w-6 h-6 flex justify-center items-center rounded-full">
                 <Image
-                  src="https://avatars.githubusercontent.com/u/82640789?v=4"
+                  src={`https://effigy.im/a/${address}.svg`}
                   alt="Edit"
-                  className="w-4 h-4"
+                  className="w-10 h-10 object-cover"
                   width={10}
                   height={10}
                 />

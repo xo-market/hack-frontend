@@ -9,6 +9,10 @@ interface PredictionCardProps {
 
 const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
   const { formatTimestamp } = useDataContext();
+  const checkExpiration = (expirationTimestamp:number) => {
+    const currentTime = Math.floor(Date.now() / 1000); // Convert to seconds
+    return (currentTime >= expirationTimestamp);
+  };
   return (
     <>
       <Link href={`/prediction/${data?.market_id}`}>
@@ -22,20 +26,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
                 {tag}
               </span>
             ))}
-            <svg
-              className="ml-auto text-pink-500 cursor-pointer w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 6l7-3 7 3v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6z"
-              ></path>
-            </svg>
+           <div className="flex border justify-content-end">{checkExpiration(data?.expires_at) ? <p>🟢</p> : <p>🔴</p>}</div>
           </div>
 
           <div className="border border-pink-300 object-cover rounded-lg justify-center items-center flex overflow-hidden mt-4">

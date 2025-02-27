@@ -102,9 +102,9 @@ const Navbar: React.FC = () => {
               >
                 <span className="h-10 w-10 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
                   <img
-                    src="https://randomuser.me/api/portraits/men/68.jpg"
+                    src={`https://effigy.im/a/${address}.svg`}
                     alt="user profile photo"
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover border border-black"
                   />
                 </span>
               </button>
