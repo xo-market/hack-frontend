@@ -12,48 +12,7 @@ const Leaderboard: React.FC = () => {
       setLeaderBoardData(res?.data);
     })()
   },[])
-  const data = [
-    {
-      rank: 1,
-      xoPoints: 4654,
-      user: "0xA58e.....e5C7",
-      wins: 40,
-      losses: 8,
-      sold: "100K xoUSDC",
-      markets: 15,
-      pnl: "104,577",
-    },
-    {
-      rank: 2,
-      xoPoints: 3253,
-      user: "0xA78e.....e2C1",
-      wins: 25,
-      losses: 10,
-      sold: "100K xoUSDC",
-      markets: 24,
-      pnl: "87,451",
-    },
-    {
-      rank: 3,
-      xoPoints: 2546,
-      user: "0xA78e.....e4C9",
-      wins: 22,
-      losses: 18,
-      sold: "100K xoUSDC",
-      markets: 4,
-      pnl: "70,457",
-    },
-    {
-      rank: 4,
-      xoPoints: 1256,
-      user: "0xA45e.....e8C3",
-      wins: 10,
-      losses: 20,
-      sold: "100K xoUSDC",
-      markets: 2,
-      pnl: "65,784",
-    },
-  ];
+
   return (
     <Layout>
       <div className="p-6 bg-white rounded-lg">

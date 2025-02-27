@@ -69,6 +69,7 @@ interface DataContextProps {
   fetchMarketChartPrices: (marketID: number) => void;
   getFaucet : () => void;
   getLeaderBoardData : () => void;
+  getUserData : () => void;
 }
 
 interface DataContextProviderProps {
@@ -869,6 +870,18 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       throw error;
     }
   }
+
+  const getUserData = async ()=>{
+    try {
+      if(!address){
+        return;
+      }
+      let res = await api.get(`/user/activity/${address}`);
+      return res?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <DataContext.Provider
       value={{
@@ -904,7 +917,8 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         createFarcasterMarket,
         fetchMarketChartPrices,
         getFaucet,
-        getLeaderBoardData
+        getLeaderBoardData,
+        getUserData
       }}
     >
       {children}

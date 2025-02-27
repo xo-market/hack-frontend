@@ -2,7 +2,16 @@
 import Layout from "@/components/layout/Layout";
 import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
+import { useDataContext } from "@/context/DataContext";
 const Dashboard: React.FC = () => {
+    const {getUserData} = useDataContext();
+    const [userData,setUserData] = useState();
+  useEffect(() => {
+    (async () => {
+      let res = await getUserData();
+      console.log(res,"res");
+    })();
+  }, []);
   return (
     <>
       <Layout>
@@ -12,7 +21,13 @@ const Dashboard: React.FC = () => {
             <div className="relative">
               <div className="w-24 h-24 bg-pink-400 rounded-full"></div>
               <div className="absolute bottom-1 right-1 bg-black p-1 rounded-full">
-                <Image src="https://avatars.githubusercontent.com/u/82640789?v=4" alt="Edit" className="w-4 h-4" width={10} height={10} />
+                <Image
+                  src="https://avatars.githubusercontent.com/u/82640789?v=4"
+                  alt="Edit"
+                  className="w-4 h-4"
+                  width={10}
+                  height={10}
+                />
               </div>
             </div>
             <div>
