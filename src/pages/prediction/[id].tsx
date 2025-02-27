@@ -19,18 +19,33 @@ const SingleMarket: React.FC = () => {
   const id = router.query.id;
   const chartRef = useRef<Chart | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [prices, setPrices] = useState<{ price: number[]; timestamp: string }[]>(
-    []
-  );
+  const [marketData, setMarketData] = useState();
+  const {
+    buyOutcome,
+    formatTimestamp,
+    fetchMarketChartPrices,
+    fetchSingleMarketData,
+  } = useDataContext();
+  const [prices, setPrices] = useState<
+    { price: number[]; timestamp: string }[]
+  >([]);
 
   useEffect(() => {
     // Register necessary components
-    Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale);
+    Chart.register(
+      LineController,
+      LineElement,
+      PointElement,
+      LinearScale,
+      CategoryScale
+    );
   }, []);
 
   useEffect(() => {
     (async () => {
       let data = await fetchMarketChartPrices(id);
+      let market = await fetchSingleMarketData(id);
+      setMarketData(market[0]);
       setPrices(data?.prices || []);
     })();
   }, [id]);
@@ -45,9 +60,9 @@ const SingleMarket: React.FC = () => {
         month: "short",
         day: "numeric",
       })
-    );    
+    );
     const dataset1 = prices.map((item) => Number(item.price[0]) / 1e14);
-    const dataset2 = prices.map((item) => Number(item.price[1]) / 1e14);    
+    const dataset2 = prices.map((item) => Number(item.price[1]) / 1e14);
 
     const config: ChartConfiguration = {
       type: "line",
@@ -92,18 +107,11 @@ const SingleMarket: React.FC = () => {
         chartRef.current = new Chart(ctx, config);
       }
     }
-  }, [prices,id]);
-  const {buyOutcome,fetchMarketChartPrices} = useDataContext();
+  }, [prices, id]);
   const [amount, setAmount] = React.useState("0");
   const handleConfirmTransaction = async () => {
-    await buyOutcome(
-      10,
-      1,
-      +amount.toString(),
-      +amount.toString()
-    );
-  } 
-
+    await buyOutcome(10, 1, +amount.toString(), +amount.toString());
+  };
 
   return (
     <>
@@ -135,7 +143,10 @@ const SingleMarket: React.FC = () => {
             <div className="mt-4 p-4 border rounded-lg flex gap-x-8">
               <div className="flex items-center space-x-4">
                 <Image
-                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                  src={
+                    marketData?.image ||
+                    "https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                  }
                   alt="Post Image"
                   className="rounded-md w-20 h-20"
                   width={80}
@@ -144,25 +155,32 @@ const SingleMarket: React.FC = () => {
               </div>
               <div className="mt-2 flex flex-col">
                 <h2 className="text-lg font-semibold">
-                  1K Likes or above by end of Feb.
+                  {marketData?.description}
                 </h2>
-                <div className="flex items-center space-x-2 text-gray-600 text-xs">
+                <p className="text-xs -mt-2">{marketData?.name}</p>
+                <div className="flex items-center space-x-2 text-gray-600 text-xs mt-1">
                   <span>2000 Vol.</span>
                   <span>•</span>
-                  <span>Feb 28, 23:59</span>
+                  <span>{formatTimestamp(marketData?.expires_at)}</span>
                   <span>•</span>
-                  <span className="text-blue-500">@0Xwalid.eth</span>
+                  <span className="text-blue-500">
+                    {marketData?.creator.slice(0, 5) +
+                      "..." +
+                      marketData?.creator.slice(-5)}
+                  </span>
                   <span className="px-2 py-0.5 text-xs bg-red-200 text-red-700 rounded">
                     USDC
                   </span>
                   <span className="px-2 py-0.5 text-xs bg-blue-200 text-blue-700 rounded">
                     NEW
                   </span>
-                  <span className="px-2 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">
-                    Tech
-                  </span>
+                  {marketData?.tags && marketData?.tags?.map((item) => (
+                    <span className="px-2 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">
+                      {item}
+                    </span>
+                  ))}
                   <span className="px-2 py-0.5 text-xs bg-pink-200 text-pink-700 rounded">
-                    Multi tags
+                    {marketData?.category}
                   </span>
                 </div>
               </div>
@@ -227,9 +245,7 @@ const SingleMarket: React.FC = () => {
                   <div className="flex items-center justify-between py-3">
                     <span className="text-green-600 font-semibold">64%</span>
                     <div className="flex-1 h-2 mx-2 bg-[#198788] rounded-full relative">
-                      <div
-                        style={{ width: "64%" }}
-                      ></div>
+                      <div style={{ width: "64%" }}></div>
                       <div
                         className="absolute right-0 top-0 h-2 bg-red-500 rounded-r-full"
                         style={{ width: "35%" }}
@@ -277,7 +293,10 @@ const SingleMarket: React.FC = () => {
                   </div>
 
                   {/* Confirm Button */}
-                  <button onClick={handleConfirmTransaction} className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg">
+                  <button
+                    onClick={handleConfirmTransaction}
+                    className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
+                  >
                     Confirm Transaction
                   </button>
                 </div>

@@ -70,6 +70,7 @@ interface DataContextProps {
   getFaucet : () => void;
   getLeaderBoardData : () => void;
   getUserData : () => void;
+  fetchSingleMarketData : () => void;
 }
 
 interface DataContextProviderProps {
@@ -673,6 +674,19 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
 
+  const fetchSingleMarketData = async (id:number) => {
+    try {
+      let marketData = await api.get("/market/all");
+      if(marketData?.data?.markets.length>0){
+        let market = marketData?.data?.markets?.filter((item)=>item.market_id==id);
+        return market;
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
+  };
+
   function formatTimestamp(timestamp: number) {
     const date = new Date(timestamp * 1000); // Convert to milliseconds
     return date.toLocaleDateString("en-US", {
@@ -918,7 +932,8 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         fetchMarketChartPrices,
         getFaucet,
         getLeaderBoardData,
-        getUserData
+        getUserData,
+        fetchSingleMarketData
       }}
     >
       {children}
