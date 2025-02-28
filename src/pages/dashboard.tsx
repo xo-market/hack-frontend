@@ -12,7 +12,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     (async () => {
       let res = await getUserData();
-      console.log(res, "res");
+      setUserData(res);
     })();
   }, []);
   return (
@@ -64,13 +64,6 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Claim Points Button */}
-          <div className="mt-4 flex justify-end">
-            <button className="px-4 py-2 bg-pink-500 text-white rounded">
-              Claim Points
-            </button>
-          </div>
-
           {/* Search & Filters */}
           <div className="mt-6 flex space-x-4 text-black">
             <input
@@ -88,6 +81,16 @@ const Dashboard: React.FC = () => {
 
           {/* Tabs */}
           <div className="mt-6 flex border-b">
+            <button
+              className={`pb-2 px-4 border-b-2 ${
+                activeTab === "Activity"
+                  ? "border-pink-500 text-pink-600 font-medium"
+                  : "border-transparent text-gray-600 hover:text-gray-900"
+              }`}
+              onClick={() => setActiveTab("Activity")}
+            >
+              Activity
+            </button>
             <button
               className={`pb-2 px-4 border-b-2 ${
                 activeTab === "Current Markets"
@@ -108,127 +111,218 @@ const Dashboard: React.FC = () => {
             >
               Past Markets
             </button>
-            <button
-              className={`pb-2 px-4 border-b-2 ${
-                activeTab === "Activity"
-                  ? "border-pink-500 text-pink-600 font-medium"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
-              onClick={() => setActiveTab("Activity")}
-            >
-              Activity
-            </button>
           </div>
 
           {/* Tab Content */}
           <div className="mt-4 space-y-2">
             {activeTab === "Current Markets" && (
-              <p className="text-gray-600">
-                📈 Current markets data goes here...
-              </p>
+              <>
+                {userData?.currentMarket?.length > 0 ? (
+                  userData?.currentMarket?.map((curr: any, index: any) => (
+                    <table
+                      key={index}
+                      className="w-full border-collapse border border-gray-300"
+                    >
+                      <thead>
+                        <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
+                          <th className="p-3 border border-gray-300 text-left">
+                            Market ID
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Outcome
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Quantity (XO)
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Market Name
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Description
+                          </th>
+
+                          <th className="p-3 border border-gray-300 text-left">
+                            Expires At
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-t text-gray-900 text-sm hover:bg-gray-50">
+                          <td className="p-3 border border-gray-300">
+                            {curr.market_id}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {curr.outcome === 1 ? "Yes" : "No"}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {parseFloat(curr.quantity) / 1e18} XO
+                          </td>
+                          <td className="p-3 border border-gray-300 font-semibold">
+                            {curr.market_name}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {curr.market_description}
+                          </td>
+
+                          <td className="p-3 border border-gray-300">
+                            {new Date(
+                              parseInt(curr.expires_at) * 1000
+                            ).toLocaleString()}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  ))
+                ) : (
+                  <p>No Data Available</p>
+                )}
+              </>
             )}
             {activeTab === "Past Markets" && (
-              <p className="text-gray-600">📉 Past markets data goes here...</p>
+              <>
+                {userData?.pastMarket?.length > 0 ? (
+                  userData?.pastMarket?.map((past: any, index: any) => (
+                    <table
+                      key={index}
+                      className="w-full border-collapse border border-gray-300"
+                    >
+                      <thead>
+                        <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
+                          <th className="p-3 border border-gray-300 text-left">
+                            Market ID
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            User Outcome
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Winning Outcome
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Quantity (XO)
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Redeemed
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Claimable
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Market Name
+                          </th>
+                          <th className="p-3 border border-gray-300 text-left">
+                            Description
+                          </th>
+
+                          <th className="p-3 border border-gray-300 text-left">
+                            Expired At
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="border-t text-gray-900 text-sm hover:bg-gray-50">
+                          <td className="p-3 border border-gray-300">
+                            {past?.market_id}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {past?.user_outcome === 1 ? "Yes" : "No"}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {past?.wining_outcome === 1 ? "Yes" : "No"}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {parseFloat(past?.quantity) / 1e18} ETH
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {past?.is_redeemed ? "✅" : "❌"}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {past?.is_claimable ? (
+                              <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition">
+                                Claim
+                              </button>
+                            ) : (
+                              <span className="text-gray-500">
+                                Not Claimable
+                              </span>
+                            )}
+                          </td>
+
+                          <td className="p-3 border border-gray-300 font-semibold">
+                            {past?.market_name}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {past?.market_description}
+                          </td>
+
+                          <td className="p-3 border border-gray-300">
+                            {new Date(
+                              parseInt(past?.expired_at) * 1000
+                            ).toLocaleString()}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  ))
+                ) : (
+                  <p>No Data Available</p>
+                )}
+              </>
             )}
             {activeTab === "Activity" && (
               <>
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Name
+                <table className="w-full border-collapse border border-gray-300">
+                  <thead>
+                    <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
+                      <th className="p-3 border border-gray-300 text-left">
+                        Action
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Title
+
+                      <th className="p-3 border border-gray-300 text-left">
+                        Market ID
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Status
+                      <th className="p-3 border border-gray-300 text-left">
+                        Quantity
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Role
+                      <th className="p-3 border border-gray-300 text-left">
+                        Timestamp
                       </th>
-                      <th scope="col" className="relative px-6 py-3">
-                        <span className="sr-only">Edit</span>
+                      <th className="p-3 border border-gray-300 text-left">
+                        Transaction Hash
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="ml-0">
-                            <div className="text-sm font-medium text-gray-900">
-                              004232...iuhww
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          Regional Paradigm Technician
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Active
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Admin
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a
-                          href="#"
-                          className="text-indigo-600 hover:text-indigo-900"
+                  <tbody>
+                    {userData?.activity &&
+                      userData?.activity?.map((act: any, index: any) => (
+                        <tr
+                          key={index}
+                          className="border-t text-gray-900 text-sm hover:bg-gray-50"
                         >
-                          Claim
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="ml-0">
-                            <div className="text-sm font-medium text-gray-900">
-                              Cody Fisher
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          Product Directives Officer
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                          Pending
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Editor
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a
-                          href="#"
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Claim
-                        </a>
-                      </td>
-                    </tr>
+                          <td className="p-3 border border-gray-300">
+                            {act.action}
+                          </td>
+
+                          <td className="p-3 border border-gray-300">
+                            {act.market_id}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {parseFloat(act.quantity) / 1e18} Shares
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {new Date(parseInt(act.timestamp)).toLocaleString()}
+                          </td>
+                          <td className="p-3 border border-gray-300 text-blue-600">
+                            <a
+                              href={`https://etherscan.io/tx/${act.txn_hash}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline"
+                            >
+                              {act.txn_hash.slice(0, 10)}...
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </>

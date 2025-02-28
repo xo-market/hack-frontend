@@ -685,13 +685,15 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const fetchAllMarketsData = async () => {
     try {
-      let marketData = await api.get("/market/all");
+      let marketData = await api.get("/market/all?limit=20");
       let markets = marketData?.data?.markets || [];
-  
+
       // Fetch yes/no percentages for all markets concurrently
       let marketsWithPercentages = await Promise.all(
         markets.map(async (market) => {
-          const { yesPercentage, noPercentage } = await _getPricePercentages(market?.market_id);
+          const { yesPercentage, noPercentage } = await _getPricePercentages(
+            market?.market_id
+          );
           return { ...market, yesPercentage, noPercentage };
         })
       );
@@ -701,35 +703,40 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     }
   };
 
-  const _getPricePercentages = async (marketId:number) => {
+  const _getPricePercentages = async (marketId: number) => {
     if (!activeChain) return;
-    let yesPercentage=50,noPercentage=50;
+    let yesPercentage = 50,
+      noPercentage = 50;
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
       MultiOutcomeMarketABI
     );
     if (marketContract) {
       let prices = await marketContract.getPrices(marketId);
-      console.log(prices,"prices");
+      console.log(prices, "prices");
       let yes = +prices[0].toString() / 10 ** 18;
       let no = +prices[1].toString() / 10 ** 18;
 
       let total = yes + no;
-      console.log(yes,no,total,"total")
+      console.log(yes, no, total, "total");
 
-       yesPercentage = total > 0 ? (yes / total) * 100 : 0;
-       noPercentage = total > 0 ? (no / total) * 100 : 0;
+      yesPercentage = total > 0 ? (yes / total) * 100 : 0;
+      noPercentage = total > 0 ? (no / total) * 100 : 0;
     }
-    return {yesPercentage,noPercentage}
+    return { yesPercentage, noPercentage };
   };
 
   const fetchSingleMarketData = async (id: number) => {
     try {
       let marketData = await api.get("/market/all");
       if (marketData?.data?.markets.length > 0) {
-        let market = marketData?.data?.markets?.find((item) => item.market_id == id);
+        let market = marketData?.data?.markets?.find(
+          (item) => item.market_id == id
+        );
         if (market) {
-          const { yesPercentage, noPercentage } = await _getPricePercentages(id);
+          const { yesPercentage, noPercentage } = await _getPricePercentages(
+            id
+          );
           return { ...market, yesPercentage, noPercentage };
         }
       }
@@ -739,7 +746,6 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       return null;
     }
   };
-  
 
   function formatTimestamp(timestamp: number) {
     const date = new Date(timestamp * 1000); // Convert to milliseconds
@@ -907,7 +913,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         expiry: marketMetadata?.endDate,
         settlement_factor: marketMetadata?.param,
         count: marketMetadata?.value,
-        winning_outcome: 1,
+        winning_outcome: "0",
       });
 
       console.log("Farcaster market created successfully:", response);
@@ -954,32 +960,37 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       if (!address) {
         return;
       }
-      let activity = await api.get(`/user/activity/${address}`);
-      let currentMarket = await api.get(`/user/current-market/${address}`);
-      let pastMarket = await api.get(`/user/past-market/${address}`);
-
-     
+      let activity = await api.get(
+        `/user/activity/0xc593b69e40b6095d39663568d0b37a0b845d916f`
+      );
+      let currentMarket = await api.get(
+        `/user/current-market/0xc593b69e40b6095d39663568d0b37a0b845d916f`
+      );
+      let pastMarket = await api.get(
+        `/user/past-market/0xc593b69e40b6095d39663568d0b37a0b845d916f`
+      );
+      
       return {
-        activity : activity?.data?.data,
-        currentMarket : currentMarket?.data?.data,
-        pastMarket : pastMarket?.data?.data
+        activity: activity?.data?.data,
+        currentMarket: currentMarket?.data?.data,
+        pastMarket: pastMarket?.data?.data,
       };
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getCurrentMarket = async()=>{
+  const getCurrentMarket = async () => {
     try {
       if (!address) {
         return;
       }
-      
+
       return res?.data;
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   return (
     <DataContext.Provider
       value={{

@@ -6,7 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://xo-data-service-573
 // Create a default Axios instance for normal JSON requests
 const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000, // Timeout after 10 seconds
+  timeout: 20000, // Timeout after 10 seconds
   headers: {
     "Content-Type": "application/json",
   },
