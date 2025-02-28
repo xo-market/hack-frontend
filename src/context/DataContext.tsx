@@ -954,12 +954,32 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       if (!address) {
         return;
       }
-      let res = await api.get(`/user/activity/${address}`);
-      return res?.data;
+      let activity = await api.get(`/user/activity/${address}`);
+      let currentMarket = await api.get(`/user/current-market/${address}`);
+      let pastMarket = await api.get(`/user/past-market/${address}`);
+
+     
+      return {
+        activity : activity?.data?.data,
+        currentMarket : currentMarket?.data?.data,
+        pastMarket : pastMarket?.data?.data
+      };
     } catch (error) {
       console.log(error);
     }
   };
+
+  const getCurrentMarket = async()=>{
+    try {
+      if (!address) {
+        return;
+      }
+      
+      return res?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <DataContext.Provider
       value={{

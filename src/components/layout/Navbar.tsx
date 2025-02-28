@@ -76,7 +76,7 @@ const Navbar: React.FC = () => {
           <div className="text-right">
             <p className="text-xs text-gray-500">My balance</p>
             <p className="text-sm font-medium text-pink-500">
-              {tokenBalance?.toString()} Token
+              {tokenBalance?.toString()} xoUSDC
             </p>
           </div>
           <button

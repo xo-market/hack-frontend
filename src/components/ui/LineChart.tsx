@@ -21,9 +21,6 @@ const LineChart = ({ prices }) => {
     const dataset1 = prices.map((item) => Number(item.price[0]) / 1e18);
     const dataset2 = prices.map((item) => Number(item.price[1]) / 1e18);
 
-    console.log("Labels:", labels);
-    console.log("Dataset1:", dataset1);
-    console.log("Dataset2:", dataset2);
 
     // Destroy existing chart before creating a new one
     if (chartRef.current) {
@@ -40,14 +37,14 @@ const LineChart = ({ prices }) => {
             label: `No`,
             backgroundColor: "#FE69B3",
             borderColor: "#FE69B3",
-            data: dataset1,
+            data: dataset2,
             fill: false,
           },
           {
             label: `Yes`,
             backgroundColor: "#3FDEC9",
             borderColor: "#3FDEC9",
-            data: dataset2,
+            data: dataset1,
             fill: false,
           },
         ],
