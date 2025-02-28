@@ -5,7 +5,7 @@ import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
 import SEO from "@/components/seo/SEO";
 import PredictionCard from "@/components/ui/PredictionCard";
 import { useDataContext } from "@/context/DataContext";
-import Spinner from "@/components/ui/Spinner";
+
 const CATEGORIES = [
   "Technologies",
   "Memes",
@@ -169,8 +169,8 @@ const Home: React.FC = () => {
   return (
     <Layout>
       <SEO
-        title="Create and Trade Memecoins Easily on XO-Market."
-        description="The ultimate platform for launching and trading memecoins on Shibarium. Create your own tokens effortlessly and engage in fair, dynamic trading."
+        title="Create and Trade predictions Easily on XO-Market."
+        description="The ultimate platform for launching and trading predictions on Xo. Create your own predictions effortlessly and engage in fair, dynamic trading."
         image="seo/home.jpg"
       />
       <HowItWorksPopup
@@ -188,14 +188,6 @@ const Home: React.FC = () => {
               {displayText.subheading}
             </h2>
           </div> */}
-
-          {loading ? (
-            <div className="flex justify-center items-center mt-2">
-              <Spinner size="medium" />
-            </div>
-          ) : (
-            <></>
-          )}
         </div>
 
         <div className="flex items-center gap-3 overflow-x-auto p-4">
@@ -234,19 +226,34 @@ const Home: React.FC = () => {
             </select>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-6 mt-10">
-          {filteredMarkets  &&
-            filteredMarkets?.map((data: any, index: any) => {
-              return (
-                <PredictionCard
-                  key={index}
-                  data={data}
-                  onClick={() => console.log("Clicked")}
-                />
-              );
-            })
-          }
-        </div>
+
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-8">
+            <div className="animate-pulse flex space-x-4 mb-4">
+              <div className="h-12 w-12 bg-pink-200 rounded-full"></div>
+              <div className="flex-1 space-y-4 max-w-md">
+                <div className="h-4 bg-pink-200 rounded w-3/4"></div>
+                <div className="h-4 bg-pink-200 rounded"></div>
+                <div className="h-4 bg-pink-200 rounded w-5/6"></div>
+              </div>
+            </div>
+            <p className="text-gray-500">Loading prediction markets...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-6 mt-10">
+            {filteredMarkets  &&
+              filteredMarkets?.map((data: any, index: any) => {
+                return (
+                  <PredictionCard
+                    key={index}
+                    data={data}
+                    onClick={() => console.log("Clicked")}
+                  />
+                );
+              })
+            }
+          </div>
+        )}
       </div>
     </Layout>
   );
