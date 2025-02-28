@@ -157,7 +157,7 @@ const Dashboard: React.FC = () => {
                             {curr.market_id}
                           </td>
                           <td className="p-3 border border-gray-300">
-                            {curr.outcome === 1 ? "Yes" : "No"}
+                            {curr.outcome === 0 ? "Yes" : "No"}
                           </td>
                           <td className="p-3 border border-gray-300">
                             {parseFloat(curr.quantity) / 1e18} XO
