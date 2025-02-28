@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Account Info */}
-          <div className="grid grid-cols-4 gap-4 mt-6 p-4 border rounded-lg">
+          <div className="grid grid-cols-3 gap-4 mt-6 p-4 border rounded-lg">
             <div>
               <p className="text-gray-500 text-sm">Account</p>
               <p className="font-semibold text-black">
@@ -58,15 +58,11 @@ const Dashboard: React.FC = () => {
             </div>
             <div>
               <p className="text-gray-500 text-sm">Rank</p>
-              <p className="font-semibold text-black">1,548</p>
+              <p className="font-semibold text-black">5</p>
             </div>
             <div>
               <p className="text-gray-500 text-sm">Balance</p>
               <p className="font-semibold text-black">{tokenBalance} xoUSDC</p>
-            </div>
-            <div>
-              <p className="text-gray-500 text-sm">Points to Claim</p>
-              <p className="font-semibold text-black">0 xoPoints</p>
             </div>
           </div>
 
@@ -178,7 +174,21 @@ const Dashboard: React.FC = () => {
                         </tr>
                       ))
                     ) : (
-                      <Spinner/>
+                      <tr>
+                        <td colSpan={6} className="p-6 text-center">
+                          <div className="flex flex-col items-center justify-center py-8">
+                            <div className="animate-pulse flex space-x-4 mb-4">
+                              <div className="h-12 w-12 bg-pink-200 rounded-full"></div>
+                              <div className="flex-1 space-y-4 max-w-md">
+                                <div className="h-4 bg-pink-200 rounded w-3/4"></div>
+                                <div className="h-4 bg-pink-200 rounded"></div>
+                                <div className="h-4 bg-pink-200 rounded w-5/6"></div>
+                              </div>
+                            </div>
+                            <p className="text-gray-500">Loading market data...</p>
+                          </div>
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
@@ -264,7 +274,21 @@ const Dashboard: React.FC = () => {
                         </tr>
                       ))
                     ) : (
-                      <Spinner/>
+                      <tr>
+                        <td colSpan={7} className="p-6 text-center">
+                          <div className="flex flex-col items-center justify-center py-8">
+                            <div className="animate-pulse flex space-x-4 mb-4">
+                              <div className="h-12 w-12 bg-pink-200 rounded-full"></div>
+                              <div className="flex-1 space-y-4 max-w-md">
+                                <div className="h-4 bg-pink-200 rounded w-3/4"></div>
+                                <div className="h-4 bg-pink-200 rounded"></div>
+                                <div className="h-4 bg-pink-200 rounded w-5/6"></div>
+                              </div>
+                            </div>
+                            <p className="text-gray-500">Loading past market data...</p>
+                          </div>
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
@@ -326,7 +350,21 @@ const Dashboard: React.FC = () => {
                         </tr>
                       ))
                     ) : (
-                      <Spinner/>
+                      <tr>
+                        <td colSpan={5} className="p-6 text-center">
+                          <div className="flex flex-col items-center justify-center py-8">
+                            <div className="animate-pulse flex space-x-4 mb-4">
+                              <div className="h-12 w-12 bg-pink-200 rounded-full"></div>
+                              <div className="flex-1 space-y-4 max-w-md">
+                                <div className="h-4 bg-pink-200 rounded w-3/4"></div>
+                                <div className="h-4 bg-pink-200 rounded"></div>
+                                <div className="h-4 bg-pink-200 rounded w-5/6"></div>
+                              </div>
+                            </div>
+                            <p className="text-gray-500">Loading activity data...</p>
+                          </div>
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
