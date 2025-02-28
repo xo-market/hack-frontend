@@ -25,6 +25,7 @@ export const ProvideTab: React.FC = () => {
             min={0}
             max={2}
             step="0.1"
+            defaultValue={2}
             name="reward"
             onChange={(e) => handleOnChange(e)}
             className="w-full"

@@ -5,7 +5,11 @@ import Image from "next/image";
 import { useDataContext } from "@/context/DataContext";
 import { useAccount } from "wagmi";
 const Dashboard: React.FC = () => {
-  const { getUserData, tokenBalance } = useDataContext();
+  const { getUserData, tokenBalance, redeemWinnings } = useDataContext();
+
+  const handleRedeem = async (marketId: number) => {
+    await redeemWinnings(marketId);
+  };
   const [userData, setUserData] = useState();
   const { address } = useAccount();
   const [activeTab, setActiveTab] = useState("Activity");
@@ -15,6 +19,8 @@ const Dashboard: React.FC = () => {
       setUserData(res);
     })();
   }, []);
+
+
   return (
     <>
       <Layout>
@@ -117,37 +123,37 @@ const Dashboard: React.FC = () => {
           <div className="mt-4 space-y-2">
             {activeTab === "Current Markets" && (
               <>
-                {userData?.currentMarket?.length > 0 ? (
-                  userData?.currentMarket?.map((curr: any, index: any) => (
-                    <table
-                      key={index}
-                      className="w-full border-collapse border border-gray-300"
-                    >
-                      <thead>
-                        <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
-                          <th className="p-3 border border-gray-300 text-left">
-                            Market ID
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Outcome
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Quantity (XO)
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Market Name
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Description
-                          </th>
+                <table className="w-full border-collapse border border-gray-300">
+                  <thead>
+                    <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
+                      <th className="p-3 border border-gray-300 text-left">
+                        Market ID
+                      </th>
+                      <th className="p-3 border border-gray-300 text-left">
+                        Outcome
+                      </th>
+                      <th className="p-3 border border-gray-300 text-left">
+                        Quantity (XO)
+                      </th>
+                      <th className="p-3 border border-gray-300 text-left">
+                        Market Name
+                      </th>
+                      <th className="p-3 border border-gray-300 text-left">
+                        Description
+                      </th>
 
-                          <th className="p-3 border border-gray-300 text-left">
-                            Expires At
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="border-t text-gray-900 text-sm hover:bg-gray-50">
+                      <th className="p-3 border border-gray-300 text-left">
+                        Expires At
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userData?.currentMarket?.length > 0 ? (
+                      userData?.currentMarket?.map((curr: any, index: any) => (
+                        <tr
+                          key={index}
+                          className="border-t text-gray-900 text-sm hover:bg-gray-50"
+                        >
                           <td className="p-3 border border-gray-300">
                             {curr.market_id}
                           </td>
@@ -170,81 +176,64 @@ const Dashboard: React.FC = () => {
                             ).toLocaleString()}
                           </td>
                         </tr>
-                      </tbody>
-                    </table>
-                  ))
-                ) : (
-                  <p>No Data Available</p>
-                )}
+                      ))
+                    ) : (
+                      <p className="text-black">No Data Available</p>
+                    )}
+                  </tbody>
+                </table>
               </>
             )}
             {activeTab === "Past Markets" && (
               <>
-                {userData?.pastMarket?.length > 0 ? (
-                  userData?.pastMarket?.map((past: any, index: any) => (
-                    <table
-                      key={index}
-                      className="w-full border-collapse border border-gray-300"
-                    >
-                      <thead>
-                        <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
-                          <th className="p-3 border border-gray-300 text-left">
-                            Market ID
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            User Outcome
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Winning Outcome
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Quantity (XO)
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Redeemed
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Claimable
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Market Name
-                          </th>
-                          <th className="p-3 border border-gray-300 text-left">
-                            Description
-                          </th>
+                <table className="w-full border-collapse border border-gray-300">
+                  <thead>
+                    <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
+                      <th className="p-3 border border-gray-300 text-left">
+                        Market ID
+                      </th>
+                      <th className="p-3 border border-gray-300 text-left">
+                        User Outcome
+                      </th>
 
-                          <th className="p-3 border border-gray-300 text-left">
-                            Expired At
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="border-t text-gray-900 text-sm hover:bg-gray-50">
+                      <th className="p-3 border border-gray-300 text-left">
+                        Quantity (XO)
+                      </th>
+
+                      <th className="p-3 border border-gray-300 text-left">
+                        Market Name
+                      </th>
+                      <th className="p-3 border border-gray-300 text-left">
+                        Description
+                      </th>
+
+                      <th className="p-3 border border-gray-300 text-left">
+                        Expired At
+                      </th>
+                      <th className="p-3 border border-gray-300 text-left">
+                        Redeemed
+                      </th>
+                      <th className="p-3 border border-gray-300 text-left">
+                        Claimable
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userData?.pastMarket?.length > 0 ? (
+                      userData?.pastMarket?.map((past: any, index: any) => (
+                        <tr
+                          key={index}
+                          className="border-t text-gray-900 text-sm hover:bg-gray-50"
+                        >
                           <td className="p-3 border border-gray-300">
                             {past?.market_id}
                           </td>
                           <td className="p-3 border border-gray-300">
                             {past?.user_outcome === 1 ? "Yes" : "No"}
                           </td>
+
                           <td className="p-3 border border-gray-300">
-                            {past?.wining_outcome === 1 ? "Yes" : "No"}
-                          </td>
-                          <td className="p-3 border border-gray-300">
-                            {parseFloat(past?.quantity) / 1e18} ETH
-                          </td>
-                          <td className="p-3 border border-gray-300">
-                            {past?.is_redeemed ? "✅" : "❌"}
-                          </td>
-                          <td className="p-3 border border-gray-300">
-                            {past?.is_claimable ? (
-                              <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition">
-                                Claim
-                              </button>
-                            ) : (
-                              <span className="text-gray-500">
-                                Not Claimable
-                              </span>
-                            )}
+                            {parseFloat(past?.quantity) / 1e18} Shares
                           </td>
 
                           <td className="p-3 border border-gray-300 font-semibold">
@@ -259,13 +248,30 @@ const Dashboard: React.FC = () => {
                               parseInt(past?.expired_at) * 1000
                             ).toLocaleString()}
                           </td>
+                          <td className="p-3 border border-gray-300">
+                            {past?.is_redeemed ? "✅" : "❌"}
+                          </td>
+                          <td className="p-3 border border-gray-300">
+                            {past?.is_claimable ? (
+                              <button
+                                onClick={() => handleRedeem(past?.market_id)}
+                                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
+                              >
+                                Claim
+                              </button>
+                            ) : (
+                              <span className="text-gray-500">
+                                Not Claimable
+                              </span>
+                            )}
+                          </td>
                         </tr>
-                      </tbody>
-                    </table>
-                  ))
-                ) : (
-                  <p>No Data Available</p>
-                )}
+                      ))
+                    ) : (
+                      <p className="text-black">No Data Available</p>
+                    )}
+                  </tbody>
+                </table>
               </>
             )}
             {activeTab === "Activity" && (
@@ -292,7 +298,7 @@ const Dashboard: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {userData?.activity &&
+                    {userData?.activity?.length > 0 ? (
                       userData?.activity?.map((act: any, index: any) => (
                         <tr
                           key={index}
@@ -322,7 +328,10 @@ const Dashboard: React.FC = () => {
                             </a>
                           </td>
                         </tr>
-                      ))}
+                      ))
+                    ) : (
+                      <p className="text-black">No Data Available</p>
+                    )}
                   </tbody>
                 </table>
               </>

@@ -18,7 +18,7 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
     startDate: "",
     category: "",
     seed: "",
-    reward: "",
+    reward: "2",
   });
 
   const handleOnChange = (e: any) => {

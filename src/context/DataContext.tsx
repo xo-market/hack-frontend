@@ -901,7 +901,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         expiresAtTimestamp,
         Addresses[activeChain]?.XOCollateralTokenAddress,
         collateralAmount,
-        ethers.BigNumber.from(0),
+        ethers.BigNumber.from(marketMetadata?.reward),
         ethers.BigNumber.from(2),
         "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
         `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`
@@ -961,13 +961,13 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         return;
       }
       let activity = await api.get(
-        `/user/activity/0xc593b69e40b6095d39663568d0b37a0b845d916f`
+        `/user/activity/${address}`
       );
       let currentMarket = await api.get(
-        `/user/current-market/0xc593b69e40b6095d39663568d0b37a0b845d916f`
+        `/user/current-market/${address}`
       );
       let pastMarket = await api.get(
-        `/user/past-market/0xc593b69e40b6095d39663568d0b37a0b845d916f`
+        `/user/past-market/${address}`
       );
       
       return {
