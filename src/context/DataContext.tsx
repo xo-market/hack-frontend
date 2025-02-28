@@ -793,6 +793,9 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const scheduleFarcasterMarket = async (marketData: any) => {
     try {
+      marketData.expiry = new Date(marketData.expiry).toUTCString();
+      console.log("New date", new Date(marketData.expiry).toUTCString());
+      console.log("new market data", marketData);
       const response = await api.post("/farcaster/schedule", marketData);
       return response.data;
     } catch (error) {
@@ -923,11 +926,11 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
         `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`
       );
-
+      
       let scheduleRes = await api.post("/market/farcaster/schedule", {
         market_id: marketId,
         cast_url: marketMetadata?.url,
-        expiry: marketMetadata?.endDate,
+        expiry: new Date(marketMetadata?.endDate).toUTCString(),
         settlement_factor: marketMetadata?.param,
         count: marketMetadata?.value,
         winning_outcome: "0",
