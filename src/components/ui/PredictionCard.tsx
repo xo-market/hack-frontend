@@ -11,8 +11,13 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
   const { formatTimestamp } = useDataContext();
   const checkExpiration = (expirationTimestamp: number) => {
     const currentTime = Math.floor(Date.now() / 1000); // Convert to seconds
-    return currentTime >= expirationTimestamp;
-  };
+    const timeDifference = expirationTimestamp - currentTime; // Remaining time
+    return {
+        isExpired: currentTime >= expirationTimestamp,
+        timeDifference, // Positive if not expired, Negative if expired
+    };
+};
+
   return (
     <>
       <Link href={`/prediction/${data?.market_id}`}>
@@ -30,7 +35,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
               {data?.category}
             </span>
             <div className="flex justify-content-end">
-              {!checkExpiration(data?.expires_at) ? <p>🟢</p> : <p>🔴</p>}
+              {!checkExpiration(data?.expires_at)?.isExpired ? <p>🟢</p> : <p>🔴</p>}
             </div>
           </div>
 

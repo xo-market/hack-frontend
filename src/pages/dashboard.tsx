@@ -20,7 +20,6 @@ const Dashboard: React.FC = () => {
     })();
   }, []);
 
-
   return (
     <>
       <Layout>
@@ -211,11 +210,9 @@ const Dashboard: React.FC = () => {
                         Expired At
                       </th>
                       <th className="p-3 border border-gray-300 text-left">
-                        Redeemed
+                        Status
                       </th>
-                      <th className="p-3 border border-gray-300 text-left">
-                        Claimable
-                      </th>
+                    
                     </tr>
                   </thead>
                   <tbody>
@@ -248,21 +245,19 @@ const Dashboard: React.FC = () => {
                               parseInt(past?.expired_at) * 1000
                             ).toLocaleString()}
                           </td>
+                         
                           <td className="p-3 border border-gray-300">
-                            {past?.is_redeemed ? "✅" : "❌"}
-                          </td>
-                          <td className="p-3 border border-gray-300">
-                            {past?.is_claimable ? (
+                            {past?.is_claimable && !past?.is_redeemed ? (
                               <button
                                 onClick={() => handleRedeem(past?.market_id)}
                                 className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
                               >
                                 Claim
                               </button>
+                            ) : !past?.is_claimable && !past?.is_redeemed ? (
+                              <span className="text-red-500">Lost</span>
                             ) : (
-                              <span className="text-gray-500">
-                                Not Claimable
-                              </span>
+                              <span className="text-green-500">Won</span>
                             )}
                           </td>
                         </tr>

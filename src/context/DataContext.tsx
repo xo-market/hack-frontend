@@ -960,16 +960,16 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       if (!address) {
         return;
       }
-      let activity = await api.get(
-        `/user/activity/${address}`
+
+      let activity = await api.get(`/user/activity/${address.toLowerCase()}`);
+      let currentMarket = await api.get(`/user/current-market/${address.toLowerCase()}`);
+      let pastMarket = await api.get(`/user/past-market/${address.toLowerCase()}`);
+
+      console.log(
+        activity?.data?.data,
+        currentMarket?.data?.data,
+        pastMarket?.data?.data
       );
-      let currentMarket = await api.get(
-        `/user/current-market/${address}`
-      );
-      let pastMarket = await api.get(
-        `/user/past-market/${address}`
-      );
-      
       return {
         activity: activity?.data?.data,
         currentMarket: currentMarket?.data?.data,

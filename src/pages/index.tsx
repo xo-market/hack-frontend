@@ -179,7 +179,7 @@ const Home: React.FC = () => {
       />
       <div className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-6 flex flex-col bg-white">
         <div className="text-center mb-4 ">
-          <div className="h-[80px]">
+          {/* <div className="h-[80px]">
             {" "}
             <h1 className="text-3xl text-black font-bold mb-1">
               {displayText.heading}
@@ -187,10 +187,10 @@ const Home: React.FC = () => {
             <h2 className="text-2xl text-black mb-3">
               {displayText.subheading}
             </h2>
-          </div>
+          </div> */}
 
           {loading ? (
-            <div className="flex justify-center items-center mt-10">
+            <div className="flex justify-center items-center mt-2">
               <Spinner size="medium" />
             </div>
           ) : (
