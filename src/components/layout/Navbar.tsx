@@ -112,9 +112,11 @@ const Navbar: React.FC = () => {
                 className="absolute top-20 right-4 text-xs bg-white border border-pink-400 rounded-md p-2 w-48"
                 style={{ display: showProfile ? "block" : "none" }}
               >
-                <div className="p-2 text-black hover:bg-blue-200 cursor-pointer">
-                  <Link href="/dashboard"> My Bets</Link>
-                </div>
+                <Link href="/dashboard">
+                  <div className="p-2 text-black hover:bg-blue-200 cursor-pointer">
+                    My Bets
+                  </div>
+                </Link>
                 <div
                   onClick={getFaucet}
                   className="bg-blue-500 cursor-pointer text-white px-4 py-2 rounded-md text-sm mt-2"

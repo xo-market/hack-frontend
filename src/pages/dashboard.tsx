@@ -226,7 +226,7 @@ const Dashboard: React.FC = () => {
                             {past?.market_id}
                           </td>
                           <td className="p-3 border border-gray-300">
-                            {past?.user_outcome === 1 ? "Yes" : "No"}
+                            {past?.user_outcome === 0 ? "Yes" : "No"}
                           </td>
 
                           <td className="p-3 border border-gray-300">
