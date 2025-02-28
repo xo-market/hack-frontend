@@ -830,7 +830,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
           marketMetadata?.param,
           marketMetadata?.value
         ),
-        image: farcasterData?.author?.pfp_url,
+        image: `https://client.warpcast.com/v2/cast-image?castHash=${farcasterData?.hash}`,
         attributes: [
           { trait_type: "Category", value: marketMetadata?.category },
           { trait_type: "Type", value: marketMetadata?.param },

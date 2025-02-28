@@ -27,6 +27,8 @@ const SingleMarket: React.FC = () => {
     (async () => {
       let data = await fetchMarketChartPrices(id);
       let market = await fetchSingleMarketData(id);
+
+      console.log(data,"data");
       setMarketData(market);
       setPrices(data?.prices || []);
     })();
@@ -34,7 +36,11 @@ const SingleMarket: React.FC = () => {
 
   const [amount, setAmount] = React.useState("0");
   const handleConfirmTransaction = async () => {
-    await buyOutcome(10, 1, +amount.toString(), +amount.toString());
+    await buyOutcome(id, 1, +amount.toString(), +amount.toString());
+    let data = await fetchMarketChartPrices(id);
+    let market = await fetchSingleMarketData(id);
+    setPrices(data?.prices || []);
+    setMarketData(market);
   };
 
   return (

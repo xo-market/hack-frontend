@@ -10,7 +10,7 @@ export const ReviewTab: React.FC = () => {
           <Image
             src={
               farcasterData?.author?.pfp_url
-                ? farcasterData?.author?.pfp_url
+                ? `https://client.warpcast.com/v2/cast-image?castHash=${farcasterData?.hash}`
                 : "https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
             }
             alt="Post Preview"
