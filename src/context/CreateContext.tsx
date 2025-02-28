@@ -25,6 +25,11 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
     e.preventDefault();
     let name = e.target.name;
     let value = e.target.value;
+
+    if(name=="endData" ||  name=="startDate"){
+      const utcDate = new Date(value).toISOString();
+      setCreateData((prev) => ({ ...prev, [name]: utcDate }));
+    }
     setCreateData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -41,6 +46,7 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
       toast.error("Please fill all the fields");
       return;
     }
+    console.log(createData);
     await createFarcasterMarket(createData,farcasterData);
   };
 

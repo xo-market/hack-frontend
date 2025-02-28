@@ -91,29 +91,24 @@ export const DefineTab: React.FC = () => {
             } minimum value`}
           />
         </div>
-        <div>
-          <label className="text-gray-700 text-md">Start Date</label>
-          <input
-            type="datetime-local"
-            name="startDate"
-            value={createData?.startDate}
-            onChange={(e) => handleOnChange(e)}
-            className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
-            placeholder="End Data"
-          />
-        </div>
-        <div>
-          <label className="text-gray-700 text-md">End Date</label>
-          <input
-            type="datetime-local"
-            name="endDate"
-            value={createData?.endDate}
-            onChange={(e) => handleOnChange(e)}
-            className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
-            placeholder="End Data"
-          />
-        </div>
-
+        <input
+          type="datetime-local"
+          name="startDate"
+          value={
+            createData?.startDate }
+          onChange={(e) => handleOnChange(e)}
+          className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
+          placeholder="Start Date"
+        />
+        <input
+          type="datetime-local"
+          name="endDate"
+          value={
+            createData?.endDate }
+          onChange={(e) => handleOnChange(e)}
+          className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
+          placeholder="End Date"
+        />
         <div>
           <label className="text-gray-700 text-md">Market categories</label>
           <select

@@ -235,7 +235,7 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-6 mt-10">
-          {filteredMarkets.length > 0 ? (
+          {filteredMarkets  &&
             filteredMarkets?.map((data: any, index: any) => {
               return (
                 <PredictionCard
@@ -245,9 +245,7 @@ const Home: React.FC = () => {
                 />
               );
             })
-          ) : (
-            <p className="text-center text-black">No Data Available</p>
-          )}
+          }
         </div>
       </div>
     </Layout>

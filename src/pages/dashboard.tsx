@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { useDataContext } from "@/context/DataContext";
 import { useAccount } from "wagmi";
+import Spinner from "@/components/ui/Spinner";
 const Dashboard: React.FC = () => {
   const { getUserData, tokenBalance, redeemWinnings } = useDataContext();
 
@@ -177,7 +178,7 @@ const Dashboard: React.FC = () => {
                         </tr>
                       ))
                     ) : (
-                      <p className="text-black">No Data Available</p>
+                      <Spinner/>
                     )}
                   </tbody>
                 </table>
@@ -263,7 +264,7 @@ const Dashboard: React.FC = () => {
                         </tr>
                       ))
                     ) : (
-                      <p className="text-black">No Data Available</p>
+                      <Spinner/>
                     )}
                   </tbody>
                 </table>
@@ -325,7 +326,7 @@ const Dashboard: React.FC = () => {
                         </tr>
                       ))
                     ) : (
-                      <p className="text-black">No Data Available</p>
+                      <Spinner/>
                     )}
                   </tbody>
                 </table>
