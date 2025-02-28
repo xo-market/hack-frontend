@@ -14,7 +14,6 @@ const StartTab: React.FC = () => {
           const pastedText = e.clipboardData.getData("text");
           setCreateData((prev) => ({ ...prev, url: pastedText }));
         }}
-        value={createData.url}
         placeholder="https://warpcast.com/vitalik.eth/0x0868f688"
         className="w-full px-4 py-2 bg-gray-100 rounded-md"
       />

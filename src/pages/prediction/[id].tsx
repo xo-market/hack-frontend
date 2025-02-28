@@ -12,6 +12,8 @@ const SingleMarket: React.FC = () => {
   const router = useRouter();
   const id = router.query.id;
   const [marketData, setMarketData] = useState();
+  const [outcome, setOutcome] = useState(0);
+  const [activeTab, setActiveTab] = useState("buy");
   const {
     buyOutcome,
     formatTimestamp,
@@ -28,7 +30,7 @@ const SingleMarket: React.FC = () => {
       let data = await fetchMarketChartPrices(id);
       let market = await fetchSingleMarketData(id);
 
-      console.log(data,"data");
+      console.log(data, "data");
       setMarketData(market);
       setPrices(data?.prices || []);
     })();
@@ -36,7 +38,7 @@ const SingleMarket: React.FC = () => {
 
   const [amount, setAmount] = React.useState("0");
   const handleConfirmTransaction = async () => {
-    await buyOutcome(id, 1, +amount.toString(), +amount.toString());
+    await buyOutcome(id, outcome, +amount.toString(), +amount.toString());
     let data = await fetchMarketChartPrices(id);
     let market = await fetchSingleMarketData(id);
     setPrices(data?.prices || []);
@@ -176,50 +178,89 @@ const SingleMarket: React.FC = () => {
                   <div className="w-80 border border-red-300 rounded-lg p-4 mt-4">
                     {/* Tab Selector */}
                     <div className="flex border-b border-red-300">
-                      <button className="w-1/2 text-center py-2 font-semibold text-black border-b-2 border-red-400">
+                      <button
+                        onClick={() => setActiveTab("buy")}
+                        className={`w-1/2 text-center py-2 font-semibold ${
+                          activeTab === "buy"
+                            ? "text-black border-b-2 border-red-400"
+                            : "text-gray-400"
+                        }`}
+                      >
                         Buy
                       </button>
-                      <button className="w-1/2 text-center py-2 text-gray-400">
+                      <button
+                        onClick={() => setActiveTab("sell")}
+                        className={`w-1/2 text-center py-2 font-semibold ${
+                          activeTab === "sell"
+                            ? "text-black border-b-2 border-red-400"
+                            : "text-gray-400"
+                        }`}
+                      >
                         Sell
                       </button>
                     </div>
 
                     {/* Prediction Bar */}
-                    <div className="flex items-center justify-between py-3">
-                      <span className="text-green-600 font-semibold">
-                        {Number(marketData?.yesPercentage).toFixed(2)}%
-                      </span>
-                      <div className="flex-1 h-2 mx-2 bg-[#198788] rounded-full relative">
-                        <div
-                          style={{
-                            width: `${Number(marketData?.yesPercentage).toFixed(
-                              2
-                            )}%`,
-                          }}
-                        ></div>
-                        <div
-                          className="absolute right-0 top-0 h-2 bg-red-500 rounded-r-full"
-                          style={{
-                            width: `${Number(marketData?.noPercentage).toFixed(
-                              2
-                            )}%`,
-                          }}
-                        ></div>
-                      </div>
-                      <span className="text-red-500 font-semibold">
-                        {Number(marketData?.noPercentage).toFixed(2)}%
-                      </span>
-                    </div>
+                    {activeTab === "buy" ? (
+                      <>
+                        {/* Prediction Bar */}
+                        <div className="flex items-center justify-between py-3">
+                          <span className="text-green-600 font-semibold">
+                            {Number(marketData?.yesPercentage).toFixed(2)}%
+                          </span>
+                          <div className="flex-1 h-2 mx-2 bg-[#198788] rounded-full relative">
+                            <div
+                              style={{
+                                width: `${Number(
+                                  marketData?.yesPercentage
+                                ).toFixed(2)}%`,
+                              }}
+                              className="h-2 bg-green-600 rounded-l-full"
+                            ></div>
+                            <div
+                              className="absolute right-0 top-0 h-2 bg-red-500 rounded-r-full"
+                              style={{
+                                width: `${Number(
+                                  marketData?.noPercentage
+                                ).toFixed(2)}%`,
+                              }}
+                            ></div>
+                          </div>
+                          <span className="text-red-500 font-semibold">
+                            {Number(marketData?.noPercentage).toFixed(2)}%
+                          </span>
+                        </div>
 
-                    {/* Yes / No Buttons */}
-                    <div className="flex gap-3">
-                      <button className="flex-1 bg-[#198788] text-white py-2 rounded-lg flex items-center justify-center">
-                        Yes
-                      </button>
-                      <button className="flex-1 bg-red-100 text-red-500 py-2 rounded-lg flex items-center justify-center">
-                        No
-                      </button>
-                    </div>
+                        {/* Yes / No Buttons */}
+                        <div className="flex gap-3">
+                          <button
+                            onClick={() => setOutcome(0)}
+                            className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                              outcome === 0
+                                ? "bg-[#136d6d] text-white font-bold" // Selected "Yes"
+                                : "bg-[#198788] text-gray-300"
+                            }`}
+                          >
+                            Yes
+                          </button>
+
+                          <button
+                            onClick={() => setOutcome(1)}
+                            className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                              outcome === 1
+                                ? "bg-red-500 text-white font-bold" // Selected "No"
+                                : "bg-red-100 text-gray-500"
+                            }`}
+                          >
+                            No
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="mt-4 text-center text-gray-500 font-semibold">
+                        Sell functionality coming soon...
+                      </div>
+                    )}
 
                     {/* Input Field */}
                     <div className="mt-4">

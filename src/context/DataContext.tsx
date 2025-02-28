@@ -710,17 +710,15 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     );
     if (marketContract) {
       let prices = await marketContract.getPrices(marketId);
-
+      console.log(prices,"prices");
       let yes = +prices[0].toString() / 10 ** 18;
       let no = +prices[1].toString() / 10 ** 18;
 
       let total = yes + no;
+      console.log(yes,no,total,"total")
 
        yesPercentage = total > 0 ? (yes / total) * 100 : 0;
        noPercentage = total > 0 ? (no / total) * 100 : 0;
-
-      console.log(`Yes: ${yesPercentage}%`);
-      console.log(`No: ${noPercentage}%`);
     }
     return {yesPercentage,noPercentage}
   };
@@ -891,8 +889,6 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         );
         await tx.wait();
       }
-
-      await setMarketResolver(address, true);
 
       let marketId = await createMarket(
         startsAtTimestamp,
