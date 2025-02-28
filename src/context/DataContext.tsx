@@ -286,7 +286,23 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       return null;
     }
   };
-
+  function parseMarketDetails(marketDetails:any) {
+    return {
+      collateralAmount: BigNumber.from(marketDetails.collateralAmount).toString(),
+      collateralToken: marketDetails.collateralToken,
+      createdAt: new Date(marketDetails.createdAt * 1000).toISOString(),  // Convert UNIX timestamp to ISO format
+      creatorFeeBps: marketDetails.creatorFeeBps,
+      expiresAt: new Date(marketDetails.expiresAt * 1000).toISOString(),
+      id: BigNumber.from(marketDetails.id).toNumber(),
+      outcomeCount: marketDetails.outcomeCount,
+      outcomeTokenStartIndex: BigNumber.from(marketDetails.outcomeTokenStartIndex).toNumber(),
+      resolvedAt: marketDetails.resolvedAt === 0 ? null : new Date(marketDetails.resolvedAt * 1000).toISOString(),
+      resolver: marketDetails.resolver,
+      startsAt: new Date(marketDetails.startsAt * 1000).toISOString(),
+      status: marketDetails.status,
+      winningOutcome: BigNumber.from(marketDetails.winningOutcome).toNumber(),
+    };
+  }
   const getMarket = async (_marketId: number) => {
     if (!activeChain) return;
 
@@ -298,7 +314,8 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
       if (marketContract) {
         const marketDetails = await marketContract.getMarket(_marketId);
-        return marketDetails;
+        const parsedMarketDetails = parseMarketDetails(marketDetails);
+        return parsedMarketDetails;
       }
     } catch (error) {
       console.error("Error fetching market details:", error);

@@ -14,12 +14,14 @@ const SingleMarket: React.FC = () => {
   const [marketData, setMarketData] = useState();
   const [outcome, setOutcome] = useState(0);
   const [activeTab, setActiveTab] = useState("buy");
+  const [statusData, setStatusData] = useState();
   const {
     buyOutcome,
     formatTimestamp,
     fetchMarketChartPrices,
     fetchSingleMarketData,
     tokenBalance,
+    getMarket,
   } = useDataContext();
   const [prices, setPrices] = useState<
     { price: number[]; timestamp: string }[]
@@ -29,8 +31,8 @@ const SingleMarket: React.FC = () => {
     (async () => {
       let data = await fetchMarketChartPrices(id);
       let market = await fetchSingleMarketData(id);
-
-      console.log(data, "data");
+      let singleMarket = await getMarket(id);
+      setStatusData(singleMarket);
       setMarketData(market);
       setPrices(data?.prices || []);
     })();
@@ -317,19 +319,43 @@ const SingleMarket: React.FC = () => {
                     <h3 className="text-lg font-semibold">Market Status</h3>
                     <ul className="mt-4 space-y-2 text-sm text-gray-600">
                       <li className="flex items-center space-x-2">
-                        <span className="w-4 h-4 bg-red-500 rounded-full"></span>
-                        <span>Market Start - Feb 05, 2025 | 12:43 EST</span>
+                        <span
+                          className={`w-4 h-4 ${
+                            statusData?.status === 0
+                              ? "bg-yellow-500"
+                              : "bg-gray-300"
+                          } rounded-full`}
+                        ></span>
+                        <span>Market Start - </span>
                       </li>
                       <li className="flex items-center space-x-2">
-                        <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
+                        <span
+                          className={`w-4 h-4 ${
+                            statusData?.status === 1
+                              ? "bg-blue-500"
+                              : "bg-gray-300"
+                          } rounded-full`}
+                        ></span>
                         <span>Predictions Close</span>
                       </li>
                       <li className="flex items-center space-x-2">
-                        <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
+                        <span
+                          className={`w-4 h-4 ${
+                            statusData?.status === 2
+                              ? "bg-gray-500"
+                              : "bg-gray-300"
+                          } rounded-full`}
+                        ></span>
                         <span>Resolution Start</span>
                       </li>
                       <li className="flex items-center space-x-2">
-                        <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
+                        <span
+                          className={`w-4 h-4 ${
+                            statusData?.status === 3
+                              ? "bg-green-500"
+                              : "bg-gray-300"
+                          } rounded-full`}
+                        ></span>
                         <span>Resolution Close</span>
                       </li>
                     </ul>
