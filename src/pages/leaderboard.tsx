@@ -12,7 +12,8 @@ const Leaderboard: React.FC = () => {
   useEffect(() => {
     (async () => {
       let res = await getLeaderBoardData();
-      setLeaderBoardData(res?.data);
+      console.log(res);
+      setLeaderBoardData(res);
     })();
   }, []);
 

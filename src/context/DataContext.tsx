@@ -1011,11 +1011,14 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       console.log(error);
     }
   };
-
+  function _sortByPoints(data:any) {
+    return data.sort((a, b) => parseFloat(b?.points) - parseFloat(a?.points));
+  }
   const getLeaderBoardData = async () => {
     try {
       let res = await api.get("/user/leaderboard");
-      return res?.data;
+      let mapData = res?.data?.data;
+      return _sortByPoints(mapData);
     } catch (error) {
       throw error;
     }
