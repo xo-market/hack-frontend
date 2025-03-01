@@ -91,7 +91,7 @@ const Navbar: React.FC = () => {
                 " | " +
                 numeral(data?.formatted).format("0.0a") +
                 " " +
-                data?.symbol
+                (data?.symbol ? data?.symbol : "XO")
               : "Login"}
           </button>
           {authenticated && (
