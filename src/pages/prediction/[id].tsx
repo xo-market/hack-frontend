@@ -280,30 +280,61 @@ const SingleMarket: React.FC = () => {
                     {activeTab === "buy" ? (
                       <>
                         {/* Share Price & Potential Return */}
-                        <div className="mt-2 text-sm text-gray-500">
-                          <p>
-                            Share Price:{" "}
-                            <span className="font-semibold">
-                              {marketData?.yesPercentage /
-                                (marketData?.yesPercentage +
-                                  marketData?.noPercentage)}{" "}
-                              XO Token
-                            </span>
-                          </p>
-                          <p>
-                            Potential Return:{" "}
-                            <span className="font-semibold">
-                              {amount *
-                                (marketData?.yesPercentage /
+                        {outcome === 0 ? (
+                          <div className="mt-2 text-sm text-gray-500">
+                            <p>
+                              Share Price:{" "}
+                              <span className="font-semibold">
+                                {(
+                                  marketData?.yesPercentage /
                                   (marketData?.yesPercentage +
-                                    marketData?.noPercentage))}
-                            </span>
-                          </p>
-                        </div>
+                                    marketData?.noPercentage)
+                                ).toFixed(2)}
+                                  XO Token
+                              </span>
+                            </p>
+                            <p>
+                              Potential Return:{" "}
+                              <span className="font-semibold">
+                                {(
+                                  amount *
+                                  (marketData?.yesPercentage /
+                                    (marketData?.yesPercentage +
+                                      marketData?.noPercentage))
+                                ).toFixed(2)}
+                              </span>
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="mt-2 text-sm text-gray-500">
+                            <p>
+                              Share Price:{" "}
+                              <span className="font-semibold">
+                                {(
+                                  marketData?.noPercentage /
+                                  (marketData?.yesPercentage +
+                                    marketData?.noPercentage)
+                                ).toFixed(2)}
+                                XO Token
+                              </span>
+                            </p>
+                            <p>
+                              Potential Return:{" "}
+                              <span className="font-semibold">
+                                {(
+                                  amount *
+                                  (marketData?.noPercentage /
+                                    (marketData?.yesPercentage +
+                                      marketData?.noPercentage))
+                                ).toFixed(2)}
+                              </span>
+                            </p>
+                          </div>
+                        )}
 
                         {/* Confirm Button */}
                         <button
-                          onClick={()=>handleConfirmTransaction("buy")}
+                          onClick={() => handleConfirmTransaction("buy")}
                           className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
                         >
                           Buy
@@ -312,7 +343,7 @@ const SingleMarket: React.FC = () => {
                     ) : (
                       <>
                         <button
-                           onClick={()=>handleConfirmTransaction("sell")}
+                          onClick={() => handleConfirmTransaction("sell")}
                           className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
                         >
                           Sell
