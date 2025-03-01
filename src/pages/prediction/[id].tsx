@@ -359,42 +359,44 @@ const SingleMarket: React.FC = () => {
                       <li className="flex items-center space-x-2">
                         <span
                           className={`w-4 h-4 ${
-                            statusData?.status === 0
+                            marketData?.starts_at > Math.floor(Date.now() / 1000)
                               ? "bg-yellow-500"
                               : "bg-gray-300"
                           } rounded-full`}
                         ></span>
-                        <span>Market Start - </span>
+                        <span>Market Start</span>
                       </li>
                       <li className="flex items-center space-x-2">
                         <span
                           className={`w-4 h-4 ${
-                            statusData?.status === 1
+                            marketData?.starts_at <= Math.floor(Date.now() / 1000) && 
+                            marketData?.expires_at > Math.floor(Date.now() / 1000)
                               ? "bg-blue-500"
                               : "bg-gray-300"
                           } rounded-full`}
                         ></span>
-                        <span>Predictions Close</span>
+                        <span>Predictions Open</span>
                       </li>
                       <li className="flex items-center space-x-2">
                         <span
                           className={`w-4 h-4 ${
-                            statusData?.status === 2
+                            marketData?.expires_at <= Math.floor(Date.now() / 1000) && 
+                            !marketData?.resolved
                               ? "bg-gray-500"
                               : "bg-gray-300"
                           } rounded-full`}
                         ></span>
-                        <span>Resolution Start</span>
+                        <span>Resolution Pending</span>
                       </li>
                       <li className="flex items-center space-x-2">
                         <span
                           className={`w-4 h-4 ${
-                            statusData?.status === 3
+                            marketData?.resolved
                               ? "bg-green-500"
                               : "bg-gray-300"
                           } rounded-full`}
                         ></span>
-                        <span>Resolution Close</span>
+                        <span>Resolution Complete</span>
                       </li>
                     </ul>
                   </div>

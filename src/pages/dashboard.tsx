@@ -259,7 +259,7 @@ const Dashboard: React.FC = () => {
                             {past?.is_claimable && !past?.is_redeemed ? (
                               <button
                                 onClick={() => handleRedeem(past?.market_id)}
-                                className="bg-pink-500 text-white px-3 py-1 rounded-md hover:bg-pink-600 transition-colors shadow-sm"
+                                className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors shadow-sm"
                               >
                                 Claim
                               </button>
