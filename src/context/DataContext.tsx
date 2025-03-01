@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode, useMemo } from "react";
 import { useAccount, useChainId } from "wagmi";
 import { useEthersSigner } from "@/utils/signer";
-import { ethers, BigNumber, Contract } from "ethers";
+import { ethers, BigNumber, Contract, providers } from "ethers";
 import { toast } from "react-hot-toast";
 import { api, apiMultipart } from "@/config";
 import {
@@ -97,21 +97,26 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const signer = useEthersSigner({ chainId: activeChain });
   console.log("Signer", activeChain);
-  const getContractInstance = async (
-    contractAddress: string,
-    contractAbi: any
-  ): Promise<Contract | undefined> => {
+
+  // Create a read-only provider using the custom RPC
+  const readOnlyProvider = useMemo(() => {
+    return new ethers.providers.JsonRpcProvider("https://rpc.xo-testnet.t.raas.gelato.cloud");
+  }, []);
+
+  // Function to get contract instance with connected wallet
+  const getContractInstance = async (contractAddress: string, contractAbi: any): Promise<Contract | null> => {
     try {
-      const contractInstance = new ethers.Contract(
-        contractAddress,
-        contractAbi,
-        signer
-      );
-      return contractInstance;
+      if (!signer) return null;
+      return new ethers.Contract(contractAddress, contractAbi, signer);
     } catch (error) {
-      console.log("Error in deploying contract");
-      return undefined;
+      console.error("Error getting contract instance:", error);
+      return null;
     }
+  };
+
+  // Function to get contract instance with read-only provider
+  const getReadOnlyContractInstance = (contractAddress: string, contractAbi: any): Contract => {
+    return new ethers.Contract(contractAddress, contractAbi, readOnlyProvider);
   };
 
   function generateBinaryPredictionQuestion(metric: string, threshold: number) {
@@ -710,10 +715,10 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       let marketData = await api.get("/market/all?limit=20");
       let markets = marketData?.data?.markets || [];
 
-      // Fetch yes/no percentages for all markets concurrently
+      // Use the read-only provider to get prices
       let marketsWithPercentages = await Promise.all(
         markets.map(async (market) => {
-          const { yesPercentage, noPercentage } = await _getPricePercentages(
+          const { yesPercentage, noPercentage } = await _getPricePercentagesReadOnly(
             market?.market_id
           );
           return { ...market, yesPercentage, noPercentage };
@@ -722,9 +727,45 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       return marketsWithPercentages;
     } catch (error) {
       console.log(error);
+      return [];
     }
   };
 
+  const _getPricePercentagesReadOnly = async (marketId: number) => {
+    let yesPercentage = 50,
+        noPercentage = 50;
+    
+    try {
+      // Use the chain ID from the custom RPC (likely 1337 for your testnet)
+      const chainId = await readOnlyProvider.getNetwork().then(network => network.chainId);
+      
+      // Get contract using read-only provider
+      const marketContract = getReadOnlyContractInstance(
+        Addresses[chainId]?.XOMultiOutcomeMarketAddress || Addresses[1337]?.XOMultiOutcomeMarketAddress,
+        MultiOutcomeMarketABI
+      );
+      
+      if (marketContract) {
+        let prices = await marketContract.getPrices(marketId);
+        console.log(prices, "prices");
+        let yes = +prices[0].toString() / 10 ** 18;
+        let no = +prices[1].toString() / 10 ** 18;
+
+        let total = yes + no;
+        console.log(yes, no, total, "total");
+
+        yesPercentage = total > 0 ? (yes / total) * 100 : 0;
+        noPercentage = total > 0 ? (no / total) * 100 : 0;
+      }
+    } catch (error) {
+      console.error("Error fetching prices from read-only provider:", error);
+      // Fall back to default values on error
+    }
+    
+    return { yesPercentage, noPercentage };
+  };
+
+  // Keep the original function for when the wallet is connected
   const _getPricePercentages = async (marketId: number) => {
     if (!activeChain) return;
     let yesPercentage = 50,
