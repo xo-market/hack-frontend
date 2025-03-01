@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Layout from "@/components/layout/Layout";
 import StartTab from "@/components/ui/create-tabs/StartTab";
 import { DefineTab } from "@/components/ui/create-tabs/DefineTab";
 import { ProvideTab } from "@/components/ui/create-tabs/ProvideTab";
@@ -10,7 +11,7 @@ const CreateComponent: React.FC = () => {
   const { tab, changeTab } = useCreateContext();
   
   return (
-    <div className="container mx-auto flex justify-center items-center min-h-[90vh] py-12">
+    <div className="container mx-auto flex justify-center items-center min-h-[80vh] py-12">
       <div className="bg-white rounded-xl shadow-md border border-pink-100 p-6 w-2/3 mx-auto">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Create New Prediction Market</h1>
         
@@ -56,7 +57,9 @@ const CreateComponent: React.FC = () => {
 const Create: React.FC = () => {
   return (
     <CreateProvider>
-      <CreateComponent />
+      <Layout>
+        <CreateComponent />
+      </Layout>
     </CreateProvider>
   );
 };
