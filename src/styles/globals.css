@@ -69,12 +69,16 @@ body {
   }
 
   .neon-text {
-    text-shadow: 0 0 5px rgb(var(--accent-color)),
-      0 0 10px rgb(var(--accent-color)), 0 0 15px rgb(var(--accent-color));
+    text-shadow:
+      0 0 5px rgb(var(--accent-color)),
+      0 0 10px rgb(var(--accent-color)),
+      0 0 15px rgb(var(--accent-color));
   }
 
   .neon-border {
-    box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary),
+    box-shadow:
+      0 0 5px var(--primary),
+      0 0 10px var(--primary),
       0 0 15px var(--primary);
   }
 }

@@ -216,7 +216,7 @@ const SingleMarket: React.FC = () => {
                         <div
                           style={{
                             width: `${Number(marketData?.yesPercentage).toFixed(
-                              2
+                              2,
                             )}%`,
                           }}
                           className="h-2 bg-green-600 rounded-l-full"
@@ -225,7 +225,7 @@ const SingleMarket: React.FC = () => {
                           className="absolute right-0 top-0 h-2 bg-red-500 rounded-r-full"
                           style={{
                             width: `${Number(marketData?.noPercentage).toFixed(
-                              2
+                              2,
                             )}%`,
                           }}
                         ></div>
@@ -290,7 +290,7 @@ const SingleMarket: React.FC = () => {
                                   (marketData?.yesPercentage +
                                     marketData?.noPercentage)
                                 ).toFixed(2)}
-                                  XO Token
+                                XO Token
                               </span>
                             </p>
                             <p>
@@ -403,8 +403,16 @@ const SingleMarket: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="flex justify-center items-center mt-10">
-            <Spinner size="medium" />
+          <div className="flex flex-col items-center justify-center py-8">
+            <div className="animate-pulse flex space-x-4 mb-4">
+              <div className="h-12 w-12 bg-pink-200 rounded-full"></div>
+              <div className="flex-1 space-y-4 max-w-md">
+                <div className="h-4 bg-pink-200 rounded w-3/4"></div>
+                <div className="h-4 bg-pink-200 rounded"></div>
+                <div className="h-4 bg-pink-200 rounded w-5/6"></div>
+              </div>
+            </div>
+            <p className="text-gray-500">Loading prediction market...</p>
           </div>
         )}
       </Layout>

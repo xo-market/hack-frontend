@@ -9,12 +9,14 @@ import { CreateProvider, useCreateContext } from "@/context/CreateContext";
 
 const CreateComponent: React.FC = () => {
   const { tab, changeTab } = useCreateContext();
-  
+
   return (
     <div className="container mx-auto flex justify-center items-center min-h-[80vh] py-12">
       <div className="bg-white rounded-xl shadow-md border border-pink-100 p-6 w-2/3 mx-auto">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Create New Prediction Market</h1>
-        
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">
+          Create New Prediction Market
+        </h1>
+
         <div className="flex space-x-1 mb-8">
           {["start", "define", "provide", "review"].map((t, index) => (
             <div key={t} className="flex-1">
@@ -27,17 +29,23 @@ const CreateComponent: React.FC = () => {
                 } font-medium text-sm`}
               >
                 <div className="flex items-center justify-center">
-                  <span className={`flex items-center justify-center h-6 w-6 rounded-full mr-2 text-xs ${
-                    tab === t ? "bg-white text-pink-500" : "bg-gray-300 text-gray-600"
-                  }`}>
+                  <span
+                    className={`flex items-center justify-center h-6 w-6 rounded-full mr-2 text-xs ${
+                      tab === t
+                        ? "bg-white text-pink-500"
+                        : "bg-gray-300 text-gray-600"
+                    }`}
+                  >
                     {index + 1}
                   </span>
                   {t.charAt(0).toUpperCase() + t.slice(1)}
                 </div>
               </button>
-              
+
               {index < 3 && (
-                <div className={`h-1 mt-1 ${index < ["start", "define", "provide", "review"].indexOf(tab) ? "bg-pink-500" : "bg-gray-200"}`}></div>
+                <div
+                  className={`h-1 mt-1 ${index < ["start", "define", "provide", "review"].indexOf(tab) ? "bg-pink-500" : "bg-gray-200"}`}
+                ></div>
               )}
             </div>
           ))}

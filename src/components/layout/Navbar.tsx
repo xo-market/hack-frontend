@@ -48,7 +48,10 @@ const Navbar: React.FC = () => {
 
         {/* Navigation Links - Centered */}
         <div className="flex items-center space-x-8">
-          <Link href="/" className="text-gray-600 hover:text-gray-900 font-medium">
+          <Link
+            href="/"
+            className="text-gray-600 hover:text-gray-900 font-medium"
+          >
             Markets
           </Link>
           <Link
@@ -85,7 +88,7 @@ const Navbar: React.FC = () => {
               {tokenBalance?.toString()} xoUSDC
             </p>
           </div>
-          
+
           {/* Login/Profile */}
           {!authenticated ? (
             <button
@@ -114,7 +117,7 @@ const Navbar: React.FC = () => {
                   />
                 </span>
               </button>
-              
+
               <div
                 className="absolute top-12 right-0 bg-white border border-gray-200 rounded-md shadow-lg z-10 w-56 overflow-hidden"
                 style={{ display: showProfile ? "block" : "none" }}
@@ -127,36 +130,63 @@ const Navbar: React.FC = () => {
                       privyUser?.wallet?.address.slice(-4)}
                   </p>
                 </div>
-                
+
                 <div className="py-1">
                   <Link href="/dashboard">
                     <div className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 cursor-pointer">
-                      <svg className="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <svg
+                        className="mr-3 h-5 w-5 text-gray-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                        <path
+                          fillRule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                       My Bets
                     </div>
                   </Link>
-                  
-                  <div 
+
+                  <div
                     onClick={getFaucet}
                     className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 cursor-pointer"
                   >
-                    <svg className="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm4.707 3.707a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L8.414 9H10a3 3 0 013 3v1a1 1 0 102 0v-1a5 5 0 00-5-5H8.414l1.293-1.293z" clipRule="evenodd" />
+                    <svg
+                      className="mr-3 h-5 w-5 text-gray-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm4.707 3.707a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L8.414 9H10a3 3 0 013 3v1a1 1 0 102 0v-1a5 5 0 00-5-5H8.414l1.293-1.293z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     Get Drip Faucet
                   </div>
-                  
+
                   <div className="border-t border-gray-100 my-1"></div>
-                  
-                  <div 
+
+                  <div
                     onClick={logout}
                     className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 cursor-pointer"
                   >
-                    <svg className="mr-3 h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clipRule="evenodd" />
+                    <svg
+                      className="mr-3 h-5 w-5 text-red-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     Logout
                   </div>

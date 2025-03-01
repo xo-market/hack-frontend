@@ -1,5 +1,5 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+import Head from "next/head";
+import { useRouter } from "next/router";
 
 interface SEOProps {
   title?: string;
@@ -15,11 +15,16 @@ interface SEOProps {
 
 const SEO: React.FC<SEOProps> = ({ title, description, image, token }) => {
   const router = useRouter();
-  const domain = process.env.NEXT_PUBLIC_DOMAIN || '';
+  const domain = process.env.NEXT_PUBLIC_DOMAIN || "";
 
   const seo = {
-    title: token ? `${token.name} (${token.symbol}) - XO` : title || 'XO - Explore and Trade Tokens',
-    description: token?.description || description || 'Explore, create, and trade tokens on the XO platform',
+    title: token
+      ? `${token.name} (${token.symbol}) - XO`
+      : title || "XO - Explore and Trade PredictionMarkets",
+    description:
+      token?.description ||
+      description ||
+      "Explore, create, and trade markets on the XO platform",
     url: `${domain}${router.asPath}`,
   };
 

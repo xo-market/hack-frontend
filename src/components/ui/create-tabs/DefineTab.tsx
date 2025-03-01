@@ -72,10 +72,10 @@ export const DefineTab: React.FC = () => {
               createData?.param === "likes"
                 ? farcasterData?.reactions?.likes_count
                 : createData?.param === "recasts"
-                ? farcasterData?.reactions?.recasts_count
-                : createData?.param === "replies"
-                ? farcasterData?.replies?.count
-                : 0
+                  ? farcasterData?.reactions?.recasts_count
+                  : createData?.param === "replies"
+                    ? farcasterData?.replies?.count
+                    : 0
             }
             value={createData?.value}
             onChange={(e) => handleOnChange(e)}
@@ -84,18 +84,17 @@ export const DefineTab: React.FC = () => {
               createData?.param === "likes"
                 ? farcasterData?.reactions?.likes_count
                 : createData?.param === "recasts"
-                ? farcasterData?.reactions?.recasts_count
-                : createData?.param === "replies"
-                ? farcasterData?.replies?.count
-                : 0
+                  ? farcasterData?.reactions?.recasts_count
+                  : createData?.param === "replies"
+                    ? farcasterData?.replies?.count
+                    : 0
             } minimum value`}
           />
         </div>
         <input
           type="datetime-local"
           name="startDate"
-          value={
-            createData?.startDate }
+          value={createData?.startDate}
           onChange={(e) => handleOnChange(e)}
           className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
           placeholder="Start Date"
@@ -103,8 +102,7 @@ export const DefineTab: React.FC = () => {
         <input
           type="datetime-local"
           name="endDate"
-          value={
-            createData?.endDate }
+          value={createData?.endDate}
           onChange={(e) => handleOnChange(e)}
           className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
           placeholder="End Date"

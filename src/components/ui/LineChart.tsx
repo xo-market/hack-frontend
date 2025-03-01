@@ -16,11 +16,10 @@ const LineChart = ({ prices }) => {
         year: "numeric",
         month: "short",
         day: "numeric",
-      })
+      }),
     );
     const dataset1 = prices.map((item) => Number(item.price[0]) / 1e18);
     const dataset2 = prices.map((item) => Number(item.price[1]) / 1e18);
-
 
     // Destroy existing chart before creating a new one
     if (chartRef.current) {

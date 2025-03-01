@@ -24,7 +24,7 @@ export const connectors = connectorsForWallets(
   {
     appName: "XO-Market",
     projectId: projectId,
-  }
+  },
 );
 
 export const wagmiConfig = createConfig({

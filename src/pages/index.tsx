@@ -63,7 +63,7 @@ const Home: React.FC = () => {
 
         if (Array.isArray(data)) {
           const uniqueData = Array.from(
-            new Map(data.map((item) => [item.id, item])).values()
+            new Map(data.map((item) => [item.id, item])).values(),
           );
           setMarketsData(uniqueData);
           setFilteredMarkets(uniqueData);
@@ -90,8 +90,8 @@ const Home: React.FC = () => {
       setFilteredMarkets(
         marketsData?.filter(
           (market) =>
-            market?.category?.toLowerCase() === category?.toLowerCase()
-        )
+            market?.category?.toLowerCase() === category?.toLowerCase(),
+        ),
       );
     }
   };
@@ -241,7 +241,7 @@ const Home: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-6 mt-10">
-            {filteredMarkets  &&
+            {filteredMarkets &&
               filteredMarkets?.map((data: any, index: any) => {
                 return (
                   <PredictionCard
@@ -250,8 +250,7 @@ const Home: React.FC = () => {
                     onClick={() => console.log("Clicked")}
                   />
                 );
-              })
-            }
+              })}
           </div>
         )}
       </div>

@@ -1,5 +1,5 @@
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
 
 const Footer: React.FC = () => {
   return (
@@ -12,14 +12,14 @@ const Footer: React.FC = () => {
             </p>
           </div>
           <nav className="flex space-x-4">
-            <Link 
-              href="/about" 
+            <Link
+              href="/about"
               className="text-[10px] sm:text-xs text-gray-800 hover:text-[var(--primary-hover)] transition-colors"
             >
               About
             </Link>
-            <Link 
-              href="/FAQ" 
+            <Link
+              href="/FAQ"
               className="text-[10px] sm:text-xs text-gray-800 hover:text-[var(--primary-hover)] transition-colors"
             >
               FAQ

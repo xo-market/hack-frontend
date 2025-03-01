@@ -62,7 +62,9 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="p-3 bg-white rounded-lg shadow-sm">
               <p className="text-gray-500 text-sm font-medium">Balance</p>
-              <p className="font-semibold text-black text-lg mt-1">{tokenBalance} xoUSDC</p>
+              <p className="font-semibold text-black text-lg mt-1">
+                {tokenBalance} xoUSDC
+              </p>
             </div>
           </div>
 
@@ -122,12 +124,24 @@ const Dashboard: React.FC = () => {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-50 text-gray-700 text-sm uppercase">
-                      <th className="px-4 py-3 text-left font-semibold">Market ID</th>
-                      <th className="px-4 py-3 text-left font-semibold">Outcome</th>
-                      <th className="px-4 py-3 text-left font-semibold">Quantity (XO)</th>
-                      <th className="px-4 py-3 text-left font-semibold">Market Name</th>
-                      <th className="px-4 py-3 text-left font-semibold">Description</th>
-                      <th className="px-4 py-3 text-left font-semibold">Expires At</th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Market ID
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Outcome
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Quantity (XO)
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Market Name
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Description
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Expires At
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -139,15 +153,25 @@ const Dashboard: React.FC = () => {
                         >
                           <td className="px-4 py-3">{curr.market_id}</td>
                           <td className="px-4 py-3">
-                            <span className={`px-2 py-1 rounded-full text-xs ${curr.outcome === 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs ${curr.outcome === 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                            >
                               {curr.outcome === 0 ? "Yes" : "No"}
                             </span>
                           </td>
-                          <td className="px-4 py-3 font-medium">{parseFloat(curr.quantity) / 1e18} XO</td>
-                          <td className="px-4 py-3 font-semibold">{curr.market_name}</td>
-                          <td className="px-4 py-3 text-gray-600 max-w-xs truncate">{curr.market_description}</td>
+                          <td className="px-4 py-3 font-medium">
+                            {parseFloat(curr.quantity) / 1e18} XO
+                          </td>
+                          <td className="px-4 py-3 font-semibold">
+                            {curr.market_name}
+                          </td>
+                          <td className="px-4 py-3 text-gray-600 max-w-xs truncate">
+                            {curr.market_description}
+                          </td>
                           <td className="px-4 py-3 text-gray-600">
-                            {new Date(parseInt(curr.expires_at) * 1000).toLocaleString()}
+                            {new Date(
+                              parseInt(curr.expires_at) * 1000,
+                            ).toLocaleString()}
                           </td>
                         </tr>
                       ))
@@ -163,7 +187,9 @@ const Dashboard: React.FC = () => {
                                 <div className="h-4 bg-pink-200 rounded w-5/6"></div>
                               </div>
                             </div>
-                            <p className="text-gray-500">Loading market data...</p>
+                            <p className="text-gray-500">
+                              Loading market data...
+                            </p>
                           </div>
                         </td>
                       </tr>
@@ -177,13 +203,27 @@ const Dashboard: React.FC = () => {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-50 text-gray-700 text-sm uppercase">
-                      <th className="px-4 py-3 text-left font-semibold">Market ID</th>
-                      <th className="px-4 py-3 text-left font-semibold">User Outcome</th>
-                      <th className="px-4 py-3 text-left font-semibold">Quantity (XO)</th>
-                      <th className="px-4 py-3 text-left font-semibold">Market Name</th>
-                      <th className="px-4 py-3 text-left font-semibold">Description</th>
-                      <th className="px-4 py-3 text-left font-semibold">Expired At</th>
-                      <th className="px-4 py-3 text-left font-semibold">Status</th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Market ID
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        User Outcome
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Quantity (XO)
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Market Name
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Description
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Expired At
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Status
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -195,15 +235,25 @@ const Dashboard: React.FC = () => {
                         >
                           <td className="px-4 py-3">{past?.market_id}</td>
                           <td className="px-4 py-3">
-                            <span className={`px-2 py-1 rounded-full text-xs ${past?.user_outcome === 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs ${past?.user_outcome === 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                            >
                               {past?.user_outcome === 0 ? "Yes" : "No"}
                             </span>
                           </td>
-                          <td className="px-4 py-3 font-medium">{parseFloat(past?.quantity) / 1e18} Shares</td>
-                          <td className="px-4 py-3 font-semibold">{past?.market_name}</td>
-                          <td className="px-4 py-3 text-gray-600 max-w-xs truncate">{past?.market_description}</td>
+                          <td className="px-4 py-3 font-medium">
+                            {parseFloat(past?.quantity) / 1e18} Shares
+                          </td>
+                          <td className="px-4 py-3 font-semibold">
+                            {past?.market_name}
+                          </td>
+                          <td className="px-4 py-3 text-gray-600 max-w-xs truncate">
+                            {past?.market_description}
+                          </td>
                           <td className="px-4 py-3 text-gray-600">
-                            {new Date(parseInt(past?.expired_at) * 1000).toLocaleString()}
+                            {new Date(
+                              parseInt(past?.expired_at) * 1000,
+                            ).toLocaleString()}
                           </td>
                           <td className="px-4 py-3">
                             {past?.is_claimable && !past?.is_redeemed ? (
@@ -214,9 +264,13 @@ const Dashboard: React.FC = () => {
                                 Claim
                               </button>
                             ) : !past?.is_claimable && !past?.is_redeemed ? (
-                              <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Lost</span>
+                              <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">
+                                Lost
+                              </span>
                             ) : (
-                              <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Won</span>
+                              <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                                Won
+                              </span>
                             )}
                           </td>
                         </tr>
@@ -233,7 +287,9 @@ const Dashboard: React.FC = () => {
                                 <div className="h-4 bg-pink-200 rounded w-5/6"></div>
                               </div>
                             </div>
-                            <p className="text-gray-500">Loading past market data...</p>
+                            <p className="text-gray-500">
+                              Loading past market data...
+                            </p>
                           </div>
                         </td>
                       </tr>
@@ -247,11 +303,21 @@ const Dashboard: React.FC = () => {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-gray-50 text-gray-700 text-sm uppercase">
-                      <th className="px-4 py-3 text-left font-semibold">Action</th>
-                      <th className="px-4 py-3 text-left font-semibold">Market ID</th>
-                      <th className="px-4 py-3 text-left font-semibold">Quantity</th>
-                      <th className="px-4 py-3 text-left font-semibold">Timestamp</th>
-                      <th className="px-4 py-3 text-left font-semibold">Transaction Hash</th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Action
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Market ID
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Quantity
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Timestamp
+                      </th>
+                      <th className="px-4 py-3 text-left font-semibold">
+                        Transaction Hash
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -267,7 +333,9 @@ const Dashboard: React.FC = () => {
                             </span>
                           </td>
                           <td className="px-4 py-3">{act.market_id}</td>
-                          <td className="px-4 py-3 font-medium">{parseFloat(act.quantity) / 1e18} Shares</td>
+                          <td className="px-4 py-3 font-medium">
+                            {parseFloat(act.quantity) / 1e18} Shares
+                          </td>
                           <td className="px-4 py-3 text-gray-600">
                             {new Date(parseInt(act.timestamp)).toLocaleString()}
                           </td>
@@ -295,7 +363,9 @@ const Dashboard: React.FC = () => {
                                 <div className="h-4 bg-pink-200 rounded w-5/6"></div>
                               </div>
                             </div>
-                            <p className="text-gray-500">Loading activity data...</p>
+                            <p className="text-gray-500">
+                              Loading activity data...
+                            </p>
                           </div>
                         </td>
                       </tr>

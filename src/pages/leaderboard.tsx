@@ -2,7 +2,7 @@
 import Layout from "@/components/layout/Layout";
 import { useDataContext } from "@/context/DataContext";
 import React, { useEffect, useState } from "react";
-import numeral from "numeral"
+import numeral from "numeral";
 
 const Leaderboard: React.FC = () => {
   const { getLeaderBoardData } = useDataContext();
@@ -71,11 +71,15 @@ const Leaderboard: React.FC = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center">
                         {index < 3 ? (
-                          <div className={`w-8 h-8 flex items-center justify-center rounded-full mr-2 ${
-                            index === 0 ? "bg-yellow-100 text-yellow-600" :
-                            index === 1 ? "bg-gray-100 text-gray-600" :
-                            "bg-amber-100 text-amber-600"
-                          }`}>
+                          <div
+                            className={`w-8 h-8 flex items-center justify-center rounded-full mr-2 ${
+                              index === 0
+                                ? "bg-yellow-100 text-yellow-600"
+                                : index === 1
+                                  ? "bg-gray-100 text-gray-600"
+                                  : "bg-amber-100 text-amber-600"
+                            }`}
+                          >
                             {index + 1}
                           </div>
                         ) : (
@@ -85,7 +89,9 @@ const Leaderboard: React.FC = () => {
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-pink-600 font-medium">
-                        {player?.user_address.slice(0, 6) + "..." + player?.user_address.slice(-4)}
+                        {player?.user_address.slice(0, 6) +
+                          "..." +
+                          player?.user_address.slice(-4)}
                       </span>
                     </td>
                     <td className="px-6 py-4 font-semibold text-green-600">
@@ -94,8 +100,12 @@ const Leaderboard: React.FC = () => {
                     <td className="px-6 py-4 text-red-500">
                       {numeral(player?.losses).format("0.0a")}
                     </td>
-                    <td className="px-6 py-4">{numeral(player?.markets).format("0.0a")}</td>
-                    <td className="px-6 py-4">{numeral(player?.total_volume).format("0.0a")}</td>
+                    <td className="px-6 py-4">
+                      {numeral(player?.markets).format("0.0a")}
+                    </td>
+                    <td className="px-6 py-4">
+                      {numeral(player?.total_volume).format("0.0a")}
+                    </td>
                     <td className="px-6 py-4">
                       <span className="font-bold text-pink-600">
                         {numeral(player?.points).format("0.0a")}

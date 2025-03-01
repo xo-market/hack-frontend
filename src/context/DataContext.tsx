@@ -24,12 +24,12 @@ interface DataContextProps {
     _creatorFeeBps: any,
     _outcomeCount: any,
     _resolver: string,
-    _metaDataURI: string
+    _metaDataURI: string,
   ) => void;
   reviewMarket: (
     _marketId: number,
     _isApproved: boolean,
-    _data: string
+    _data: string,
   ) => void;
   setMarketResolver: (_resolver: any, _isPublicResolver: boolean) => void;
   setMarketResolverFee: (_feeBps: number) => void;
@@ -39,13 +39,13 @@ interface DataContextProps {
     _marketId: number,
     _outcome: number,
     _amount: number,
-    _maxCost: number
+    _maxCost: number,
   ) => void;
   sellOutcome: (
     _marketId: number,
     _outcome: number,
     _amount: number,
-    _minReturn: number
+    _minReturn: number,
   ) => void;
   redeemWinnings: (_marketId: number) => void;
   redeemDefaultedMarket: (_marketId: number) => void;
@@ -79,7 +79,7 @@ interface DataContextProviderProps {
 
 // Context initialization
 const DataContext = React.createContext<DataContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 const DataContextProvider: React.FC<DataContextProviderProps> = ({
@@ -88,7 +88,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   const [tokenBalance, setTokenBalance] = useState<BigNumber | number>(0);
   const { address, chain } = useAccount();
   const [activeChain, setActiveChainId] = useState<number | undefined>(
-    chain?.id
+    chain?.id,
   );
   const router = useRouter();
   useEffect(() => {
@@ -100,11 +100,16 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   // Create a read-only provider using the custom RPC
   const readOnlyProvider = useMemo(() => {
-    return new ethers.providers.JsonRpcProvider("https://rpc.xo-testnet.t.raas.gelato.cloud");
+    return new ethers.providers.JsonRpcProvider(
+      "https://rpc.xo-testnet.t.raas.gelato.cloud",
+    );
   }, []);
 
   // Function to get contract instance with connected wallet
-  const getContractInstance = async (contractAddress: string, contractAbi: any): Promise<Contract | null> => {
+  const getContractInstance = async (
+    contractAddress: string,
+    contractAbi: any,
+  ): Promise<Contract | null> => {
     try {
       if (!signer) return null;
       return new ethers.Contract(contractAddress, contractAbi, signer);
@@ -115,7 +120,10 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   };
 
   // Function to get contract instance with read-only provider
-  const getReadOnlyContractInstance = (contractAddress: string, contractAbi: any): Contract => {
+  const getReadOnlyContractInstance = (
+    contractAddress: string,
+    contractAbi: any,
+  ): Contract => {
     return new ethers.Contract(contractAddress, contractAbi, readOnlyProvider);
   };
 
@@ -128,7 +136,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       if (!activeChain) return BigNumber.from(0);
       const tokenContract = await getContractInstance(
         Addresses[activeChain]?.XOCollateralTokenAddress,
-        CollateralTokenABI
+        CollateralTokenABI,
       );
       if (tokenContract) {
         let balance = await tokenContract.balanceOf(address);
@@ -151,12 +159,12 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     _creatorFeeBps: any,
     _outcomeCount: any,
     _resolver: string,
-    _metaDataURI: string
+    _metaDataURI: string,
   ) => {
     if (!activeChain) return;
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
     try {
       if (marketContract) {
@@ -168,7 +176,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
           _creatorFeeBps,
           _outcomeCount,
           _resolver,
-          _metaDataURI
+          _metaDataURI,
         );
         const receipt = await tx.wait();
         let marketId;
@@ -200,14 +208,14 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   const reviewMarket = async (
     _marketId: number,
     _isApproved: boolean,
-    _data: string
+    _data: string,
   ) => {
     if (!activeChain) return;
     let id = toast.loading("Reviewing market...");
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -215,7 +223,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         const tx = await marketContract.reviewMarket(
           _marketId,
           _isApproved,
-          _data
+          _data,
         );
         await tx.wait();
         toast.success("Market Reviewing successfully", { id });
@@ -228,21 +236,21 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const setMarketResolver = async (
     _resolver: any,
-    _isPublicResolver: boolean
+    _isPublicResolver: boolean,
   ) => {
     if (!activeChain) return;
     let id = toast.loading("Setting market resolver...");
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
       if (marketContract) {
         const tx = await marketContract.setMarketResolver(
           _resolver,
-          _isPublicResolver
+          _isPublicResolver,
         );
         await tx.wait();
         toast.success("Market resolver set successfully", { id });
@@ -259,7 +267,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -278,7 +286,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -291,17 +299,24 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       return null;
     }
   };
-  function parseMarketDetails(marketDetails:any) {
+  function parseMarketDetails(marketDetails: any) {
     return {
-      collateralAmount: BigNumber.from(marketDetails.collateralAmount).toString(),
+      collateralAmount: BigNumber.from(
+        marketDetails.collateralAmount,
+      ).toString(),
       collateralToken: marketDetails.collateralToken,
-      createdAt: new Date(marketDetails.createdAt * 1000).toISOString(),  // Convert UNIX timestamp to ISO format
+      createdAt: new Date(marketDetails.createdAt * 1000).toISOString(), // Convert UNIX timestamp to ISO format
       creatorFeeBps: marketDetails.creatorFeeBps,
       expiresAt: new Date(marketDetails.expiresAt * 1000).toISOString(),
       id: BigNumber.from(marketDetails.id).toNumber(),
       outcomeCount: marketDetails.outcomeCount,
-      outcomeTokenStartIndex: BigNumber.from(marketDetails.outcomeTokenStartIndex).toNumber(),
-      resolvedAt: marketDetails.resolvedAt === 0 ? null : new Date(marketDetails.resolvedAt * 1000).toISOString(),
+      outcomeTokenStartIndex: BigNumber.from(
+        marketDetails.outcomeTokenStartIndex,
+      ).toNumber(),
+      resolvedAt:
+        marketDetails.resolvedAt === 0
+          ? null
+          : new Date(marketDetails.resolvedAt * 1000).toISOString(),
       resolver: marketDetails.resolver,
       startsAt: new Date(marketDetails.startsAt * 1000).toISOString(),
       status: marketDetails.status,
@@ -314,7 +329,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     try {
       const marketContract = await getContractInstance(
         Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-        MultiOutcomeMarketABI
+        MultiOutcomeMarketABI,
       );
 
       if (marketContract) {
@@ -335,13 +350,12 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     try {
       const marketContract = await getContractInstance(
         Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-        MultiOutcomeMarketABI
+        MultiOutcomeMarketABI,
       );
 
       if (marketContract) {
-        const extendedMarketDetails = await marketContract.getExtendedMarket(
-          _marketId
-        );
+        const extendedMarketDetails =
+          await marketContract.getExtendedMarket(_marketId);
         return extendedMarketDetails;
       }
     } catch (error) {
@@ -358,14 +372,14 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
       if (marketContract) {
         const tx = await marketContract.resolveMarket(
           _marketId,
-          _winningOutcome
+          _winningOutcome,
         );
         await tx.wait();
         toast.success("Market resolved successfully", { id });
@@ -380,7 +394,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     _marketId: number,
     _outcome: number,
     _amount: number,
-    _maxCost: number
+    _maxCost: number,
   ) => {
     if (!activeChain) return;
 
@@ -390,13 +404,13 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
       let collateralToken = await getContractInstance(
         Addresses[activeChain]?.XOCollateralTokenAddress,
-        CollateralTokenABI
+        CollateralTokenABI,
       );
       if (!collateralToken) {
         toast.error("Error getting collateral token instance", { id });
@@ -404,12 +418,12 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       }
       let allowanceAmount = await collateralToken.allowance(
         address,
-        Addresses[activeChain]?.XOMultiOutcomeMarketAddress
+        Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
       );
       if (allowanceAmount.lt(_maxCost)) {
         const tx = await collateralToken.approve(
           Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-          ethers.utils.parseUnits(_amount.toString(), 18)
+          ethers.utils.parseUnits(_amount.toString(), 18),
         );
         await tx.wait();
       }
@@ -418,7 +432,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
           _marketId,
           _outcome,
           ethers.utils.parseUnits(_amount.toString(), 18),
-          ethers.utils.parseUnits(_amount.toString(), 18)
+          ethers.utils.parseUnits(_amount.toString(), 18),
         );
         await tx.wait();
         toast.success("Purchase successful", { id });
@@ -432,7 +446,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     _marketId: number,
     _outcome: number,
     _amount: number,
-    _minReturn: number
+    _minReturn: number,
   ) => {
     if (!activeChain) return;
 
@@ -440,13 +454,10 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
-    console.log( _marketId,
-      _outcome,
-      _amount,
-      _minReturn)
+    console.log(_marketId, _outcome, _amount, _minReturn);
 
     try {
       if (marketContract) {
@@ -454,7 +465,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
           _marketId,
           _outcome,
           ethers.utils.parseUnits(_amount.toString(), 18),
-          0
+          0,
         );
         await tx.wait();
         toast.success("Sell successful", { id });
@@ -472,7 +483,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -494,7 +505,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -513,14 +524,14 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     if (!activeChain) return;
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
       if (marketContract) {
         const redeemableAmount = await marketContract.getRedeemableAmount(
           _marketId,
-          ethers.utils.parseUnits(_amount.toString(), 18) // Ensure correct units
+          ethers.utils.parseUnits(_amount.toString(), 18), // Ensure correct units
         );
         const formattedAmount = ethers.utils.formatUnits(redeemableAmount, 18);
 
@@ -533,7 +544,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const setCollateralTokenAllowed = async (
     _tokenAddress: string,
-    _allowed: Boolean
+    _allowed: Boolean,
   ) => {
     if (!activeChain) return;
 
@@ -541,19 +552,19 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
       if (marketContract) {
         const tx = await marketContract.setCollateralTokenAllowed(
           _tokenAddress,
-          _allowed
+          _allowed,
         );
         await tx.wait();
         toast.success(
           `Collateral token ${_allowed ? "enabled" : "disabled"} successfully`,
-          { id }
+          { id },
         );
       }
     } catch (error) {
@@ -566,13 +577,12 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     if (!activeChain) return;
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
     try {
       if (marketContract) {
-        const isAllowed = await marketContract.getCollateralTokenAllowed(
-          _tokenAddress
-        );
+        const isAllowed =
+          await marketContract.getCollateralTokenAllowed(_tokenAddress);
         return isAllowed;
       }
     } catch (error) {
@@ -587,13 +597,13 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
       if (marketContract) {
         const tx = await marketContract.setMinimumInitialCollateral(
-          ethers.utils.parseUnits(_amount.toString(), 18)
+          ethers.utils.parseUnits(_amount.toString(), 18),
         );
         await tx.wait();
         toast.success(`Minimum initial collateral set to ${_amount}`, { id });
@@ -609,7 +619,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -631,7 +641,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -651,7 +661,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -672,7 +682,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -692,7 +702,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
 
     try {
@@ -718,11 +728,10 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       // Use the read-only provider to get prices
       let marketsWithPercentages = await Promise.all(
         markets.map(async (market) => {
-          const { yesPercentage, noPercentage } = await _getPricePercentagesReadOnly(
-            market?.market_id
-          );
+          const { yesPercentage, noPercentage } =
+            await _getPricePercentagesReadOnly(market?.market_id);
           return { ...market, yesPercentage, noPercentage };
-        })
+        }),
       );
       return marketsWithPercentages;
     } catch (error) {
@@ -733,18 +742,21 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const _getPricePercentagesReadOnly = async (marketId: number) => {
     let yesPercentage = 50,
-        noPercentage = 50;
-    
+      noPercentage = 50;
+
     try {
       // Use the chain ID from the custom RPC (likely 1337 for your testnet)
-      const chainId = await readOnlyProvider.getNetwork().then(network => network.chainId);
-      
+      const chainId = await readOnlyProvider
+        .getNetwork()
+        .then((network) => network.chainId);
+
       // Get contract using read-only provider
       const marketContract = getReadOnlyContractInstance(
-        Addresses[chainId]?.XOMultiOutcomeMarketAddress || Addresses[1337]?.XOMultiOutcomeMarketAddress,
-        MultiOutcomeMarketABI
+        Addresses[chainId]?.XOMultiOutcomeMarketAddress ||
+          Addresses[1337]?.XOMultiOutcomeMarketAddress,
+        MultiOutcomeMarketABI,
       );
-      
+
       if (marketContract) {
         let prices = await marketContract.getPrices(marketId);
         console.log(prices, "prices");
@@ -761,7 +773,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       console.error("Error fetching prices from read-only provider:", error);
       // Fall back to default values on error
     }
-    
+
     return { yesPercentage, noPercentage };
   };
 
@@ -772,7 +784,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       noPercentage = 50;
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-      MultiOutcomeMarketABI
+      MultiOutcomeMarketABI,
     );
     if (marketContract) {
       let prices = await marketContract.getPrices(marketId);
@@ -794,12 +806,11 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       let marketData = await api.get("/market/all");
       if (marketData?.data?.markets.length > 0) {
         let market = marketData?.data?.markets?.find(
-          (item) => item.market_id == id
+          (item) => item.market_id == id,
         );
         if (market) {
-          const { yesPercentage, noPercentage } = await _getPricePercentages(
-            id
-          );
+          const { yesPercentage, noPercentage } =
+            await _getPricePercentages(id);
           return { ...market, yesPercentage, noPercentage };
         }
       }
@@ -855,7 +866,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
     try {
       const response = await api.post(
         "/market/farcaster/validate",
-        validationData
+        validationData,
       );
       return response.data;
     } catch (error) {
@@ -876,7 +887,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   // Create a new Farcaster market
   const createFarcasterMarket = async (
     marketMetadata: any,
-    farcasterData: any
+    farcasterData: any,
   ) => {
     let id = toast.loading("Creating Farcaster market...");
     try {
@@ -898,7 +909,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         name: `${farcasterData?.author?.username} Prediction Market`,
         description: generateBinaryPredictionQuestion(
           marketMetadata?.param,
-          marketMetadata?.value
+          marketMetadata?.value,
         ),
         image: `https://client.warpcast.com/v2/cast-image?castHash=${farcasterData?.hash}`,
         attributes: [
@@ -915,7 +926,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
       const response = await api.post(
         "/market/farcaster/create",
-        formattedData
+        formattedData,
       );
 
       if (!response?.data?.success) {
@@ -924,24 +935,24 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       }
       const startsAt = Math.floor(Date.now() / 1000) + 60; // 1 minute from now
       const expiresAtSeconds = Math.floor(
-        new Date(marketMetadata?.endDate).getTime() / 1000
+        new Date(marketMetadata?.endDate).getTime() / 1000,
       );
       console.log("Starts At", startsAt, expiresAtSeconds);
 
       const collateralAmount = ethers.utils.parseUnits(
         marketMetadata?.seed,
-        18
+        18,
       );
       const startsAtTimestamp = Math.floor(
-        new Date(marketMetadata?.startDate).getTime() / 1000
+        new Date(marketMetadata?.startDate).getTime() / 1000,
       );
       const expiresAtTimestamp = Math.floor(
-        new Date(marketMetadata?.endDate).getTime() / 1000
+        new Date(marketMetadata?.endDate).getTime() / 1000,
       );
 
       let collateralTokenInstance = await getContractInstance(
         Addresses[activeChain]?.XOCollateralTokenAddress,
-        CollateralTokenABI
+        CollateralTokenABI,
       );
 
       if (!collateralTokenInstance) {
@@ -951,13 +962,13 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
       let allowanceAmount = await collateralTokenInstance.allowance(
         address,
-        Addresses[activeChain]?.XOMultiOutcomeMarketAddress
+        Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
       );
 
       if (allowanceAmount.lt(collateralAmount)) {
         const tx = await collateralTokenInstance.approve(
           Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
-          collateralAmount
+          collateralAmount,
         );
         await tx.wait();
       }
@@ -970,9 +981,9 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         ethers.BigNumber.from(marketMetadata?.reward),
         ethers.BigNumber.from(2),
         "0xa732946c3816e7A7f0Aa0069df259d63385D1BA1",
-        `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`
+        `https://ipfs.io/ipfs/${response?.data?.ipfs_hash}`,
       );
-      
+
       let scheduleRes = await api.post("/market/farcaster/schedule", {
         market_id: marketId,
         cast_url: marketMetadata?.url,
@@ -1011,7 +1022,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       console.log(error);
     }
   };
-  function _sortByPoints(data:any) {
+  function _sortByPoints(data: any) {
     return data.sort((a, b) => parseFloat(b?.points) - parseFloat(a?.points));
   }
   const getLeaderBoardData = async () => {
@@ -1031,13 +1042,17 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
       }
 
       let activity = await api.get(`/user/activity/${address.toLowerCase()}`);
-      let currentMarket = await api.get(`/user/current-market/${address.toLowerCase()}`);
-      let pastMarket = await api.get(`/user/past-market/${address.toLowerCase()}`);
+      let currentMarket = await api.get(
+        `/user/current-market/${address.toLowerCase()}`,
+      );
+      let pastMarket = await api.get(
+        `/user/past-market/${address.toLowerCase()}`,
+      );
 
       console.log(
         activity?.data?.data,
         currentMarket?.data?.data,
-        pastMarket?.data?.data
+        pastMarket?.data?.data,
       );
       return {
         activity: activity?.data?.data,

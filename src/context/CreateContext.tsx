@@ -9,7 +9,7 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
   const [tab, setTab] = useState("start");
   const [image, setImage] = useState(null);
   const [formData, setFormData] = useState(null);
-  const [farcasterData,setFarcasterData] = useState();
+  const [farcasterData, setFarcasterData] = useState();
   const [createData, setCreateData] = useState({
     url: "",
     param: "",
@@ -26,7 +26,7 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
     let name = e.target.name;
     let value = e.target.value;
 
-    if(name=="endData" ||  name=="startDate"){
+    if (name == "endData" || name == "startDate") {
       const utcDate = new Date(value).toISOString();
       setCreateData((prev) => ({ ...prev, [name]: utcDate }));
     }
@@ -47,7 +47,7 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
     console.log(createData);
-    await createFarcasterMarket(createData,farcasterData);
+    await createFarcasterMarket(createData, farcasterData);
   };
 
   useEffect(() => {
@@ -62,15 +62,13 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
       const response = await api.get(`/farcaster/cast?cast_url=${cast_url}`);
       setFarcasterData(response?.data?.cast);
       console.log(response?.data?.cast);
-      toast.success("Farcaster Data Fetch Sucessfully",{id});
+      toast.success("Farcaster Data Fetch Sucessfully", { id });
       return response.data;
     } catch (error) {
-      toast.error("Error Fetching Farcaster market",{id});
+      toast.error("Error Fetching Farcaster market", { id });
       throw error;
     }
   };
-
-
 
   const changeTab = (newTab: string) => setTab(newTab);
   const changeNextTab = () => {
@@ -99,7 +97,7 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
         setFormData,
         setCreateData,
         fetchFarcasterData,
-        farcasterData
+        farcasterData,
       }}
     >
       {children}

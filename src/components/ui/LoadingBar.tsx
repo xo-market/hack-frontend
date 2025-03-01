@@ -1,28 +1,30 @@
-import React from 'react';
+import React from "react";
 
 interface LoadingBarProps {
-  size?: 'small' | 'medium' | 'large';
+  size?: "small" | "medium" | "large";
   color?: string;
 }
 
-const LoadingBar: React.FC<LoadingBarProps> = ({ 
-  size = 'medium',
-  color = 'var(--primary)'
+const LoadingBar: React.FC<LoadingBarProps> = ({
+  size = "medium",
+  color = "var(--primary)",
 }) => {
   const sizeClasses = {
-    small: 'w-32 h-1',
-    medium: 'w-48 h-1.5',
-    large: 'w-64 h-2'
+    small: "w-32 h-1",
+    medium: "w-48 h-1.5",
+    large: "w-64 h-2",
   };
 
   return (
     <div className="flex flex-col items-center justify-center gap-2">
-      <div className={`${sizeClasses[size]} bg-[var(--card-boarder)] rounded-full overflow-hidden`}>
+      <div
+        className={`${sizeClasses[size]} bg-[var(--card-boarder)] rounded-full overflow-hidden`}
+      >
         <div
           className="h-full rounded-full animate-loading-bar"
-          style={{ 
+          style={{
             backgroundColor: color,
-            width: '30%'
+            width: "30%",
           }}
         />
       </div>
@@ -31,4 +33,4 @@ const LoadingBar: React.FC<LoadingBarProps> = ({
   );
 };
 
-export default LoadingBar; 
+export default LoadingBar;
