@@ -22,6 +22,7 @@ const SingleMarket: React.FC = () => {
     fetchSingleMarketData,
     tokenBalance,
     getMarket,
+    sellOutcome,
   } = useDataContext();
   const [prices, setPrices] = useState<
     { price: number[]; timestamp: string }[]
@@ -39,8 +40,13 @@ const SingleMarket: React.FC = () => {
   }, [id]);
 
   const [amount, setAmount] = React.useState("0");
-  const handleConfirmTransaction = async () => {
-    await buyOutcome(id, outcome, +amount.toString(), +amount.toString());
+  const handleConfirmTransaction = async (state: string) => {
+    if (state === "buy") {
+      await buyOutcome(id, outcome, +amount.toString(), +amount.toString());
+    } else {
+      await sellOutcome(id, outcome, +amount.toString(), +amount.toString());
+    }
+
     let data = await fetchMarketChartPrices(id);
     let market = await fetchSingleMarketData(id);
     setPrices(data?.prices || []);
@@ -202,67 +208,55 @@ const SingleMarket: React.FC = () => {
                       </button>
                     </div>
 
-                    {/* Prediction Bar */}
-                    {activeTab === "buy" ? (
-                      <>
-                        {/* Prediction Bar */}
-                        <div className="flex items-center justify-between py-3">
-                          <span className="text-green-600 font-semibold">
-                            {Number(marketData?.yesPercentage).toFixed(2)}%
-                          </span>
-                          <div className="flex-1 h-2 mx-2 bg-[#198788] rounded-full relative">
-                            <div
-                              style={{
-                                width: `${Number(
-                                  marketData?.yesPercentage
-                                ).toFixed(2)}%`,
-                              }}
-                              className="h-2 bg-green-600 rounded-l-full"
-                            ></div>
-                            <div
-                              className="absolute right-0 top-0 h-2 bg-red-500 rounded-r-full"
-                              style={{
-                                width: `${Number(
-                                  marketData?.noPercentage
-                                ).toFixed(2)}%`,
-                              }}
-                            ></div>
-                          </div>
-                          <span className="text-red-500 font-semibold">
-                            {Number(marketData?.noPercentage).toFixed(2)}%
-                          </span>
-                        </div>
-
-                        {/* Yes / No Buttons */}
-                        <div className="flex gap-3">
-                          <button
-                            onClick={() => setOutcome(0)}
-                            className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
-                              outcome === 0
-                                ? "bg-[#136d6d] text-white font-bold" // Selected "Yes"
-                                : "bg-[#198788] text-gray-300"
-                            }`}
-                          >
-                            Yes
-                          </button>
-
-                          <button
-                            onClick={() => setOutcome(1)}
-                            className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
-                              outcome === 1
-                                ? "bg-red-500 text-white font-bold" // Selected "No"
-                                : "bg-red-100 text-gray-500"
-                            }`}
-                          >
-                            No
-                          </button>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="mt-4 text-center text-gray-500 font-semibold">
-                        Sell functionality coming soon...
+                    <div className="flex items-center justify-between py-3">
+                      <span className="text-green-600 font-semibold">
+                        {Number(marketData?.yesPercentage).toFixed(2)}%
+                      </span>
+                      <div className="flex-1 h-2 mx-2 bg-[#198788] rounded-full relative">
+                        <div
+                          style={{
+                            width: `${Number(marketData?.yesPercentage).toFixed(
+                              2
+                            )}%`,
+                          }}
+                          className="h-2 bg-green-600 rounded-l-full"
+                        ></div>
+                        <div
+                          className="absolute right-0 top-0 h-2 bg-red-500 rounded-r-full"
+                          style={{
+                            width: `${Number(marketData?.noPercentage).toFixed(
+                              2
+                            )}%`,
+                          }}
+                        ></div>
                       </div>
-                    )}
+                      <span className="text-red-500 font-semibold">
+                        {Number(marketData?.noPercentage).toFixed(2)}%
+                      </span>
+                    </div>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setOutcome(0)}
+                        className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                          outcome === 0
+                            ? "bg-[#136d6d] text-white font-bold" // Selected "Yes"
+                            : "bg-green-100 text-gray-600"
+                        }`}
+                      >
+                        Yes
+                      </button>
+
+                      <button
+                        onClick={() => setOutcome(1)}
+                        className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                          outcome === 1
+                            ? "bg-red-500 text-white font-bold" // Selected "No"
+                            : "bg-red-100 text-gray-500"
+                        }`}
+                      >
+                        No
+                      </button>
+                    </div>
 
                     {/* Input Field */}
                     <div className="mt-4">
@@ -283,35 +277,48 @@ const SingleMarket: React.FC = () => {
                       />
                     </div>
 
-                    {/* Share Price & Potential Return */}
-                    <div className="mt-2 text-sm text-gray-500">
-                      <p>
-                        Share Price:{" "}
-                        <span className="font-semibold">
-                          {marketData?.yesPercentage /
-                            (marketData?.yesPercentage +
-                              marketData?.noPercentage)}{" "}
-                          XO Token
-                        </span>
-                      </p>
-                      <p>
-                        Potential Return:{" "}
-                        <span className="font-semibold">
-                          {amount *
-                            (marketData?.yesPercentage /
-                              (marketData?.yesPercentage +
-                                marketData?.noPercentage))}
-                        </span>
-                      </p>
-                    </div>
+                    {activeTab === "buy" ? (
+                      <>
+                        {/* Share Price & Potential Return */}
+                        <div className="mt-2 text-sm text-gray-500">
+                          <p>
+                            Share Price:{" "}
+                            <span className="font-semibold">
+                              {marketData?.yesPercentage /
+                                (marketData?.yesPercentage +
+                                  marketData?.noPercentage)}{" "}
+                              XO Token
+                            </span>
+                          </p>
+                          <p>
+                            Potential Return:{" "}
+                            <span className="font-semibold">
+                              {amount *
+                                (marketData?.yesPercentage /
+                                  (marketData?.yesPercentage +
+                                    marketData?.noPercentage))}
+                            </span>
+                          </p>
+                        </div>
 
-                    {/* Confirm Button */}
-                    <button
-                      onClick={handleConfirmTransaction}
-                      className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
-                    >
-                      Confirm Transaction
-                    </button>
+                        {/* Confirm Button */}
+                        <button
+                          onClick={()=>handleConfirmTransaction("buy")}
+                          className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
+                        >
+                          Buy
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                           onClick={()=>handleConfirmTransaction("sell")}
+                          className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
+                        >
+                          Sell
+                        </button>
+                      </>
+                    )}
                   </div>
 
                   {/* Market Status */}

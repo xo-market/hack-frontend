@@ -4,7 +4,7 @@ export const ReviewTab: React.FC = () => {
   const { createData, image, createMarket, farcasterData } = useCreateContext();
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 mt-6">
+      <div className="grid grid-cols-2 gap-4 mt-6 text-black ">
         {/* Post Preview */}
         <div className="rounded-lg p-2 flex justify-center flex-col gap-y-4 items-center border">
           <Image
@@ -27,7 +27,7 @@ export const ReviewTab: React.FC = () => {
         </div>
 
         {/* Market Info */}
-        <div className="space-y-8">
+        <div className="space-y-8 text-black ">
           <div>
             <label className="text-gray-700 text-md mb-2">Url</label>
             <input
@@ -69,7 +69,7 @@ export const ReviewTab: React.FC = () => {
       </div>
 
       {/* Dropdowns & Inputs */}
-      <div className="grid grid-cols-2 gap-8 mt-6">
+      <div className="grid grid-cols-2 gap-8 mt-6 text-black ">
         <div>
           <label className="text-gray-700 text-md mb-2">Parameter</label>
           <input

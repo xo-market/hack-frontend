@@ -5,7 +5,7 @@ const StartTab: React.FC = () => {
 
   return (
     <>
-     <div className="mt-4 rounded-md flex items-center justify-between">
+     <div className="mt-4 rounded-md flex items-center justify-between text-black ">
       <input
         type="text"
         name="url"

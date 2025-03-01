@@ -4,7 +4,7 @@ export const ProvideTab: React.FC = () => {
     useCreateContext();
   return (
     <>
-      <div className="mt-4 w-1/2">
+      <div className="mt-4 w-1/2 text-black ">
         <label className="text-gray-700 text-sm">Seed your market</label>
         <input
           type="text"
@@ -17,7 +17,7 @@ export const ProvideTab: React.FC = () => {
       </div>
 
       {/* Slider */}
-      <div className="mt-6 w-1/2">
+      <div className="mt-6 w-1/2 text-black ">
         <label className="text-gray-700 text-sm">Creator Reward</label>
         <div className="flex items-center space-x-2">
           <input
@@ -36,7 +36,7 @@ export const ProvideTab: React.FC = () => {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex justify-end gap-4 mt-6">
+      <div className="flex justify-end gap-4 mt-6 text-black ">
         <button
           onClick={changePreviousTab}
           className="text-gray-600 font-medium flex items-center space-x-1"

@@ -431,23 +431,28 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
   ) => {
     if (!activeChain) return;
 
-    let id = toast.loading("Processing sale...");
+    let id = toast.loading("Processing sell...");
 
     const marketContract = await getContractInstance(
       Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
       MultiOutcomeMarketABI
     );
 
+    console.log( _marketId,
+      _outcome,
+      _amount,
+      _minReturn)
+
     try {
       if (marketContract) {
         const tx = await marketContract.sell(
           _marketId,
           _outcome,
-          _amount,
-          _minReturn
+          ethers.utils.parseUnits(_amount.toString(), 18),
+          0
         );
         await tx.wait();
-        toast.success("Sale successful", { id });
+        toast.success("Sell successful", { id });
       }
     } catch (error) {
       console.error("Error selling outcome:", error);

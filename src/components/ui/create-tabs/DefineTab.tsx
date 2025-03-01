@@ -46,7 +46,7 @@ export const DefineTab: React.FC = () => {
   };
   return (
     <>
-      <div className="grid grid-cols-2 gap-8 mt-4">
+      <div className="grid grid-cols-2 gap-8 mt-4 text-black ">
         <div>
           <label className="text-gray-700 text-md">
             What are you betting on?
