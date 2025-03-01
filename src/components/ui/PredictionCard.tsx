@@ -184,9 +184,6 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
       <Link href={`/prediction/${data?.market_id}`} className="block">
         <div className="flex items-center text-xs text-gray-600 mt-6">
           <span className="flex items-center">
-            Starts : <br /> {formatTimestamp(data?.starts_at)}
-          </span>
-          <span className="flex items-center ml-6">
             End : <br /> {formatTimestamp(data?.expires_at)}
           </span>
           <span className="ml-auto text-pink-500 font-semibold">

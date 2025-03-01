@@ -22,7 +22,10 @@ export const CreateProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const handleOnChange = (e: any) => {
-    e.preventDefault();
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    
     let name = e.target.name;
     let value = e.target.value;
 

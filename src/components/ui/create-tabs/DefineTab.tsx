@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCreateContext } from "@/context/CreateContext";
 
 export const DefineTab: React.FC = () => {
@@ -14,6 +14,25 @@ export const DefineTab: React.FC = () => {
     farcasterData,
   } = useCreateContext();
   const [fileName, setFileName] = useState("");
+
+  // Set startDate to now + 5 minutes when component mounts
+  useEffect(() => {
+    const startDate = new Date();
+    startDate.setMinutes(startDate.getMinutes() + 5);
+    
+    // Format to datetime-local string format (YYYY-MM-DDThh:mm)
+    const formattedDate = startDate.toISOString().slice(0, 16);
+    
+    // Create a synthetic event object without preventDefault
+    const syntheticEvent = {
+      target: {
+        name: "startDate",
+        value: formattedDate
+      }
+    };
+    
+    handleOnChange(syntheticEvent);
+  }, [handleOnChange]);
 
   const [uploadProgress, setUploadProgress] = useState(0);
   const handleImageChange = (event: any) => {
@@ -91,22 +110,17 @@ export const DefineTab: React.FC = () => {
             } minimum value`}
           />
         </div>
-        <input
-          type="datetime-local"
-          name="startDate"
-          value={createData?.startDate}
-          onChange={(e) => handleOnChange(e)}
-          className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
-          placeholder="Start Date"
-        />
-        <input
-          type="datetime-local"
-          name="endDate"
-          value={createData?.endDate}
-          onChange={(e) => handleOnChange(e)}
-          className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
-          placeholder="End Date"
-        />
+        <div className="col-span-2">
+          <label className="text-gray-700 text-md">Market expiration</label>
+          <input
+            type="datetime-local"
+            name="endDate"
+            value={createData?.endDate}
+            onChange={(e) => handleOnChange(e)}
+            className="w-full border border-gray-300 rounded-md px-2 py-3 mt-2"
+            placeholder="End Date"
+          />
+        </div>
         <div>
           <label className="text-gray-700 text-md">Market categories</label>
           <select

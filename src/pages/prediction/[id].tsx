@@ -100,9 +100,7 @@ const SingleMarket: React.FC = () => {
                   </h2>
                   <p className="text-xs -mt-2">{marketData?.name}</p>
                   <div className="flex items-center space-x-2 text-gray-600 text-xs mt-1">
-                    <span>2000 Vol.</span>
-                    <span>•</span>
-                    <span>{formatTimestamp(marketData?.expires_at)}</span>
+                    <span>Ends: {formatTimestamp(marketData?.expires_at)}</span>
                     <span>•</span>
                     <span className="text-blue-500">
                       {marketData?.creator.slice(0, 5) +
@@ -116,8 +114,8 @@ const SingleMarket: React.FC = () => {
                       NEW
                     </span>
                     {marketData?.tags &&
-                      marketData?.tags?.map((item) => (
-                        <span className="px-2 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">
+                      marketData?.tags?.map((item, index) => (
+                        <span key={index} className="px-2 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">
                           {item}
                         </span>
                       ))}
@@ -154,10 +152,10 @@ const SingleMarket: React.FC = () => {
                     <div className="mt-4 border p-4 rounded-md">
                       <h4 className="font-semibold">Market Summary</h4>
                       <p className="text-sm text-gray-600">
-                        This market will resolve to Yes if the total amount of
-                        likes on the linked post are 1K or above, by Feb 28,
-                        2025, 11:59 PM EST. Otherwise, this market will resolve
-                        to No.
+                        This market will resolve to Yes if the total amount of {marketData?.param || "likes"} on the linked post 
+                        {marketData?.param === "likes" ? " are " : " is "}
+                        {marketData?.value} or above, by {formatTimestamp(marketData?.expires_at)}. 
+                        Otherwise, this market will resolve to No.
                       </p>
                     </div>
 
@@ -165,8 +163,8 @@ const SingleMarket: React.FC = () => {
                       <h4 className="font-semibold">Resolution Rules</h4>
                       <p className="text-sm text-gray-600">
                         This market will resolve based on the live data provided
-                        by the social media API at 23:59 EST on Feb 28, 2025, to
-                        find the total number of likes this post has received.
+                        by the Farcaster API at the expiration time ({formatTimestamp(marketData?.expires_at)}), to
+                        find the total number of {marketData?.param || "likes"} this post has received.
                         If there is an issue with the API, a manual count by an
                         XO jury is done.
                       </p>
@@ -174,9 +172,9 @@ const SingleMarket: React.FC = () => {
 
                     <div className="mt-4 p-4 rounded-md border">
                       <h4 className="font-semibold">Resolution Source</h4>
-                      <a href="#" className="text-blue-500 text-sm underline">
-                        Post Link on social media website X.
-                      </a>
+        
+                        Neynar API - https://api.neynar.com/v2/farcaster
+                    
                     </div>
                   </div>
                 </div>
@@ -368,12 +366,7 @@ const SingleMarket: React.FC = () => {
                       </li>
                       <li className="flex items-center space-x-2">
                         <span
-                          className={`w-4 h-4 ${
-                            marketData?.starts_at <= Math.floor(Date.now() / 1000) && 
-                            marketData?.expires_at > Math.floor(Date.now() / 1000)
-                              ? "bg-blue-500"
-                              : "bg-gray-300"
-                          } rounded-full`}
+                          className={`w-4 h-4 bg-green-500 rounded-full`}
                         ></span>
                         <span>Predictions Open</span>
                       </li>

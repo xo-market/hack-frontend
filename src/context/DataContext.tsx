@@ -722,7 +722,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const fetchAllMarketsData = async () => {
     try {
-      let marketData = await api.get("/market/all?limit=20");
+      let marketData = await api.get("/market/all");
       let markets = marketData?.data?.markets || [];
 
       // Use the read-only provider to get prices
