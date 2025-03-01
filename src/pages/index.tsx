@@ -72,14 +72,14 @@ const Home: React.FC = () => {
         }
       } catch (err) {
         console.error("Error fetching market data:", err);
-        setLoading(true);
+        setLoading(false);
       } finally {
         setLoading(false);
       }
     };
 
     fetchMarkets();
-  }, []);
+  }, [fetchAllMarketsData]);
 
   // Function to filter markets by category
   const handleFilter = (category) => {
