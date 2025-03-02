@@ -331,12 +331,14 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         Addresses[activeChain]?.XOMultiOutcomeMarketAddress,
         MultiOutcomeMarketABI,
       );
-
+      console.log("Market Contract", marketContract);
       if (marketContract) {
         const marketDetails = await marketContract.getMarket(_marketId);
         const parsedMarketDetails = parseMarketDetails(marketDetails);
+        console.log("Parsed Market Details", parsedMarketDetails);
         return parsedMarketDetails;
       }
+
     } catch (error) {
       console.error("Error fetching market details:", error);
       toast.error("Failed to fetch market details");
@@ -722,7 +724,7 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
 
   const fetchAllMarketsData = async () => {
     try {
-      let marketData = await api.get("/market/all");
+      let marketData = await api.get("/market/all?limit=100");
       let markets = marketData?.data?.markets || [];
 
       // Use the read-only provider to get prices
@@ -1015,10 +1017,16 @@ const DataContextProvider: React.FC<DataContextProviderProps> = ({
         recipient: address,
       });
 
-      toast.success("Driping Completed", { id });
+      // Wait for the transaction to be processed
+      await new Promise(resolve => setTimeout(resolve, 7000));
+      
+      // Update token balance after successful drip
+      await getTokenBalance();
+      
+      toast.success("Dripping Completed", { id });
       return;
     } catch (error) {
-      toast.error("Driping Failed", { id });
+      toast.error("Dripping Failed", { id });
       console.log(error);
     }
   };

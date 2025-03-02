@@ -30,14 +30,45 @@ const SingleMarket: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      let data = await fetchMarketChartPrices(id);
-      let market = await fetchSingleMarketData(id);
-      let singleMarket = await getMarket(id);
-      setStatusData(singleMarket);
-      setMarketData(market);
-      setPrices(data?.prices || []);
+      try {
+        // Add console logs to see what's happening
+        console.log("Fetching data for market ID:", id);
+        
+        // Fetch all data in parallel to improve performance
+        const [chartData, marketDataResult, singleMarketResult] = await Promise.all([
+          fetchMarketChartPrices(id).catch(err => {
+            console.error("Error fetching chart prices:", err);
+            return { prices: [] };
+          }),
+          fetchSingleMarketData(id).catch(err => {
+            console.error("Error fetching single market data:", err);
+            return null;
+          }),
+          getMarket(id).catch(err => {
+            console.error("Error fetching market status:", err);
+            return null;
+          })
+        ]);
+        
+        console.log("Chart data:", chartData);
+        console.log("Market data:", marketDataResult);
+        console.log("Single market data:", singleMarketResult);
+        
+        // Even if some data is missing, we should still set what we have
+        setStatusData(singleMarketResult);
+        setMarketData(marketDataResult);
+        setPrices(chartData?.prices || []);
+        
+        // If we didn't get any market data, set an empty object to avoid infinite loading
+        // if (!marketDataResult && !singleMarketResult) {
+        //   setMarketData({});
+        // }
+      } catch (error) {
+        console.error("Error in market data fetch:", error);
+        setMarketData({});
+      }
     })();
-  }, [id]);
+  }, [id, fetchMarketChartPrices, fetchSingleMarketData, getMarket]);
 
   const [amount, setAmount] = React.useState("0");
   const handleConfirmTransaction = async (state: string) => {
