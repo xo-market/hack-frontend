@@ -15,6 +15,7 @@ const SingleMarket: React.FC = () => {
   const [outcome, setOutcome] = useState(0);
   const [activeTab, setActiveTab] = useState("buy");
   const [statusData, setStatusData] = useState();
+  const [singleMarketResult, setSingleMarketResult] = useState();
   const {
     buyOutcome,
     formatTimestamp,
@@ -56,6 +57,7 @@ const SingleMarket: React.FC = () => {
         
         // Even if some data is missing, we should still set what we have
         setStatusData(singleMarketResult);
+        setSingleMarketResult(singleMarketResult);
         setMarketData(marketDataResult);
         setPrices(chartData?.prices || []);
         
@@ -81,7 +83,7 @@ const SingleMarket: React.FC = () => {
     let data = await fetchMarketChartPrices(id);
     let market = await fetchSingleMarketData(id);
     setPrices(data?.prices || []);
-    setMarketData(market);
+    setSingleMarketResult(market);
   };
 
   return (
@@ -388,7 +390,7 @@ const SingleMarket: React.FC = () => {
                       <li className="flex items-center space-x-2">
                         <span
                           className={`w-4 h-4 ${
-                            marketData?.starts_at > Math.floor(Date.now() / 1000)
+                            marketData?.expires_at >= Math.floor(Date.now() / 1000)
                               ? "bg-yellow-500"
                               : "bg-gray-300"
                           } rounded-full`}
@@ -397,15 +399,9 @@ const SingleMarket: React.FC = () => {
                       </li>
                       <li className="flex items-center space-x-2">
                         <span
-                          className={`w-4 h-4 bg-green-500 rounded-full`}
-                        ></span>
-                        <span>Predictions Open</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <span
                           className={`w-4 h-4 ${
                             marketData?.expires_at <= Math.floor(Date.now() / 1000) && 
-                            !marketData?.resolved
+                            !singleMarketResult?.resolvedAt 
                               ? "bg-gray-500"
                               : "bg-gray-300"
                           } rounded-full`}
@@ -415,7 +411,7 @@ const SingleMarket: React.FC = () => {
                       <li className="flex items-center space-x-2">
                         <span
                           className={`w-4 h-4 ${
-                            marketData?.resolved
+                            ((new Date(singleMarketResult.resolvedAt).getTime() / 1000) != 0)
                               ? "bg-green-500"
                               : "bg-gray-300"
                           } rounded-full`}
