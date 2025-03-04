@@ -55,6 +55,7 @@ const SingleMarket: React.FC = () => {
         console.log("Market data:", marketDataResult);
         console.log("Single market data:", singleMarketResult);
         
+        console.log("Status data:", new Date(singleMarketResult.resolvedAt).getTime() / 1000);
         // Even if some data is missing, we should still set what we have
         setStatusData(singleMarketResult);
         setSingleMarketResult(singleMarketResult);

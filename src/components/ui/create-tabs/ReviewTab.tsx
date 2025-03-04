@@ -38,13 +38,13 @@ export const ReviewTab: React.FC = () => {
             />
           </div>
           <div>
-            <label className="text-gray-700 text-md mb-2">Start Date</label>
+            {/* <label className="text-gray-700 text-md mb-2">Start Date</label>
             <input
               type="text"
               value={createData?.startDate ? createData?.startDate : "N/A"}
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-md"
               disabled
-            />
+            /> */}
           </div>
           <div>
             <label className="text-gray-700 text-md mb-2">End Date</label>
