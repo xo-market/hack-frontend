@@ -36,7 +36,7 @@ const SingleMarket: React.FC = () => {
         console.log("Fetching data for market ID:", id);
         
         // Fetch all data in parallel to improve performance
-        const [chartData, marketDataResult, singleMarketResult] = await Promise.all([
+        const [chartData, singleMarketResult, marketDataResult] = await Promise.all([
           fetchMarketChartPrices(id).catch(err => {
             console.error("Error fetching chart prices:", err);
             return { prices: [] };
@@ -55,17 +55,15 @@ const SingleMarket: React.FC = () => {
         console.log("Market data:", marketDataResult);
         console.log("Single market data:", singleMarketResult);
         
-        console.log("Status data:", new Date(singleMarketResult.resolvedAt).getTime() / 1000);
+        // Use the correct property for resolvedAt
+        console.log("ResolvedAt data:", marketDataResult?.resolvedAt ? new Date(marketDataResult.resolvedAt).getTime() / 1000 : 0);
+        
         // Even if some data is missing, we should still set what we have
-        setStatusData(singleMarketResult);
+        setStatusData(marketDataResult);
         setSingleMarketResult(singleMarketResult);
         setMarketData(marketDataResult);
         setPrices(chartData?.prices || []);
         
-        // If we didn't get any market data, set an empty object to avoid infinite loading
-        // if (!marketDataResult && !singleMarketResult) {
-        //   setMarketData({});
-        // }
       } catch (error) {
         console.error("Error in market data fetch:", error);
         setMarketData({});
@@ -90,7 +88,7 @@ const SingleMarket: React.FC = () => {
   return (
     <>
       <Layout>
-        {marketData?.market_id ? (
+        {marketData ? (
           <div className="container mx-auto text-black px-20 flex flex-col">
             <div className="max-w-5xl mx-auto p-6">
               {/* Header Section */}
@@ -119,7 +117,7 @@ const SingleMarket: React.FC = () => {
                 <div className="flex items-center space-x-4">
                   <Image
                     src={
-                      marketData?.image ||
+                      singleMarketResult?.image ||
                       "https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                     }
                     alt="Post Image"
@@ -130,16 +128,16 @@ const SingleMarket: React.FC = () => {
                 </div>
                 <div className="mt-2 flex flex-col">
                   <h2 className="text-lg font-semibold">
-                    {marketData?.description}
+                    {singleMarketResult?.description}
                   </h2>
-                  <p className="text-xs -mt-2">{marketData?.name}</p>
+                  <p className="text-xs -mt-2">{singleMarketResult?.name}</p>
                   <div className="flex items-center space-x-2 text-gray-600 text-xs mt-1">
-                    <span>Ends: {formatTimestamp(marketData?.expires_at)}</span>
+                    <span>Ends: {formatTimestamp(singleMarketResult?.expires_at)}</span>
                     <span>•</span>
                     <span className="text-blue-500">
-                      {marketData?.creator.slice(0, 5) +
+                      {singleMarketResult?.creator?.slice(0, 5) +
                         "..." +
-                        marketData?.creator.slice(-5)}
+                        singleMarketResult?.creator?.slice(-5)}
                     </span>
                     <span className="px-2 py-0.5 text-xs bg-red-200 text-red-700 rounded">
                       USDC
@@ -147,14 +145,14 @@ const SingleMarket: React.FC = () => {
                     <span className="px-2 py-0.5 text-xs bg-blue-200 text-blue-700 rounded">
                       NEW
                     </span>
-                    {marketData?.tags &&
-                      marketData?.tags?.map((item, index) => (
+                    {singleMarketResult?.tags &&
+                      singleMarketResult?.tags?.map((item, index) => (
                         <span key={index} className="px-2 py-0.5 text-xs bg-purple-200 text-purple-700 rounded">
                           {item}
                         </span>
                       ))}
                     <span className="px-2 py-0.5 text-xs bg-pink-200 text-pink-700 rounded">
-                      {marketData?.category}
+                      {singleMarketResult?.category}
                     </span>
                   </div>
                 </div>
@@ -186,9 +184,9 @@ const SingleMarket: React.FC = () => {
                     <div className="mt-4 border p-4 rounded-md">
                       <h4 className="font-semibold">Market Summary</h4>
                       <p className="text-sm text-gray-600">
-                        This market will resolve to Yes if the total amount of {marketData?.param || "likes"} on the linked post 
-                        {marketData?.param === "likes" ? " are " : " is "}
-                        {marketData?.value} or above, by {formatTimestamp(marketData?.expires_at)}. 
+                        This market will resolve to Yes if the total amount of {singleMarketResult?.type || "likes"} on the linked post 
+                        {singleMarketResult?.type === "likes" ? " are " : " is "}
+                        {singleMarketResult?.value || 166} or above, by {formatTimestamp(singleMarketResult?.expires_at)}. 
                         Otherwise, this market will resolve to No.
                       </p>
                     </div>
@@ -197,8 +195,8 @@ const SingleMarket: React.FC = () => {
                       <h4 className="font-semibold">Resolution Rules</h4>
                       <p className="text-sm text-gray-600">
                         This market will resolve based on the live data provided
-                        by the Farcaster API at the expiration time ({formatTimestamp(marketData?.expires_at)}), to
-                        find the total number of {marketData?.param || "likes"} this post has received.
+                        by the Farcaster API at the expiration time ({formatTimestamp(singleMarketResult?.expires_at)}), to
+                        find the total number of {singleMarketResult?.type || "likes"} this post has received.
                         If there is an issue with the API, a manual count by an
                         XO jury is done.
                       </p>
@@ -242,12 +240,12 @@ const SingleMarket: React.FC = () => {
 
                     <div className="flex items-center justify-between py-3">
                       <span className="text-green-600 font-semibold">
-                        {Number(marketData?.yesPercentage).toFixed(2)}%
+                        {Number(singleMarketResult?.yesPercentage).toFixed(2)}%
                       </span>
                       <div className="flex-1 h-2 mx-2 bg-[#198788] rounded-full relative">
                         <div
                           style={{
-                            width: `${Number(marketData?.yesPercentage).toFixed(
+                            width: `${Number(singleMarketResult?.yesPercentage).toFixed(
                               2,
                             )}%`,
                           }}
@@ -256,14 +254,14 @@ const SingleMarket: React.FC = () => {
                         <div
                           className="absolute right-0 top-0 h-2 bg-red-500 rounded-r-full"
                           style={{
-                            width: `${Number(marketData?.noPercentage).toFixed(
+                            width: `${Number(singleMarketResult?.noPercentage).toFixed(
                               2,
                             )}%`,
                           }}
                         ></div>
                       </div>
                       <span className="text-red-500 font-semibold">
-                        {Number(marketData?.noPercentage).toFixed(2)}%
+                        {Number(singleMarketResult?.noPercentage).toFixed(2)}%
                       </span>
                     </div>
                     <div className="flex gap-3">
@@ -318,9 +316,9 @@ const SingleMarket: React.FC = () => {
                               Share Price:{" "}
                               <span className="font-semibold">
                                 {(
-                                  marketData?.yesPercentage /
-                                  (marketData?.yesPercentage +
-                                    marketData?.noPercentage)
+                                  singleMarketResult?.yesPercentage /
+                                  (singleMarketResult?.yesPercentage +
+                                    singleMarketResult?.noPercentage)
                                 ).toFixed(2)}
                                 XO Token
                               </span>
@@ -330,9 +328,9 @@ const SingleMarket: React.FC = () => {
                               <span className="font-semibold">
                                 {(
                                   amount *
-                                  (marketData?.yesPercentage /
-                                    (marketData?.yesPercentage +
-                                      marketData?.noPercentage))
+                                  (singleMarketResult?.yesPercentage /
+                                    (singleMarketResult?.yesPercentage +
+                                      singleMarketResult?.noPercentage))
                                 ).toFixed(2)}
                               </span>
                             </p>
@@ -343,9 +341,9 @@ const SingleMarket: React.FC = () => {
                               Share Price:{" "}
                               <span className="font-semibold">
                                 {(
-                                  marketData?.noPercentage /
-                                  (marketData?.yesPercentage +
-                                    marketData?.noPercentage)
+                                  singleMarketResult?.noPercentage /
+                                  (singleMarketResult?.yesPercentage +
+                                    singleMarketResult?.noPercentage)
                                 ).toFixed(2)}
                                 XO Token
                               </span>
@@ -355,9 +353,9 @@ const SingleMarket: React.FC = () => {
                               <span className="font-semibold">
                                 {(
                                   amount *
-                                  (marketData?.noPercentage /
-                                    (marketData?.yesPercentage +
-                                      marketData?.noPercentage))
+                                  (singleMarketResult?.noPercentage /
+                                    (singleMarketResult?.yesPercentage +
+                                      singleMarketResult?.noPercentage))
                                 ).toFixed(2)}
                               </span>
                             </p>
@@ -391,7 +389,7 @@ const SingleMarket: React.FC = () => {
                       <li className="flex items-center space-x-2">
                         <span
                           className={`w-4 h-4 ${
-                            marketData?.expires_at >= Math.floor(Date.now() / 1000)
+                            parseInt(singleMarketResult?.expires_at) >= Math.floor(Date.now() / 1000)
                               ? "bg-yellow-500"
                               : "bg-gray-300"
                           } rounded-full`}
@@ -401,8 +399,8 @@ const SingleMarket: React.FC = () => {
                       <li className="flex items-center space-x-2">
                         <span
                           className={`w-4 h-4 ${
-                            marketData?.expires_at <= Math.floor(Date.now() / 1000) && 
-                            !singleMarketResult?.resolvedAt 
+                            parseInt(singleMarketResult?.expires_at) <= Math.floor(Date.now() / 1000) && 
+                            !marketData?.resolvedAt 
                               ? "bg-gray-500"
                               : "bg-gray-300"
                           } rounded-full`}
@@ -412,7 +410,7 @@ const SingleMarket: React.FC = () => {
                       <li className="flex items-center space-x-2">
                         <span
                           className={`w-4 h-4 ${
-                            ((new Date(singleMarketResult.resolvedAt).getTime() / 1000) != 0)
+                            marketData?.resolvedAt
                               ? "bg-green-500"
                               : "bg-gray-300"
                           } rounded-full`}
@@ -427,15 +425,8 @@ const SingleMarket: React.FC = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-8">
-            <div className="animate-pulse flex space-x-4 mb-4">
-              <div className="h-12 w-12 bg-pink-200 rounded-full"></div>
-              <div className="flex-1 space-y-4 max-w-md">
-                <div className="h-4 bg-pink-200 rounded w-3/4"></div>
-                <div className="h-4 bg-pink-200 rounded"></div>
-                <div className="h-4 bg-pink-200 rounded w-5/6"></div>
-              </div>
-            </div>
-            <p className="text-gray-500">Loading prediction market...</p>
+            <Spinner />
+            <p className="text-gray-500 mt-4">Loading prediction market...</p>
           </div>
         )}
       </Layout>
