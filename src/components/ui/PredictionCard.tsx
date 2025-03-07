@@ -79,11 +79,15 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
           <span className="bg-pink-200 uppercase text-[#198778] text-xs px-3 py-1 rounded-full font-semibold">
             {data?.category}
           </span>
-          <div className="flex justify-content-end">
+          <div className="flex justify-end ml-auto">
             {!checkExpiration(data?.expires_at)?.isExpired ? (
-              <p>🟢</p>
+              <span className="bg-green-100 text-green-600 text-xs px-3 py-1 rounded-full font-semibold">
+                Active
+              </span>
             ) : (
-              <p>🔴</p>
+              <span className="bg-red-100 text-red-600 text-xs px-3 py-1 rounded-full font-semibold">
+                Ended
+              </span>
             )}
           </div>
         </div>
@@ -108,20 +112,20 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
 
         <div className="flex items-center gap-2 mt-3">
           <span className="text-green-500 text-xs">
-            {Number(data?.yesPercentage).toFixed(2)}%
+            {Number(data?.yesPercentage || 0).toFixed(2)}%
           </span>
           <div className="flex-1 h-2 bg-gray-200 rounded-full relative">
             <div
               className="absolute top-0 left-0 h-full bg-green-500 rounded-full rounded-r-none"
-              style={{ width: `${Number(data?.yesPercentage).toFixed(2)}%` }}
+              style={{ width: `${Number(data?.yesPercentage || 0).toFixed(2)}%` }}
             ></div>
             <div
               className="absolute top-0 right-0 h-full bg-red-500 rounded-full rounded-l-none"
-              style={{ width: `${Number(data?.noPercentage).toFixed(2)}%` }}
+              style={{ width: `${Number(data?.noPercentage || 0).toFixed(2)}%` }}
             ></div>
           </div>
           <span className="text-pink-500 text-xs">
-            {Number(data?.noPercentage).toFixed(2)}%
+            {Number(data?.noPercentage || 0).toFixed(2)}%
           </span>
         </div>
       </Link>
@@ -130,13 +134,23 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
         <div className="flex justify-center mt-3 gap-4">
           <button
             onClick={(e) => handleOutcomeClick(0, e)}
-            className="bg-green-100 text-green-600 px-2 py-2 rounded-lg font-semibold w-1/3 hover:bg-green-200 transition-colors"
+            disabled={checkExpiration(data?.expires_at)?.isExpired}
+            className={`px-2 py-2 rounded-lg font-semibold w-1/3 transition-colors ${
+              checkExpiration(data?.expires_at)?.isExpired
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-green-100 text-green-600 hover:bg-green-200"
+            }`}
           >
             Yes
           </button>
           <button
             onClick={(e) => handleOutcomeClick(1, e)}
-            className="bg-pink-100 text-pink-600 px-2 py-2 rounded-lg font-semibold w-1/3 hover:bg-pink-200 transition-colors"
+            disabled={checkExpiration(data?.expires_at)?.isExpired}
+            className={`px-2 py-2 rounded-lg font-semibold w-1/3 transition-colors ${
+              checkExpiration(data?.expires_at)?.isExpired
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-pink-100 text-pink-600 hover:bg-pink-200"
+            }`}
           >
             No
           </button>

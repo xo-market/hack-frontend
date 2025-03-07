@@ -223,6 +223,7 @@ const SingleMarket: React.FC = () => {
                             ? "text-black border-b-2 border-red-400"
                             : "text-gray-400"
                         }`}
+                        disabled={singleMarketResult?.expires_at && parseInt(singleMarketResult.expires_at) <= Math.floor(Date.now() / 1000)}
                       >
                         Buy
                       </button>
@@ -233,6 +234,7 @@ const SingleMarket: React.FC = () => {
                             ? "text-black border-b-2 border-red-400"
                             : "text-gray-400"
                         }`}
+                        disabled={singleMarketResult?.expires_at && parseInt(singleMarketResult.expires_at) <= Math.floor(Date.now() / 1000)}
                       >
                         Sell
                       </button>
@@ -264,120 +266,129 @@ const SingleMarket: React.FC = () => {
                         {Number(singleMarketResult?.noPercentage).toFixed(2)}%
                       </span>
                     </div>
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => setOutcome(0)}
-                        className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
-                          outcome === 0
-                            ? "bg-[#136d6d] text-white font-bold" // Selected "Yes"
-                            : "bg-green-100 text-gray-600"
-                        }`}
-                      >
-                        Yes
-                      </button>
 
-                      <button
-                        onClick={() => setOutcome(1)}
-                        className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
-                          outcome === 1
-                            ? "bg-red-500 text-white font-bold" // Selected "No"
-                            : "bg-red-100 text-gray-500"
-                        }`}
-                      >
-                        No
-                      </button>
-                    </div>
-
-                    {/* Input Field */}
-                    <div className="mt-4">
-                      <span className="text-gray-500 text-sm">
-                        Balance:{" "}
-                        <span className="font-semibold">
-                          {tokenBalance} XO Token
-                        </span>
-                      </span>
-                      <input
-                        type="number"
-                        name="amount"
-                        max={tokenBalance.toString()}
-                        onChange={(e) => setAmount(e.target.value)}
-                        value={amount}
-                        placeholder="Amount"
-                        className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-red-300"
-                      />
-                    </div>
-
-                    {activeTab === "buy" ? (
-                      <>
-                        {/* Share Price & Potential Return */}
-                        {outcome === 0 ? (
-                          <div className="mt-2 text-sm text-gray-500">
-                            <p>
-                              Share Price:{" "}
-                              <span className="font-semibold">
-                                {(
-                                  singleMarketResult?.yesPercentage /
-                                  (singleMarketResult?.yesPercentage +
-                                    singleMarketResult?.noPercentage)
-                                ).toFixed(2)}
-                                XO Token
-                              </span>
-                            </p>
-                            <p>
-                              Potential Return:{" "}
-                              <span className="font-semibold">
-                                {(
-                                  amount *
-                                  (singleMarketResult?.yesPercentage /
-                                    (singleMarketResult?.yesPercentage +
-                                      singleMarketResult?.noPercentage))
-                                ).toFixed(2)}
-                              </span>
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="mt-2 text-sm text-gray-500">
-                            <p>
-                              Share Price:{" "}
-                              <span className="font-semibold">
-                                {(
-                                  singleMarketResult?.noPercentage /
-                                  (singleMarketResult?.yesPercentage +
-                                    singleMarketResult?.noPercentage)
-                                ).toFixed(2)}
-                                XO Token
-                              </span>
-                            </p>
-                            <p>
-                              Potential Return:{" "}
-                              <span className="font-semibold">
-                                {(
-                                  amount *
-                                  (singleMarketResult?.noPercentage /
-                                    (singleMarketResult?.yesPercentage +
-                                      singleMarketResult?.noPercentage))
-                                ).toFixed(2)}
-                              </span>
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Confirm Button */}
-                        <button
-                          onClick={() => handleConfirmTransaction("buy")}
-                          className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
-                        >
-                          Buy
-                        </button>
-                      </>
+                    {singleMarketResult?.expires_at && parseInt(singleMarketResult.expires_at) <= Math.floor(Date.now() / 1000) ? (
+                      <div className="bg-red-100 text-red-600 p-3 rounded-md text-center font-medium">
+                        This market has ended and is no longer accepting trades
+                      </div>
                     ) : (
                       <>
-                        <button
-                          onClick={() => handleConfirmTransaction("sell")}
-                          className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
-                        >
-                          Sell
-                        </button>
+                        <div className="flex gap-3">
+                          <button
+                            onClick={() => setOutcome(0)}
+                            className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                              outcome === 0
+                                ? "bg-[#136d6d] text-white font-bold" // Selected "Yes"
+                                : "bg-green-100 text-gray-600"
+                            }`}
+                          >
+                            Yes
+                          </button>
+
+                          <button
+                            onClick={() => setOutcome(1)}
+                            className={`flex-1 py-2 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                              outcome === 1
+                                ? "bg-red-500 text-white font-bold" // Selected "No"
+                                : "bg-red-100 text-gray-500"
+                            }`}
+                          >
+                            No
+                          </button>
+                        </div>
+
+                        {/* Input Field */}
+                        <div className="mt-4">
+                          <span className="text-gray-500 text-sm">
+                            Balance:{" "}
+                            <span className="font-semibold">
+                              {tokenBalance} XO Token
+                            </span>
+                          </span>
+                          <input
+                            type="number"
+                            name="amount"
+                            max={tokenBalance.toString()}
+                            onChange={(e) => setAmount(e.target.value)}
+                            value={amount}
+                            placeholder="Amount"
+                            className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring focus:ring-red-300"
+                          />
+                        </div>
+
+                        {activeTab === "buy" ? (
+                          <>
+                            {/* Share Price & Potential Return */}
+                            {outcome === 0 ? (
+                              <div className="mt-2 text-sm text-gray-500">
+                                <p>
+                                  Share Price:{" "}
+                                  <span className="font-semibold">
+                                    {(
+                                      singleMarketResult?.yesPercentage /
+                                      (singleMarketResult?.yesPercentage +
+                                        singleMarketResult?.noPercentage)
+                                    ).toFixed(2)}
+                                    XO Token
+                                  </span>
+                                </p>
+                                <p>
+                                  Potential Return:{" "}
+                                  <span className="font-semibold">
+                                    {(
+                                      amount *
+                                      (singleMarketResult?.yesPercentage /
+                                        (singleMarketResult?.yesPercentage +
+                                          singleMarketResult?.noPercentage))
+                                    ).toFixed(2)}
+                                  </span>
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="mt-2 text-sm text-gray-500">
+                                <p>
+                                  Share Price:{" "}
+                                  <span className="font-semibold">
+                                    {(
+                                      singleMarketResult?.noPercentage /
+                                      (singleMarketResult?.yesPercentage +
+                                        singleMarketResult?.noPercentage)
+                                    ).toFixed(2)}
+                                    XO Token
+                                  </span>
+                                </p>
+                                <p>
+                                  Potential Return:{" "}
+                                  <span className="font-semibold">
+                                    {(
+                                      amount *
+                                      (singleMarketResult?.noPercentage /
+                                        (singleMarketResult?.yesPercentage +
+                                          singleMarketResult?.noPercentage))
+                                    ).toFixed(2)}
+                                  </span>
+                                </p>
+                              </div>
+                            )}
+
+                            {/* Confirm Button */}
+                            <button
+                              onClick={() => handleConfirmTransaction("buy")}
+                              className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
+                            >
+                              Buy
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => handleConfirmTransaction("sell")}
+                              className="w-full bg-[#198788] text-white py-2 mt-4 rounded-lg"
+                            >
+                              Sell
+                            </button>
+                          </>
+                        )}
                       </>
                     )}
                   </div>
@@ -425,8 +436,15 @@ const SingleMarket: React.FC = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-8">
-            <Spinner />
-            <p className="text-gray-500 mt-4">Loading prediction market...</p>
+            <div className="animate-pulse flex space-x-4 mb-4">
+              <div className="h-12 w-12 bg-pink-200 rounded-full"></div>
+              <div className="flex-1 space-y-4 max-w-md">
+                <div className="h-4 bg-pink-200 rounded w-3/4"></div>
+                <div className="h-4 bg-pink-200 rounded"></div>
+                <div className="h-4 bg-pink-200 rounded w-5/6"></div>
+              </div>
+            </div>
+            <p className="text-gray-500">Loading prediction market...</p>
           </div>
         )}
       </Layout>
