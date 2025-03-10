@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import numeral from "numeral";
 import HowItWorksPopup from "@/components/notifications/HowItWorksPopup";
 import { useDataContext } from "@/context/DataContext";
+
 const Navbar: React.FC = () => {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const { address } = useAccount();
@@ -33,6 +34,18 @@ const Navbar: React.FC = () => {
   const { data, isError, isLoading } = useBalance({
     address,
   });
+
+  const handleCreateMarketClick = (e: React.MouseEvent) => {
+    if (!authenticated) {
+      e.preventDefault();
+      toast.info("Please login to create a market");
+      login();
+      return;
+    }
+    
+    // If authenticated, allow normal navigation to /create
+    router.push("/create");
+  };
 
   return (
     <>
@@ -74,12 +87,12 @@ const Navbar: React.FC = () => {
         {/* Right Side: Create Button, Balance & Profile */}
         <div className="flex items-center space-x-6">
           {/* Create Market Button */}
-          <Link
-            href="/create"
-            className="bg-pink-500 text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-pink-600 transition-colors"
+          <button
+            onClick={handleCreateMarketClick}
+            className="bg-pink-500 text-white px-5 py-2 rounded-md text-sm font-medium hover:bg-pink-600 transition-colors cursor-pointer"
           >
             Create Market
-          </Link>
+          </button>
 
           {/* Balance */}
           <div className="text-center">

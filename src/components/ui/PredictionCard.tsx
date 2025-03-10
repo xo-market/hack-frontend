@@ -2,6 +2,9 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Image from "next/image";
 import { useDataContext } from "@/context/DataContext";
+import { usePrivy } from "@privy-io/react-auth";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface PredictionCardProps {
   data: any;
@@ -10,10 +13,12 @@ interface PredictionCardProps {
 
 const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
   const { formatTimestamp, buyOutcome, tokenBalance } = useDataContext();
+  const { authenticated, login } = usePrivy();
   const [showBuyForm, setShowBuyForm] = useState(false);
   const [outcome, setOutcome] = useState<number | null>(null);
   const [amount, setAmount] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const router = useRouter();
 
   const checkExpiration = (expirationTimestamp: number) => {
     const currentTime = Math.floor(Date.now() / 1000);
@@ -27,6 +32,13 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
   const handleOutcomeClick = (selectedOutcome: number, e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation
     e.stopPropagation(); // Stop event propagation
+    
+    if (!authenticated) {
+      toast.info("Please login to place a bet");
+      login();
+      return;
+    }
+    
     setOutcome(selectedOutcome);
     setShowBuyForm(true);
   };
@@ -64,9 +76,22 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
     setOutcome(null);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (!authenticated) {
+      toast.info("Please login to view prediction details");
+      login();
+      return;
+    }
+    
+    // Navigate to prediction details page if authenticated
+    router.push(`/prediction/${data?.market_id}`);
+  };
+
   return (
     <div className="border border-pink-300 rounded-xl p-4 shadow-lg relative">
-      <Link href={`/prediction/${data?.market_id}`} className="block">
+      <div onClick={handleCardClick} className="cursor-pointer">
         <div className="flex gap-2 mb-2 border-b border-red-300 py-2">
           {data?.tags.map((tag: string, index: number) => (
             <span
@@ -128,7 +153,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
             {Number(data?.noPercentage || 0).toFixed(2)}%
           </span>
         </div>
-      </Link>
+      </div>
 
       {!showBuyForm ? (
         <div className="flex justify-center mt-3 gap-4">
@@ -195,7 +220,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
         </div>
       )}
 
-      <Link href={`/prediction/${data?.market_id}`} className="block">
+      <div onClick={handleCardClick} className="cursor-pointer">
         <div className="flex items-center text-xs text-gray-600 mt-6">
           <span className="flex items-center">
             End : <br /> {formatTimestamp(data?.expires_at)}
@@ -204,7 +229,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
             {data?.creator.slice(0, 5) + "..." + data?.creator.slice(-5)}
           </span>
         </div>
-      </Link>
+      </div>
     </div>
   );
 };
