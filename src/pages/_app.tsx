@@ -9,6 +9,32 @@ import { PrivyProvider } from "@privy-io/react-auth";
 import DataContextProvider from "@/context/DataContext";
 import { wagmiConfig } from "@/utils/wallet-utils";
 const queryClient = new QueryClient();
+import {defineChain} from 'viem';
+
+// Define the XO Network chain
+export const xoNetwork = defineChain({
+  id: 123420001402,
+  name: 'XO Network',
+  network: 'xo-testnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'TEST',
+    symbol: 'TEST',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.xo-testnet.t.raas.gelato.cloud'],
+      webSocket: ['wss://ws.xo-testnet.t.raas.gelato.cloud'],
+    },
+    public: {
+      http: ['https://rpc.xo-testnet.t.raas.gelato.cloud'],
+      webSocket: ['wss://ws.xo-testnet.t.raas.gelato.cloud'],
+    },
+  },
+  blockExplorers: {
+    default: { name: 'XO Explorer', url: 'https://xo-testnet.cloud.blockscout.com/' },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -28,6 +54,8 @@ export default function App({ Component, pageProps }: AppProps) {
               embeddedWallets: {
                 createOnLogin: "all-users",
               },
+              supportedChains: [xoNetwork],
+              defaultChain: xoNetwork,
             }}
           >
             <DataContextProvider>

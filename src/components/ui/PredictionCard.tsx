@@ -117,7 +117,7 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
           </div>
         </div>
 
-        <div className="border border-pink-300 object-cover rounded-lg justify-center items-center flex overflow-hidden mt-4">
+        <div className="bg-gray-50 rounded-lg overflow-hidden h-48 relative">
           <Image
             src={
               data?.image
@@ -125,9 +125,10 @@ const PredictionCard: React.FC<PredictionCardProps> = ({ data, onClick }) => {
                 : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdWbSawA3GEvIqk54-RJTyKllWJPfh4RjrDQ&s"
             }
             alt="Market Image"
-            className="w-[100%] h-[30vh]"
-            width={200}
-            height={128}
+            className="w-full h-full object-cover object-top filter"
+            width={400}
+            height={300}
+            style={{ objectPosition: 'top center' }}
           />
         </div>
 
